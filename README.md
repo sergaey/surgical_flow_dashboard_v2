@@ -13,9 +13,7 @@ Double-cliquez sur `Lancer_Dashboard.bat` — le dashboard s'ouvre directement d
 
 **Ou ouvrez directement** `surgical_flow_dashboard_v2.html` dans Chrome / Edge.
 
-## Accès en ligne
-
-🔗 [Ouvrir le dashboard](https://sergaey.github.io/sfd-bloc-foch/surgical_flow_dashboard_v2.html)
+**Accès en ligne** : https://sergaey.github.io/surgical_flow_dashboard_v2/surgical_flow_dashboard_v2.html
 
 ## Comptes de démonstration
 
@@ -44,7 +42,7 @@ Chaque profil ne voit que ses onglets et ses données (RBAC appliqué côté int
 |---|---|
 | Frontend | HTML5 + CSS3 + JavaScript (vanilla) |
 | Graphiques | Chart.js 4.4.0 |
-| Déploiement | Single-file · GitHub Pages · Netlify Drop |
+| Déploiement | Single-file · GitHub Pages |
 
 ---
 *Projet pédagogique — données anonymisées — usage interne STBF*

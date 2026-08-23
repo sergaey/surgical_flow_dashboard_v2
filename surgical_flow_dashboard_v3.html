@@ -1,0 +1,1700 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Surgical Flow Dashboard — Hôpital Foch</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --navy:#0a1628;--navy2:#112240;--teal:#0ea5a0;--teal-lt:#e0f7f6;
+  --gold:#f4b942;--gold-lt:#fff8e7;--bg:#f0f4f8;--white:#fff;
+  --red:#e53e3e;--red-lt:#fff5f5;--green:#38a169;--green-lt:#f0fff4;
+  --orange:#ed8936;--blue:#3b82f6;--gray:#718096;--border:#e2e8f0;
+  --sw:230px;--hh:50px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);font-size:13px;}
+
+/* ── LOGIN ───────────────────────────────── */
+#login{position:fixed;inset:0;background:linear-gradient(135deg,#0a1628 0%,#1a3a6b 100%);display:flex;align-items:center;justify-content:center;z-index:1000;}
+.lcard{background:white;border-radius:18px;padding:40px 36px;width:420px;box-shadow:0 24px 64px rgba(0,0,0,.4);}
+.llogo{width:60px;height:60px;background:var(--navy);border-radius:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:28px;color:var(--teal);}
+.ltitle{text-align:center;font-size:22px;font-weight:800;color:var(--navy);margin-bottom:4px;}
+.lsub{text-align:center;font-size:12px;color:var(--teal);margin-bottom:24px;}
+.lgoog{width:100%;padding:11px;border:1.5px solid var(--border);border-radius:8px;background:white;cursor:pointer;font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s;}
+.lgoog:hover{background:#f8f9fa;}
+.ldiv{text-align:center;color:var(--gray);margin:16px 0;font-size:12px;position:relative;}
+.ldiv::before,.ldiv::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:var(--border);}
+.ldiv::before{left:0;}.ldiv::after{right:0;}
+.ltabs{display:flex;border-radius:8px;overflow:hidden;border:1.5px solid var(--border);margin-bottom:16px;}
+.ltab{flex:1;padding:9px;border:none;cursor:pointer;font-size:13px;font-weight:600;}
+.ltab.on{background:var(--navy);color:white;}.ltab:not(.on){background:white;color:var(--gray);}
+.lfl{display:block;font-size:11px;font-weight:600;color:var(--teal);margin-bottom:4px;}
+.lin{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:7px;font-size:13px;outline:none;transition:border-color .2s;}
+.lin:focus{border-color:var(--teal);}
+.lfg{margin-bottom:12px;}
+.lbtn{width:100%;padding:12px;background:var(--navy);color:white;border:none;border-radius:8px;font-size:14px;font-weight:700;cursor:pointer;margin-top:2px;transition:background .2s;}
+.lbtn:hover{background:#1a2a42;}
+.lhint{text-align:center;font-size:11px;color:var(--gray);margin-top:16px;line-height:1.7;}
+.lhint strong{color:var(--navy);}
+
+/* ── APP SHELL ───────────────────────────── */
+#app{display:none;height:100vh;flex-direction:column;}
+#app.on{display:flex;}
+
+/* ── HEADER ──────────────────────────────── */
+.hdr{background:var(--navy);color:white;height:var(--hh);padding:0 16px;display:flex;align-items:center;gap:12px;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.1);}
+.hbrand{font-size:14px;font-weight:800;letter-spacing:1px;white-space:nowrap;}
+.hbrand span{color:var(--teal);}
+.hsub{font-size:11px;color:#8899aa;white-space:nowrap;border-left:1px solid rgba(255,255,255,.15);padding-left:12px;}
+.hsp{flex:1;}
+.hdb{font-size:10px;color:#8899bb;background:rgba(255,255,255,.07);padding:3px 10px;border-radius:20px;white-space:nowrap;}
+.hrole{font-size:10px;color:#8899aa;}
+.rbadge{padding:2px 8px;border-radius:4px;font-size:10px;font-weight:700;white-space:nowrap;}
+.rbadge.direction{background:#0ea5a0;color:white;}
+.rbadge.cme{background:#3b82f6;color:white;}
+.rbadge.chefbloc{background:#f4b942;color:#0a1628;}
+.rbadge.cadre{background:#ed8936;color:white;}
+.rbadge.chirurgien{background:#8b5cf6;color:white;}
+.rbadge.anesth{background:#06b6d4;color:white;}
+.rbadge.cdg{background:#10b981;color:white;}
+.rbadge.admin{background:#e53e3e;color:white;}
+.hdeco{background:none;border:1px solid rgba(255,255,255,.2);color:white;padding:4px 10px;border-radius:5px;font-size:11px;cursor:pointer;}
+.hdeco:hover{background:rgba(255,255,255,.1);}
+.hnotif{position:relative;cursor:pointer;background:none;border:none;color:white;font-size:16px;padding:4px;}
+.hnotif .nbub{position:absolute;top:-2px;right:-4px;background:var(--red);color:white;border-radius:50%;width:16px;height:16px;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;}
+
+/* ── FILTER BAR ──────────────────────────── */
+.fbar{background:white;border-bottom:1px solid var(--border);padding:6px 14px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;flex-shrink:0;}
+.fgrp{display:flex;border:1.5px solid var(--border);border-radius:6px;overflow:hidden;}
+.fbtn{padding:4px 9px;border:none;background:white;font-size:11px;cursor:pointer;color:var(--gray);}
+.fbtn.on{background:var(--navy);color:white;font-weight:600;}
+.finp{padding:4px 7px;border:1.5px solid var(--border);border-radius:5px;font-size:11px;color:#334;}
+.fsel{padding:4px 6px;border:1.5px solid var(--border);border-radius:5px;font-size:11px;background:white;color:#334;max-width:120px;}
+.exp-row{margin-left:auto;display:flex;gap:4px;}
+.ebtn{padding:3px 9px;border:1px solid var(--border);border-radius:4px;font-size:10px;background:white;cursor:pointer;font-weight:600;color:#445;}
+.ebtn:hover{background:var(--bg);}
+
+/* ── LAYOUT ──────────────────────────────── */
+.layout{display:flex;flex:1;overflow:hidden;}
+
+/* ── SIDEBAR ─────────────────────────────── */
+.sb{width:var(--sw);background:white;border-right:1px solid var(--border);overflow-y:auto;flex-shrink:0;padding:8px 0;}
+.sb-sec-hdr{display:flex;align-items:center;gap:6px;padding:7px 12px;font-size:12px;font-weight:700;color:#334;cursor:pointer;border-radius:0;}
+.sb-sec-hdr:hover{background:#f8f9fc;}
+.sb-ico{font-size:13px;width:20px;text-align:center;}
+.sb-badge{background:var(--red);color:white;border-radius:10px;padding:1px 6px;font-size:9px;font-weight:700;margin-left:2px;}
+.sb-chev{color:var(--gray);font-size:10px;margin-left:auto;}
+.sb-item{display:flex;align-items:center;justify-content:space-between;padding:5px 12px 5px 34px;font-size:11px;color:#556;cursor:pointer;border-left:2px solid transparent;}
+.sb-item:hover{background:#f8f9fc;color:#334;}
+.sb-item.on{background:var(--teal-lt);color:var(--teal);font-weight:700;border-left-color:var(--teal);}
+.sb-sub{padding-left:50px !important;}
+.sb-divider{height:1px;background:var(--border);margin:4px 12px;}
+.etl-status{margin:8px 12px;background:#f8f9fc;border-radius:6px;padding:8px 10px;font-size:10px;}
+.etl-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;}
+.etl-dot.ok{background:var(--green);}
+.etl-dot.warn{background:var(--orange);}
+.etl-dot.err{background:var(--red);}
+
+/* ── MAIN CONTENT ────────────────────────── */
+.main{flex:1;overflow-y:auto;padding:12px;background:var(--bg);}
+
+/* ── CARDS & GRIDS ───────────────────────── */
+.kpi-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:12px;}
+.kpi-card{background:white;border-radius:9px;padding:12px 14px;box-shadow:0 1px 3px rgba(0,0,0,.06);position:relative;overflow:hidden;}
+.kpi-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;}
+.kpi-card.ok::before{background:var(--green);}
+.kpi-card.warn::before{background:var(--orange);}
+.kpi-card.bad::before{background:var(--red);}
+.kpi-card.info::before{background:var(--teal);}
+.kpi-lbl{font-size:9px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;line-height:1.3;margin-bottom:6px;}
+.kpi-val{font-size:24px;font-weight:800;color:var(--navy);line-height:1;}
+.kpi-unit{font-size:13px;font-weight:600;color:var(--navy);}
+.kpi-trend{font-size:10px;margin-top:5px;display:flex;align-items:center;gap:3px;}
+.up-bad{color:var(--red);}.up-good{color:var(--green);}.dn-good{color:var(--green);}.dn-bad{color:var(--red);}.neut{color:var(--gray);}
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px;}
+.row-65{display:grid;grid-template-columns:60% 40%;gap:10px;margin-bottom:10px;}
+
+.card{background:white;border-radius:9px;padding:14px;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.card-title{font-size:10px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.4px;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.card-badge{background:var(--red);color:white;border-radius:10px;padding:1px 6px;font-size:9px;font-weight:700;}
+.card-badge.orange{background:var(--orange);}
+.card-badge.teal{background:var(--teal);}
+.ch{position:relative;}
+
+/* ── ALERTS PANEL ────────────────────────── */
+.al-list{overflow-y:auto;max-height:240px;}
+.al-item{display:flex;align-items:flex-start;gap:7px;padding:6px 0;border-bottom:1px solid #f0f4f8;font-size:11px;color:#445;line-height:1.4;}
+.al-item:last-child{border-bottom:none;}
+.chip{padding:2px 6px;border-radius:3px;font-size:9px;font-weight:700;white-space:nowrap;flex-shrink:0;}
+.chip.rouge{background:#fed7d7;color:var(--red);border-left:2px solid var(--red);}
+.chip.orange{background:#fef3cd;color:#b7791f;border-left:2px solid var(--orange);}
+.chip.info{background:var(--teal-lt);color:var(--teal);border-left:2px solid var(--teal);}
+
+/* ── TABLES ──────────────────────────────── */
+.dtbl{width:100%;border-collapse:collapse;}
+.dtbl th{font-size:10px;color:var(--gray);font-weight:700;text-align:left;padding:5px 7px;border-bottom:1.5px solid var(--border);white-space:nowrap;}
+.dtbl td{padding:6px 7px;font-size:11px;border-bottom:1px solid #f7f8fc;color:#334;}
+.dtbl tr:hover td{background:#fafbfc;}
+.dtbl tr:last-child td{border-bottom:none;}
+.dtbl tfoot td{background:#f0f7f7;font-weight:700;color:var(--navy);border-bottom:none;}
+.dtbl tfoot tr:nth-child(2) td{background:var(--gold-lt);font-style:italic;}
+.ep{color:var(--green);font-weight:700;}.en{color:var(--red);font-weight:700;}
+.evp{color:var(--green);font-weight:700;}.evn{color:var(--red);font-weight:700;}
+.col-t{color:var(--teal);font-weight:600;}
+.tag-tvo{display:inline-flex;align-items:center;gap:4px;font-weight:700;font-size:11px;}
+
+/* ── BILAN HEADER ────────────────────────── */
+.bil-hdr{background:white;border-radius:9px;padding:14px 16px;margin-bottom:10px;box-shadow:0 1px 3px rgba(0,0,0,.06);}
+.bil-title{font-size:13px;font-weight:800;color:var(--navy);margin-bottom:5px;}
+.bil-sub{font-size:11px;color:var(--gray);background:#f8f9fc;padding:5px 10px;border-radius:5px;border-left:3px solid var(--teal);}
+
+/* ── TAB ROW ─────────────────────────────── */
+.tab-row{display:flex;gap:4px;margin-bottom:10px;}
+.vtab{padding:5px 12px;border-radius:6px;border:1.5px solid var(--border);background:white;font-size:11px;cursor:pointer;color:#556;font-weight:500;transition:all .15s;}
+.vtab:hover{border-color:var(--teal);color:var(--teal);}
+.vtab.on{background:var(--gold);border-color:var(--gold);color:var(--navy);font-weight:700;}
+
+/* ── PROGRESS BARS ───────────────────────── */
+.pbar-wrap{margin-bottom:8px;}
+.pbar-hdr{display:flex;justify-content:space-between;font-size:10px;color:#556;margin-bottom:3px;}
+.pbar-bg{background:#e2e8f0;border-radius:4px;height:6px;overflow:hidden;}
+.pbar-fill{height:100%;border-radius:4px;transition:width .4s;}
+.pbar-fill.ok{background:var(--green);}
+.pbar-fill.warn{background:var(--orange);}
+.pbar-fill.bad{background:var(--red);}
+
+/* ── RH ──────────────────────────────────── */
+.rh-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px;}
+.rh-card{background:white;border-radius:7px;padding:10px 12px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.05);}
+.rh-ico{font-size:20px;margin-bottom:4px;}
+.rh-lbl{font-size:10px;color:var(--gray);font-weight:600;}
+.rh-val{font-size:18px;font-weight:800;color:var(--navy);}
+.rh-sub{font-size:9px;color:var(--gray);}
+
+/* ── MEDICO-ECO ───────────────────────────── */
+.meco-kpi{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:10px;}
+.meco-card{background:white;border-radius:7px;padding:12px;box-shadow:0 1px 3px rgba(0,0,0,.05);}
+.meco-lbl{font-size:9px;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:5px;}
+.meco-val{font-size:20px;font-weight:800;color:var(--navy);}
+.meco-unit{font-size:11px;font-weight:600;}
+.meco-trend{font-size:10px;margin-top:3px;}
+
+/* ── RECAP / CALENDAR ────────────────────── */
+.recap-grid{display:grid;grid-template-columns:1fr auto auto;gap:14px;align-items:start;margin-bottom:10px;}
+.cal-box{background:var(--gold-lt);border:1px solid #f4e5a0;border-radius:7px;padding:10px;min-width:160px;font-size:10px;}
+.cal-title{font-size:11px;font-weight:700;color:var(--teal);text-align:center;margin-bottom:6px;text-decoration:underline;}
+.cal-info{line-height:1.9;color:#445;}
+.cum-box{background:white;border-radius:7px;padding:10px 14px;border:1px solid var(--border);min-width:170px;font-size:11px;line-height:1.8;}
+
+/* ── TOOLTIP-STYLE BADGE ─────────────────── */
+.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;}
+.status-dot.g{background:var(--green);}
+.status-dot.o{background:var(--orange);}
+.status-dot.r{background:var(--red);}
+
+/* ── INFO NOTE ───────────────────────────── */
+.info-note{background:var(--gold-lt);border:1px dashed #f4d060;border-radius:5px;padding:7px 12px;font-size:11px;color:#856404;margin-top:8px;}
+.info-note.blue{background:#eff6ff;border-color:#93c5fd;color:#1d4ed8;}
+
+/* ── PAGE TITLE ──────────────────────────── */
+.page-title{font-size:13px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════
+     LOGIN
+════════════════════════════════════════════════ -->
+<div id="login">
+  <div class="lcard">
+    <div class="llogo">⊞</div>
+    <h1 class="ltitle">Hôpital Foch — Pilotage Bloc</h1>
+    <p class="lsub">Accès réservé aux équipes habilitées du bloc opératoire.</p>
+    <button class="lgoog" onclick="doLogin()">
+      <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#4285F4" d="M47.5 24.5c0-1.6-.1-3.2-.4-4.7H24v9h13.2c-.6 3-2.4 5.5-5 7.2v6h8c4.7-4.3 7.3-10.7 7.3-17.5z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-8-6c-2.1 1.4-4.8 2.3-7.9 2.3-6 0-11.2-4.1-13-9.6H3v6.2C7 42.5 15 48 24 48z"/><path fill="#FBBC05" d="M11 28.9c-.5-1.4-.7-2.9-.7-4.4s.3-3 .7-4.4V14H3C1 17.4 0 20.6 0 24s1 6.6 3 9l8-4.1z"/><path fill="#EA4335" d="M24 9.5c3.4 0 6.4 1.2 8.8 3.4l6.5-6.5C35.9 2.6 30.5 0 24 0 15 0 7 5.5 3 14l8 6.2C12.8 13.6 18 9.5 24 9.5z"/></svg>
+      SSO — Continuer avec Google (AD/OAuth2)
+    </button>
+    <div class="ldiv">OU</div>
+    <div class="ltabs">
+      <button class="ltab on">Connexion</button>
+      <button class="ltab">Créer un compte</button>
+    </div>
+    <div class="lfg"><label class="lfl">E-mail professionnel</label><input id="lemail" class="lin" value="dg" placeholder="utilisateur"></div>
+    <div class="lfg"><label class="lfl" style="color:#334">Mot de passe</label><input id="lpwd" type="password" class="lin" value="foch2026"></div>
+    <button class="lbtn" onclick="doLogin()">Se connecter</button>
+    <div class="lhint">Comptes démo : dg · cme · chefbloc · cadre · chirurgien · anesthesiste · cdg · admin<br>Mot de passe : <strong>foch2026</strong></div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════
+     APP
+════════════════════════════════════════════════ -->
+<div id="app" class="app">
+
+<!-- HEADER -->
+<header class="hdr">
+  <div class="hbrand"><span>HÔPITAL FOCH</span></div>
+  <div class="hsub">Surgical Flow Dashboard — Bloc central (Lot 1)</div>
+  <div class="hsp"></div>
+  <div class="hdb">🟢 ETL : J+1 synchronisé · 2026-07-22 06:47 · 31 728 lignes</div>
+  <div class="hrole" id="urole">Direction Générale</div>
+  <span class="rbadge direction" id="ubadge">direction</span>
+  <button class="hnotif" title="31 alertes actives"><span>🔔</span><span class="nbub">31</span></button>
+  <button class="hdeco" onclick="logout()">Déconnexion</button>
+</header>
+
+<!-- FILTER BAR -->
+<div class="fbar">
+  <div class="fgrp">
+    <button class="fbtn" onclick="setPer(this)">Jour</button>
+    <button class="fbtn on" onclick="setPer(this)">Semaine</button>
+    <button class="fbtn" onclick="setPer(this)">Mois</button>
+    <button class="fbtn" onclick="setPer(this)">Tout</button>
+  </div>
+  <input type="date" class="finp" value="2026-06-15">
+  <input type="date" class="finp" value="2026-06-21">
+  <select class="fsel"><option>Toutes salles</option><option>BL-01</option><option>BL-02</option><option>BL-03</option><option>BL-04</option><option>BL-05</option><option>BL-06</option><option>BL-08</option><option>BL-09</option><option>BL-10</option></select>
+  <select class="fsel"><option>Toutes spécialités</option><option>Urologie</option><option>Gynécologie</option><option>Orthopédie</option><option>Cardiologie</option><option>ORL</option><option>Neurochirurgie</option><option>Ophtalmologie</option><option>Digestif</option></select>
+  <select class="fsel"><option>Tous chirurgiens</option><option>Dr Martin</option><option>Dr Leclerc</option><option>Dr Moreau</option><option>Dr Dupont</option></select>
+  <select class="fsel"><option>Tous anesthésistes</option><option>Dr Bernard</option><option>Dr Petit</option></select>
+  <select class="fsel"><option>Tous types d'actes</option><option>Ambulatoire</option><option>Conventionnel</option><option>Urgence</option></select>
+  <select class="fsel"><option>Tous statuts</option><option>Réalisée</option><option>Annulée</option><option>Reportée</option></select>
+  <select class="fsel"><option>Toutes sources</option><option>OPERA (Bloc)</option><option>DxCare (DPI)</option><option>GAM/PMSI</option><option>SIRH</option></select>
+  <div class="exp-row">
+    <button class="ebtn">📊 Excel</button>
+    <button class="ebtn">📄 CSV</button>
+    <button class="ebtn">🔗 JSON</button>
+    <button class="ebtn">📑 PDF</button>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sb">
+  <!-- ETL Status -->
+  <div class="etl-status">
+    <div style="font-weight:700;color:#334;margin-bottom:5px;font-size:10px;">🔄 SOURCES ETL</div>
+    <div><span class="etl-dot ok"></span>OPERA (bloc) · J+1 ✓</div>
+    <div><span class="etl-dot ok"></span>DxCare (DPI) · J+1 ✓</div>
+    <div><span class="etl-dot warn"></span>GAM/PMSI · J+3 ⚠</div>
+    <div><span class="etl-dot ok"></span>SIRH · J+1 ✓</div>
+    <div><span class="etl-dot err"></span>Compta Ana. · Erreur ✗</div>
+  </div>
+  <div class="sb-divider"></div>
+
+  <!-- VUE D'ENSEMBLE -->
+  <div class="sb-sec-hdr" onclick="togSec('vue')">
+    <span class="sb-ico">⊞</span><span>Vue d'ensemble</span>
+    <span class="sb-chev" id="cv-vue">∨</span>
+  </div>
+  <div id="s-vue">
+    <div class="sb-item on" id="n-dash" onclick="go('dash')"><span>• Dashboard global</span><span style="color:#bbc;font-size:10px;">›</span></div>
+    <div class="sb-item" id="n-alerte" onclick="go('alerte')"><span>Alertes actives</span><span class="sb-badge">31</span></div>
+    <div class="sb-item" id="n-bil-hdr" onclick="togSec('bil')"><span>Bilans</span><span class="sb-chev" id="cv-bil">›</span></div>
+    <div id="s-bil" style="display:none">
+      <div class="sb-item sb-sub" id="n-bc2025" onclick="go('bc2025')"><span>BCentral 2025</span><span style="color:#bbc;font-size:10px;">›</span></div>
+      <div class="sb-item sb-sub" id="n-bft2025" onclick="go('bft2025')"><span>BFastTrack 2025</span><span style="color:#bbc;font-size:10px;">›</span></div>
+      <div class="sb-item sb-sub" id="n-rob2025" onclick="go('rob2025')"><span>Robot 2025</span><span style="color:#bbc;font-size:10px;">›</span></div>
+    </div>
+    <div class="sb-item" id="n-recap-hdr" onclick="togSec('recap')">
+      <span>Récap. mensuel</span><span class="sb-badge" style="background:var(--orange);">31</span>
+      <span class="sb-chev" id="cv-recap">›</span>
+    </div>
+    <div id="s-recap" style="display:none">
+      <div class="sb-item sb-sub" id="n-r-dec25" onclick="go('r-dec25')">Déc 2025</div>
+      <div class="sb-item sb-sub" id="n-r-cum25" onclick="go('r-cum25')">Cumul 2025</div>
+      <div class="sb-item sb-sub" id="n-r-jan26" onclick="go('r-jan26')">Jan 2026</div>
+      <div class="sb-item sb-sub" id="n-r-fev26" onclick="go('r-fev26')">Fév 2026</div>
+      <div class="sb-item sb-sub" id="n-r-cum26fev" onclick="go('r-cum26fev')">Cumul Fév 2026</div>
+      <div class="sb-item sb-sub" id="n-r-mar26" onclick="go('r-mar26')">Mars 2026</div>
+      <div class="sb-item sb-sub" id="n-r-cum26mar" onclick="go('r-cum26mar')">Cumul Mars 2026</div>
+      <div class="sb-item sb-sub" id="n-r-avr26" onclick="go('r-avr26')">Avr 2026</div>
+      <div class="sb-item sb-sub" id="n-r-cum26avr" onclick="go('r-cum26avr')">Cumul Avr 2026</div>
+    </div>
+  </div>
+  <div class="sb-divider"></div>
+
+  <!-- MODULES E1–E6 -->
+  <div class="sb-sec-hdr" onclick="togSec('mod')">
+    <span class="sb-ico">📊</span><span>Modules analytiques</span>
+    <span class="sb-chev" id="cv-mod">›</span>
+  </div>
+  <div id="s-mod" style="display:none">
+    <div class="sb-item" id="n-ponct" onclick="go('ponct')"><span>E2 · Démarrages tardifs</span></div>
+    <div class="sb-item" id="n-duree" onclick="go('duree')"><span>E3 · Durées interventions</span></div>
+    <div class="sb-item" id="n-ann" onclick="go('ann')"><span>E4 · Annulations</span></div>
+    <div class="sb-item" id="n-act" onclick="go('act')"><span>E5 · Activité médicale</span></div>
+    <div class="sb-item" id="n-qual" onclick="go('qual')"><span>E6 · Qualité & Sécurité</span></div>
+  </div>
+  <div class="sb-divider"></div>
+
+  <div class="sb-sec-hdr" onclick="togSec('rh')">
+    <span class="sb-ico">👥</span><span>Ressources humaines</span>
+    <span class="sb-chev" id="cv-rh">›</span>
+  </div>
+  <div id="s-rh" style="display:none">
+    <div class="sb-item" id="n-rh" onclick="go('rh')"><span>Effectifs & Absentéisme</span></div>
+  </div>
+  <div class="sb-divider"></div>
+
+  <div class="sb-sec-hdr" onclick="togSec('eco')">
+    <span class="sb-ico">💶</span><span>Médico-économique</span>
+    <span class="sb-chev" id="cv-eco">›</span>
+  </div>
+  <div id="s-eco" style="display:none">
+    <div class="sb-item" id="n-eco" onclick="go('eco')"><span>T2A · GHM · Coûts</span></div>
+  </div>
+  <div class="sb-divider"></div>
+
+  <!-- AUTRES BLOCS -->
+  <div class="sb-sec-hdr" onclick="togSec('oblocs')">
+    <span class="sb-ico">🏥</span><span>Autres blocs</span>
+    <span class="sb-chev" id="cv-oblocs" style="margin-left:auto;">›</span>
+  </div>
+  <div id="s-oblocs" style="display:none">
+    <div class="sb-item" id="n-oph" onclick="go('oph')"><span>Bloc OPH</span><span style="color:#bbc;font-size:10px;">›</span></div>
+    <div class="sb-item" id="n-amp" onclick="go('amp')"><span>Bloc AMP</span><span style="color:#bbc;font-size:10px;">›</span></div>
+    <div class="sb-item" id="n-endouro" onclick="go('endouro')"><span>Bloc Endo-Uro</span><span style="color:#bbc;font-size:10px;">›</span></div>
+    <div class="sb-item" id="n-naissance" onclick="go('naissance')"><span>Salle de naissance</span><span style="color:#bbc;font-size:10px;">›</span></div>
+    <div class="sb-item" id="n-radiobloc" onclick="go('radiobloc')"><span>Radio-Bloc</span><span style="color:#bbc;font-size:10px;">›</span></div>
+  </div>
+  <div class="sb-divider"></div>
+  <div class="sb-sec-hdr"><span class="sb-ico">📋</span><span>Reporting</span><span class="sb-chev" style="margin-left:auto;">›</span></div>
+  <div class="sb-sec-hdr"><span class="sb-ico">🗄️</span><span>Archives</span><span class="sb-chev" style="margin-left:auto;">›</span></div>
+  <div class="sb-sec-hdr" onclick="togSec('admin')"><span class="sb-ico">⚙️</span><span>Administration</span><span class="sb-chev" id="cv-admin" style="margin-left:auto;">›</span></div>
+  <div id="s-admin" style="display:none">
+    <div class="sb-item" id="n-audit" onclick="go('audit')"><span>🔒 Audit RGPD</span></div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<main class="main" id="main"></main>
+
+</div><!-- /layout -->
+</div><!-- /app -->
+
+<script>
+// ═══════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════
+const USERS={
+  dg:{n:'Direction Générale / DAF',b:'direction'},
+  cme:{n:'Commission Médicale',b:'cme'},
+  chefbloc:{n:'Chef de Bloc',b:'chefbloc'},
+  cadre:{n:'Cadre de Bloc',b:'cadre'},
+  chirurgien:{n:'Chirurgien',b:'chirurgien'},
+  anesthesiste:{n:'Anesthésiste',b:'anesth'},
+  cdg:{n:'Contrôle de Gestion',b:'cdg'},
+  admin:{n:'Administrateur',b:'admin'}
+};
+
+const DATES=['15/06','16/06','17/06','18/06','19/06'];
+const TVO_C=[101,98,100,99,80]; const TVO_P=[65,80,90,95,118];
+const BC_TVO_C=[108,115,120,122,80]; const BC_TVO_P=[65,88,100,83,115];
+
+const SPECS=['Urologie','Gynécologie','Orthopédie','Cardiologie','ORL','Neurochirurgie','Ophtalmologie','Viscéral'];
+const STERM=[27,23,21,19,21,18,17,16]; const SANN=[1,6,3,4,0,0,0,0];
+const MOTIFS=['Désistement patient','Patient non à jeun','Matériel indisponible','Bilan préop incomplet','Patient COVID+','Urgence prioritaire'];
+const MDATA=[28,22,19,18,9,4];
+const MCOLS=['#1a3a6b','#0ea5a0','#ed8936','#e53e3e','#38a169','#a0aec0'];
+
+const TOP5=[{s:'Ophtalmologie',a:17,d:'27',e:-55.4},{s:'ORL',a:20,d:'43',e:-42.7},{s:'Viscéral',a:15,d:'63',e:-35.8},{s:'Orthopédie',a:20,d:'129',e:-23.3},{s:'Gynécologie',a:23,d:'121',e:-19.2}];
+const FLOP5=[{s:'Neurochirurgie',a:17,d:'311',e:-5.8},{s:'Cardiologie',a:22,d:'233',e:-11.1},{s:'Urologie',a:27,d:'180',e:-14.2},{s:'Gynécologie',a:23,d:'121',e:-19.2},{s:'Orthopédie',a:20,d:'129',e:-23.3}];
+
+const BC_SALLES=['BL-09','BL-05','BL-10','BL-02','BL-08','BL-06','BL-04','BL-01'];
+const BC_TERM=[21,19,19,16,17,16,17,13]; const BC_ANN=[1,2,2,5,2,3,2,1];
+const BC_HAS_S=['BL-01','BL-02','BL-04','BL-05','BL-06','BL-08','BL-09','BL-10'];
+const BC_HAS=[71,83,94,90,82,100,87,95];
+const TVO_SAL=[19.8,72.4,25.5,82.1,95.3,45.2,78.9,21.2]; // BL-01..BL-09
+
+const ACTES_L=['Prostatectomie radicale','Hystérectomie totale','Phacoémulsification','Pontage coronarien','Craniotomie tumeur','Amygdalectomie','Arthroplastie genou','Cure hernie','Cholécystectomie','Arthroplastie hanche','Rempl. valve aortique'];
+const ACTES_T=[27,22,16,14,13,9,7,6,6,6,5]; const ACTES_A=[2,2,0,1,2,0,1,1,2,1,0];
+
+const CUM_S=['Anesthésie','Cardiologie','Digestif','Endodig','Endo Thoracique','Gynécologie','Neurochirurgie','Ophtalmo','ORL','Thoracique','Urologie','Vasculaire'];
+const CUM_24=[452,75,1654,52,672,1422,1470,14,935,1018,2003,849];
+const CUM_25=[626,95,1828,136,489,1507,1555,0,1021,1159,2038,848];
+
+const D25_S=CUM_S; const D25_24=[68,4,138,0,61,125,106,0,79,91,165,68]; const D25_25=[72,8,145,3,29,120,112,0,78,89,192,68];
+const J26_S=['Anesthésie','Cardiologie','Digestif','Endo Thor.','Endodig','Gynécologie','Neurochirurgie','ORL','Thoracique','Urologie','Vasculaire'];
+const J26_25=[80,5,149,69,1,151,127,100,113,212,86]; const J26_26=[68,8,169,26,0,140,133,84,94,216,72];
+
+// ── DONNÉES MENSUELLES 2026 (source : Indicateur BC & BFT 2026 S24.xlsx) ────
+const M26_S=['Anesthésie','Cardiologie','Digestif','Endo Thoracique','Endodig','Gynécologie','Neurochirurgie','ORL','Thoracique','Urologie','Vasculaire'];
+const FEV26_25=[70,7,139,59,4,126,120,81,97,147,72];  const FEV26_26=[60,11,163,30,1,127,133,80,83,182,75];
+const MAR26_25=[64,10,160,65,235,136,144,102,110,206,87]; const MAR26_26=[35,8,162,60,267,147,128,85,114,165,75];
+const AVR26_25=[22,6,166,64,226,130,140,90,99,172,66];  const AVR26_26=[49,6,177,61,197,135,125,78,100,192,71];
+
+// ── DONNÉES CUMULÉES 2026 (BC seul pour Fév, BC+BFT pour Mars/Avr) ──────────
+const CUMFEV26_25=[150,12,288,128,5,277,247,181,210,359,158]; const CUMFEV26_26=[128,19,331,56,1,267,266,164,177,396,147];
+const CUMMAR26_25=[214,22,448,193,671,413,391,283,320,565,245]; const CUMMAR26_26=[181,27,493,195,744,414,394,249,291,561,222];
+const CUMAVR26_25=[236,28,614,257,897,543,531,373,419,737,311]; const CUMAVR26_26=[230,33,670,256,941,549,519,327,391,753,293];
+
+// ── ACTIVITÉ ROBOT CUMULÉE 2026 (source : Indicateur BC & BFT 2026 S24.xlsx + jpeg) ─
+const ROB_CUM_S=['Digestif','Gynécologie','ORL','Thoracique','Urologie'];
+const ROBMAR26_25=[21,30,9,49,131]; const ROBMAR26_26=[20,44,3,69,147]; // cumul à fin Mars
+const ROBAVR26_25=[27,42,10,72,163]; const ROBAVR26_26=[25,52,3,98,193]; // cumul à fin Avril
+// Robot mensuel
+const ROBM_MAR25=[8,12,3,18,47];  const ROBM_MAR26=[7,15,2,26,48];  // Mars mensuel
+const ROBM_AVR25=[6,12,1,23,32];  const ROBM_AVR26=[5,8,0,29,46];   // Avril mensuel
+
+// ── DONNÉES HEBDOMADAIRES S1–S24 (TVO BC + interventions) ───────────────────
+const WK_L=['S1','S2','S3','S4','S5','S6','S7','S8','S9','S10','S11','S12','S13','S14','S15','S16','S17','S18','S19','S20','S21','S22','S23','S24'];
+const WK_TVO=[58,78,78,76,79,78,79,80,83,81,77,74,80,84,83,83,85,88,84,84,81,82,80,84];
+const WK_INT=[126,247,269,259,235,259,273,216,179,241,252,267,279,271,248,197,144,199,213,239,222,166,246,202];
+
+const BFT_S=['Anesthésie','Cardiologie','Endodig','Endo Thoracique','Vasculaire'];
+const BFT_D=[31,1,1939,266,3];
+const ROB_S=['Chir DIG','Gynécologie','ORL','Chir THO','Urologie'];
+const ROB_24=[79,108,20,131,496]; const ROB_25=[67,104,26,214,491];
+
+const ALERTS=[
+  {t:'rouge',m:'TVO < 85 %  BL-01 le 18/06 : TVO 19.8 %  [EF-03]'},
+  {t:'rouge',m:'TVO < 85 %  BL-01 le 19/06 : TVO 21.2 %  [EF-03]'},
+  {t:'rouge',m:'TVO < 85 %  BL-03 le 15/06 : TVO 25.5 %  [EF-03]'},
+  {t:'rouge',m:'TVO < 85 %  BL-03 le 16/06 : TVO 34.5 %  [EF-03]'},
+  {t:'rouge',m:'TVO < 85 %  BL-03 le 17/06 : TVO 19.2 %  [EF-03]'},
+  {t:'rouge',m:'TVO < 85 %  BL-06 le 15/06 : TVO 45.2 %  [EF-03]'},
+  {t:'rouge',m:'TVO < 85 %  BL-04 le 19/06 : TVO 30.3 %  [EF-03]'},
+  {t:'orange',m:'Taux annulation > 5 %  Gynéco 19/06 : 6 annul.  [EF-20]'},
+  {t:'orange',m:'Ponctualité < 60 %  BL-02 le 18/06 : 4 retards  [EF-11]'},
+  {t:'orange',m:'Durée dérivée  Dr Leclerc · Neurochirurgie +38 min  [EF-16]'},
+  {t:'orange',m:'Check-list non conforme  BL-01 le 15/06  [EF-28]'},
+  {t:'info',m:'Données Compta Analytique non chargées (J+1 → erreur ETL)'},
+  {t:'info',m:'PMSI : données GAM/PMSI à J+3 — recettes T2A indicatives'},
+];
+
+// PONCTUALITÉ data
+const PONCT_SALLES=['BL-01','BL-02','BL-04','BL-05','BL-06','BL-08','BL-09','BL-10'];
+const PONCT_DATA=[58,62,81,78,70,90,85,75]; // % vacations dans 15min
+
+// TURNOVER inter-actes (min)
+const TURNOVER_SPECS=['Urologie','Gynécologie','Orthopédie','Cardiologie','ORL','Neurochirurgie'];
+const TURNOVER_REEL=[24,21,18,32,14,28]; const TURNOVER_CIBLE=[20,18,15,25,12,22];
+
+// RH
+const RH_ABS=[{s:'IBODE',tx:4.2},{s:'IADE',tx:2.8},{s:'AS',tx:6.1},{s:'Chirurgien',tx:1.4},{s:'Anesthésiste',tx:0.9}];
+
+// MÉDICO-ECO
+const GHM_S=['Urologie','Digestif','Gynécologie','Neurochirurgie','ORL','Orthopédie','Cardiologie','Autres'];
+const T2A_R=[1842,1654,1320,1180,980,850,760,440]; // k€
+const T2A_PREV=[1900,1700,1400,1250,1020,900,800,500];
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let charts={};
+let curView='dash';
+
+// ═══════════════════════════════════════
+// AUTH
+// ═══════════════════════════════════════
+function doLogin(){
+  const u=document.getElementById('lemail').value.trim().toLowerCase();
+  const p=document.getElementById('lpwd').value;
+  if(p!=='foch2026'){alert('Mot de passe incorrect — utilisez : foch2026');return;}
+  const usr=USERS[u]||USERS.dg;
+  document.getElementById('urole').textContent=usr.n;
+  const b=document.getElementById('ubadge');
+  b.textContent=usr.b; b.className='rbadge '+usr.b;
+  document.getElementById('login').style.display='none';
+  document.getElementById('app').classList.add('on');
+  go('dash');
+}
+function logout(){
+  killCharts();
+  document.getElementById('app').classList.remove('on');
+  document.getElementById('login').style.display='flex';
+}
+
+// ═══════════════════════════════════════
+// NAV
+// ═══════════════════════════════════════
+function togSec(id){
+  const el=document.getElementById('s-'+id), cv=document.getElementById('cv-'+id);
+  if(!el)return;
+  const v=el.style.display!=='none';
+  el.style.display=v?'none':'block';
+  if(cv)cv.textContent=v?'›':'∨';
+}
+function setPer(b){document.querySelectorAll('.fgrp .fbtn').forEach(x=>x.classList.remove('on'));b.classList.add('on');}
+function killCharts(){Object.values(charts).forEach(c=>{try{c.destroy();}catch(e){}});charts={};}
+function mkChart(id,cfg){if(document.getElementById(id))charts[id]=new Chart(document.getElementById(id),cfg);}
+
+function go(v){
+  curView=v;killCharts();
+  document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('on'));
+  const el=document.getElementById('n-'+v); if(el)el.classList.add('on');
+  // open parent sections
+  if(['bc2025','bft2025','rob2025','semaines'].includes(v)){document.getElementById('s-bil').style.display='block';document.getElementById('cv-bil').textContent='∨';}
+  if(v.startsWith('r-')){document.getElementById('s-recap').style.display='block';document.getElementById('cv-recap').textContent='∨';}
+  if(['ponct','duree','ann','act','qual'].includes(v)){document.getElementById('s-mod').style.display='block';document.getElementById('cv-mod').textContent='∨';}
+  if(['oph','amp','endouro','naissance','radiobloc'].includes(v)){document.getElementById('s-oblocs').style.display='block';document.getElementById('cv-oblocs').textContent='∨';}
+  if(v==='rh'){document.getElementById('s-rh').style.display='block';document.getElementById('cv-rh').textContent='∨';}
+  if(v==='eco'){document.getElementById('s-eco').style.display='block';document.getElementById('cv-eco').textContent='∨';}
+
+  const m=document.getElementById('main');
+  const fn={dash:vDash,alerte:vAlertes,bc2025:vBc2025,bft2025:vBft,rob2025:vRobot,
+    oph:()=>vBloc('OPH','Ophtalmologie'),amp:()=>vBloc('AMP','Assistance Médicale à la Procréation'),
+    endouro:()=>vBloc('Endo-Uro','Endoscopie-Urologie'),naissance:()=>vBloc('Salle de naissance','Maternité'),
+    radiobloc:()=>vBloc('Radio-Bloc','Radiologie Interventionnelle'),
+    'r-dec25':()=>vRecapM('dec25'),'r-cum25':vRecapCum,
+    'r-jan26':()=>vRecapM('jan26'),'r-fev26':()=>vRecapM('fev26'),
+    'r-mar26':()=>vRecapM('mar26'),'r-avr26':()=>vRecapM('avr26'),
+    'r-cum26fev':()=>vRecapCum2026('fev'),'r-cum26mar':()=>vRecapCum2026('mar'),'r-cum26avr':()=>vRecapCum2026('avr'),
+    occ:vOcc,ponct:vPonct,duree:vDuree,ann:vAnn,act:vAct,qual:vQual,rh:vRH,eco:vEco,audit:vAudit}[v];
+  if(v==='audit'){document.getElementById('s-admin').style.display='block';document.getElementById('cv-admin').textContent='∨';}
+  if(fn)fn(m); else m.innerHTML='<div class="card" style="padding:20px;color:#aaa;">Vue en cours de développement — Sprint à venir.</div>';
+}
+
+// ═══════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════
+function kpi(lbl,val,unit,trend,cls,state='info'){
+  return`<div class="kpi-card ${state}"><div class="kpi-lbl">${lbl}</div><div class="kpi-val">${val}<span class="kpi-unit"> ${unit}</span></div><div class="kpi-trend ${cls}">${trend}</div></div>`;
+}
+function pbar(lbl,val,max,cls){
+  return`<div class="pbar-wrap"><div class="pbar-hdr"><span>${lbl}</span><span><strong>${val}%</strong></span></div><div class="pbar-bg"><div class="pbar-fill ${cls}" style="width:${Math.min(val/max*100,100)}%"></div></div></div>`;
+}
+function drow(a,b){
+  const d=b-a,p=a?Math.round(d/a*100):null;
+  const dc=d===0?'':(d>0?'ep':'en'),pc=p===null?'':(p>=0?'evp':'evn');
+  return`<td><span class="${dc}">${d>0?'+':''}${d||0}</span></td><td>${p===null?'-':`<span class="${pc}">${p>0?'+':''}${p}%</span>`}</td>`;
+}
+
+// ═══════════════════════════════════════
+// VIEW : DASHBOARD GLOBAL
+// ═══════════════════════════════════════
+function vDash(){
+  const m=document.getElementById('main');
+  m.innerHTML=`
+  <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+    ${kpi('TVO — OCCUPATION SALLES','96.1','%','= 0 % vs période préc.','neut','info')}
+    ${kpi('NOMBRE DE VACATIONS','48','vac.','Semaine du 15/06','neut','info')}
+    ${kpi('TROS (TEMPS RÉEL OCC.)','87.4','%','▲ 1.2 % vs préc.','up-good','ok')}
+    ${kpi('DÉMARRAGES TARDIFS (≤ 15 MIN)','73.3','%','▲ 1.1 % vs préc.','up-good','warn')}
+    ${kpi('INTERVENTIONS TERMINÉES','161','','▼ 8 vs préc.','dn-bad','warn')}
+    ${kpi('DURÉE MOYENNE OPÉRATOIRE','142.3','min','▲ 8.8 min vs préc.','up-bad','bad')}
+    ${kpi('DÉBORDEMENTS','7','cas / 43 min','= 0 cas vs préc.','neut','warn')}
+    ${kpi('SUSPENSIONS ET ABANDONS','3','cas','▼ 1 vs préc.','dn-good','ok')}
+  </div>
+  <div class="row-65">
+    <div class="card"><div class="chart-title card-title">TENDANCE TVO — COMPARATIF PÉRIODE PRÉCÉDENTE</div><div class="ch" style="height:195px"><canvas id="c-tvo"></canvas></div></div>
+    <div class="card"><div class="card-title">ALERTES &amp; ANOMALIES <span class="card-badge">31</span></div><div class="al-list" id="al-list"></div></div>
+  </div>
+  <div class="row2">
+    <div class="card"><div class="card-title">ACTIVITÉ PAR SPÉCIALITÉ</div><div class="ch" style="height:200px"><canvas id="c-spec"></canvas></div></div>
+    <div class="card"><div class="card-title">ANNULATIONS PAR MOTIF</div><div class="ch" style="height:200px"><canvas id="c-motif"></canvas></div></div>
+  </div>
+  <div class="card">
+    <div class="row2">
+      <div><div class="card-title">TOP 5 — MAÎTRISE DES DURÉES</div>
+        <table class="dtbl"><thead><tr><th>Spécialité</th><th>Actes</th><th>Durée moy.</th><th>Écart vs prévu</th></tr></thead>
+        <tbody>${TOP5.map(r=>`<tr><td>${r.s}</td><td>${r.a}</td><td class="col-t">${r.d} min</td><td class="ep">${r.e} %</td></tr>`).join('')}</tbody></table>
+      </div>
+      <div><div class="card-title">FLOP 5 — DÉRIVES DE DURÉE</div>
+        <table class="dtbl"><thead><tr><th>Spécialité</th><th>Actes</th><th>Durée moy.</th><th>Écart vs prévu</th></tr></thead>
+        <tbody>${FLOP5.map(r=>`<tr><td>${r.s}</td><td>${r.a}</td><td class="col-t">${r.d} min</td><td class="ep">${r.e} %</td></tr>`).join('')}</tbody></table>
+      </div>
+    </div>
+    <div class="info-note">📌 Module médico-économique (T2A, GHM, coûts de salle) → Sprint 3 · données GAM/PMSI non encore intégrées.</div>
+  </div>`;
+
+  // Alerts
+  const al=document.getElementById('al-list');
+  ALERTS.forEach(a=>{al.innerHTML+=`<div class="al-item"><span class="chip ${a.t}">${a.t}</span>${a.m}</div>`;});
+
+  mkChart('c-tvo',{type:'line',data:{labels:DATES,datasets:[
+    {label:'TVO courant (%)',data:TVO_C,borderColor:'#0a1628',backgroundColor:'rgba(10,22,40,.07)',tension:.3,borderWidth:2,pointRadius:4,fill:true},
+    {label:'Période préc. (%)',data:TVO_P,borderColor:'#aabbcc',backgroundColor:'transparent',tension:.3,borderWidth:2,borderDash:[6,3],pointRadius:3}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{min:0,max:130,ticks:{callback:v=>v+'%',font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+
+  mkChart('c-spec',{type:'bar',data:{labels:SPECS,datasets:[
+    {label:'Terminées',data:STERM,backgroundColor:'#0ea5a0'},
+    {label:'Annulées',data:SANN,backgroundColor:'#e53e3e'}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{x:{stacked:true,ticks:{font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}}});
+
+  mkChart('c-motif',{type:'doughnut',data:{labels:MOTIFS,datasets:[{data:MDATA,backgroundColor:MCOLS,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},padding:10}}}}});
+}
+
+// ═══════════════════════════════════════
+// VIEW : ALERTES
+// ═══════════════════════════════════════
+function vAlertes(){
+  const m=document.getElementById('main');
+  m.innerHTML=`
+  <div class="page-title">🔔 Alertes actives — 31 anomalies détectées</div>
+  <div class="row2">
+    <div class="card"><div class="card-title">RÉPARTITION PAR TYPE</div><div class="ch" style="height:180px"><canvas id="c-al-type"></canvas></div></div>
+    <div class="card"><div class="card-title">RÉPARTITION PAR MODULE</div><div class="ch" style="height:180px"><canvas id="c-al-mod"></canvas></div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">LISTE COMPLÈTE DES ALERTES</div>
+    <table class="dtbl" style="font-size:11px;">
+      <thead><tr><th>Sévérité</th><th>Module</th><th>Salle</th><th>Date</th><th>Description</th><th>Exigence</th><th>Statut</th></tr></thead>
+      <tbody>
+        ${[...Array(14)].map((_,i)=>i).map(i=>{
+          const al=ALERTS[i]||{t:'info',m:'Alerte système'};
+          const salle=BC_SALLES[i%8]||'—';
+          const date=DATES[i%5];
+          const mod=['TVO','Ponct.','Durées','Annul.','Activité','Qualité','ETL','ETL'][i%8];
+          const exi=['EF-03','EF-11','EF-16','EF-20','EF-23','EF-28','ETL','ETL'][i%8];
+          const st=i<3?'<span style="color:var(--red);font-weight:700;">⚡ Critique</span>':'<span style="color:var(--orange);font-weight:700;">⚠ Active</span>';
+          return`<tr><td><span class="chip ${al.t}">${al.t}</span></td><td>${mod}</td><td>${salle}</td><td>${date}/2026</td><td>${al.m}</td><td style="color:var(--gray)">${exi}</td><td>${st}</td></tr>`;
+        }).join('')}
+      </tbody>
+    </table>
+  </div>`;
+  mkChart('c-al-type',{type:'doughnut',data:{labels:['Rouge (critique)','Orange (avertissement)','Info'],datasets:[{data:[8,19,4],backgroundColor:['#e53e3e','#ed8936','#0ea5a0'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:10}}}}}});
+  mkChart('c-al-mod',{type:'bar',data:{labels:['TVO','Ponct.','Annul.','Durées','Qualité','ETL'],datasets:[{data:[10,5,6,4,3,3],backgroundColor:['#e53e3e','#ed8936','#e53e3e','#ed8936','#ed8936','#0ea5a0']}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+}
+
+// ═══════════════════════════════════════
+// VIEW : BILAN BCENTRAL 2025
+// ═══════════════════════════════════════
+function vBc2025(){
+  const m=document.getElementById('main');
+
+  // ── Cumulative data 2024/2025
+  const ACT_S=['Anesthésie','Cardiologie','Digestif','Endodig','Endo Thoracique','Gynécologie','Neurochirurgie','Ophtalmo','ORL','Thoracique','Urologie','Vasculaire'];
+  const ACT_24=[452,75,1654,52,672,1422,1470,14,935,1018,2003,849];
+  const ACT_25=[626,95,1828,136,489,1507,1555,0,1021,1159,2038,848];
+
+  const actRows=ACT_S.map((s,i)=>{
+    const d=ACT_25[i]-ACT_24[i];
+    const p=ACT_24[i]?Math.round(d/ACT_24[i]*100):null;
+    const dc=d>0?'ep':d<0?'en':'';
+    const pc=p===null?'':p>0?'evp':'evn';
+    return`<tr>
+      <td>${s}</td>
+      <td>${ACT_24[i].toLocaleString('fr-FR')}</td>
+      <td><strong>${ACT_25[i].toLocaleString('fr-FR')}</strong></td>
+      <td><span class="${dc}">${d>0?'+':''}${d.toLocaleString('fr-FR')}</span></td>
+      <td><span class="${pc}">${p===null?'—':(p>0?'+':'')+p+'%'}</span></td>
+    </tr>`;
+  }).join('');
+
+  // ── Datasets Jour / Semaine / Mois (source : OPERA — semaine S24, juin 2026)
+  const BC_SAL_L=['BL-01','BL-02','BL-03','BL-04','BL-05','BL-06','BL-07','BL-08','BL-09','BL-10'];
+  const BC_TYPE_L=['Hybride','Bloc froid','Ambulatoire','Urgence'];
+  window._bcPD={
+    jour:{
+      label:'Lundi 15 juin 2026',
+      tvoL:['15/06'],       tvoV:[102],
+      incL:['Lun'],         incV:[8.6],
+      salT:[2,2,2,4,4,2,3,3,4,2],   salA:[0,0,0,0,0,0,0,0,0,1],
+      typeT:[10,11,5,3],    typeA:[1,0,0,0]
+    },
+    sem:{
+      label:'Semaine S24 — 8 au 14 juin 2026',
+      tvoL:['2026-S24'],    tvoV:[97],
+      incL:['Lun','Mar','Mer','Jeu','Ven'], incV:[8.7,8.3,8.4,7.15,8.55],
+      salT:[8,20,9,16,21,16,13,18,22,16],  salA:[6,0,2,0,0,2,3,1,0,4],
+      typeT:[60,65,21,19],  typeA:[3,2,7,1]
+    },
+    mois:{
+      label:'Juin 2026 — Semaines S23 à S27',
+      tvoL:['S23','S24','S25','S26','S27'], tvoV:[97,99,30,2,0],
+      incL:['Lun','Mar','Mer','Jeu','Ven','Sam'], incV:[8.9,8.5,9.2,8.4,8.3,7.1],
+      salT:[35,40,25,37,45,38,25,32,40,40], salA:[2,5,8,0,3,5,8,10,2,5],
+      typeT:[118,150,57,37], typeA:[12,12,10,7]
+    }
+  };
+
+  m.innerHTML=`
+  <div class="bil-hdr">
+    <div class="bil-title">BCENTRAL BC_2025 — BILAN DU PÉRIMÈTRE</div>
+    <div class="bil-sub">Bloc central — salles conventionnelles, urgences et hybrides (hors ambulatoire) · 2026-06-15 → 2026-06-21 · Source : OPERA (Bloc) + DxCare (DPI)</div>
+    <div class="kpi-grid" style="margin-top:12px;margin-bottom:0">
+      ${kpi('TVO DU PÉRIMÈTRE','106.7','%','▲ 14.3 % vs préc.','up-good','ok')}
+      ${kpi('NOMBRE DE VACATIONS','40','vac.','Semaine S24','neut','info')}
+      ${kpi('TROS','89.2','%','▲ 2.1 % vs préc.','up-good','ok')}
+      ${kpi('INTERVENTIONS','140','','▲ 2 vs préc.','up-good','ok')}
+      ${kpi('DÉMARRAGES TARDIFS (≤ 15 MIN)','72.9','%','▲ 4.1 % vs préc.','up-good','ok')}
+      ${kpi('DURÉE MOYENNE OPÉRATOIRE','145.9','min','▲ 22.8 min vs préc.','up-bad','bad')}
+      ${kpi('DÉBORDEMENTS','5','cas / 38 min','▼ 2 cas vs préc.','dn-good','ok')}
+      ${kpi('SUSPENSIONS ET ABANDONS','2','cas','= 0 vs préc.','neut','info')}
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:10px;margin:10px 0 6px">
+    <div class="fgrp">
+      <button class="fbtn" id="bcg-jour" onclick="bcGran('jour')">Jour</button>
+      <button class="fbtn active" id="bcg-sem"  onclick="bcGran('sem')">Semaine</button>
+      <button class="fbtn" id="bcg-mois" onclick="bcGran('mois')">Mois</button>
+    </div>
+    <span id="bc-gran-lbl" style="font-size:12px;color:var(--gray)">Semaine S24 — 8 au 14 juin 2026</span>
+  </div>
+
+  <div class="row2">
+    <div class="card"><div class="card-title">TENDANCE TVO (OBJECTIF 85 %)</div><div class="ch" style="height:190px"><canvas id="c-bc-tvo"></canvas></div></div>
+    <div class="card"><div class="card-title">DÉMARRAGE TARDIF — MOYENNE PAR JOUR</div><div class="ch" style="height:190px"><canvas id="c-bc-inc"></canvas></div></div>
+  </div>
+  <div class="row2">
+    <div class="card"><div class="card-title">ACTIVITÉ PAR SALLE — TERMINÉES / ANNULÉES</div><div class="ch" style="height:200px"><canvas id="c-bc-sal"></canvas></div></div>
+    <div class="card"><div class="card-title">ACTIVITÉ PAR TYPE DE SALLE</div><div class="ch" style="height:200px"><canvas id="c-bc-type"></canvas></div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:10px">
+    <div class="card-title">ACTIVITÉ CUMULÉE PAR SPÉCIALITÉ — 2024 / 2025</div>
+    <table class="dtbl">
+      <thead>
+        <tr>
+          <th>Spécialité</th>
+          <th style="color:#b07d10">2024</th>
+          <th style="color:#2563eb">2025</th>
+          <th>Écart</th>
+          <th>Évol.</th>
+        </tr>
+      </thead>
+      <tbody>${actRows}</tbody>
+      <tfoot>
+        <tr>
+          <td><strong>TOTAL</strong></td>
+          <td><strong>10 616</strong></td>
+          <td><strong>11 302</strong></td>
+          <td><span class="ep">+686</span></td>
+          <td><span class="evp">+6,5%</span></td>
+        </tr>
+        <tr>
+          <td><em>TOTAL hors Anesthésie EndoTho Endodig</em></td>
+          <td><em>9 440</em></td>
+          <td><em>10 051</em></td>
+          <td><span class="ep">+611</span></td>
+          <td><span class="evp">+6,5%</span></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="card" style="margin-bottom:10px">
+    <div class="card-title">PAR SPÉCIALITÉS — COMPARAISON 2024 / 2025</div>
+    <div class="ch" style="height:260px"><canvas id="c-bc-cum"></canvas></div>
+  </div>
+
+  <div class="row2">
+    <div class="card"><div class="card-title">ACTIVITÉ PAR TYPE D'ACTE (TOP 11)</div><div class="ch" style="height:250px"><canvas id="c-bc-act"></canvas></div></div>
+    <div class="card"><div class="card-title">CONFORMITÉ CHECK-LIST HAS PAR SALLE</div>
+      <div class="ch" style="height:180px"><canvas id="c-bc-has"></canvas></div>
+      <div style="margin-top:10px">
+        ${BC_HAS_S.map((s,i)=>pbar(s,BC_HAS[i],110,BC_HAS[i]>=95?'ok':BC_HAS[i]>=80?'warn':'bad')).join('')}
+      </div>
+    </div>
+  </div>`;
+
+  // ── Static charts (cumulative + acte + HAS)
+  mkChart('c-bc-cum',{type:'bar',data:{labels:ACT_S,datasets:[
+    {label:'2024',data:ACT_24,backgroundColor:'#f4b942'},
+    {label:'2025',data:ACT_25,backgroundColor:'#3b82f6'}
+  ]},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:11},padding:16,boxWidth:14,usePointStyle:true}}},
+    scales:{y:{min:0,max:2200,ticks:{stepSize:550,font:{size:9}}},x:{ticks:{font:{size:9},maxRotation:45}}}
+  }});
+
+  mkChart('c-bc-act',{type:'bar',data:{labels:ACTES_L,datasets:[
+    {label:'Terminées',data:ACTES_T,backgroundColor:'#0ea5a0'},
+    {label:'Annulées',data:ACTES_A,backgroundColor:'#e53e3e'}
+  ]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{position:'top',labels:{font:{size:9}}}},scales:{x:{stacked:true},y:{stacked:true,ticks:{font:{size:9}}}}}});
+
+  mkChart('c-bc-has',{type:'bar',data:{labels:BC_HAS_S,datasets:[{data:BC_HAS,backgroundColor:BC_HAS.map(v=>v>=95?'#38a169':v>=80?'#ed8936':'#e53e3e')}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:110,ticks:{callback:v=>v+'%',font:{size:9}}}}}});
+
+  // ── Granularity switcher
+  window.bcGran=function(p){
+    const d=window._bcPD[p];
+    document.getElementById('bc-gran-lbl').textContent=d.label;
+    ['jour','sem','mois'].forEach(k=>document.getElementById('bcg-'+k).classList.toggle('active',k===p));
+    // Destroy old period charts before redraw
+    ['c-bc-tvo','c-bc-inc','c-bc-sal','c-bc-type'].forEach(id=>{
+      if(charts[id]){try{charts[id].destroy();}catch(e){}delete charts[id];}
+    });
+    // TVO trend
+    const tvoDs=[{label:'TVO (%)',data:d.tvoV,borderColor:'#0a1628',backgroundColor:'rgba(10,22,40,.08)',fill:true,tension:.3,borderWidth:2,pointRadius:5,pointBackgroundColor:'#0a1628'}];
+    mkChart('c-bc-tvo',{type:'line',data:{labels:d.tvoL,datasets:tvoDs},options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw+'%'}}},
+      scales:{y:{min:0,max:120,ticks:{callback:v=>v+'%',font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:9}}}}
+    }});
+    // Heure 1ère incision
+    mkChart('c-bc-inc',{type:'bar',data:{labels:d.incL,datasets:[
+      {label:'h moy.',data:d.incV,backgroundColor:d.incV.map(v=>v<8?'#ed8936':'#3b82f6'),borderRadius:4}
+    ]},options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const h=Math.floor(ctx.raw);const mn=Math.round((ctx.raw-h)*60);return h+'h'+String(mn).padStart(2,'0');}}}},
+      scales:{y:{min:6.5,max:10,ticks:{stepSize:.5,callback:v=>{const h=Math.floor(v);const mn=Math.round((v-h)*60);return h+'h'+(mn?String(mn).padStart(2,'0'):'');},font:{size:9}}},x:{ticks:{font:{size:9}}}}
+    }});
+    // Activité par salle
+    mkChart('c-bc-sal',{type:'bar',data:{labels:BC_SAL_L,datasets:[
+      {label:'Terminées',data:d.salT,backgroundColor:'#0ea5a0',stack:'s'},
+      {label:'Annulées', data:d.salA,backgroundColor:'#e53e3e',stack:'s'}
+    ]},options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{font:{size:10}}}},
+      scales:{x:{stacked:true,ticks:{font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}
+    }});
+    // Activité par type de salle
+    mkChart('c-bc-type',{type:'bar',data:{labels:BC_TYPE_L,datasets:[
+      {label:'Terminées',data:d.typeT,backgroundColor:'#0ea5a0',stack:'s'},
+      {label:'Annulées', data:d.typeA,backgroundColor:'#e53e3e',stack:'s'}
+    ]},options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{font:{size:10}}}},
+      scales:{x:{stacked:true,ticks:{font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}
+    }});
+  };
+
+  // Default: Semaine
+  window.bcGran('sem');
+}
+
+// ═══════════════════════════════════════
+// VIEW : BFASTTRACK
+// ═══════════════════════════════════════
+function vBft(){
+  const m=document.getElementById('main');
+  const BFT_HAS_S=['BL-03','BL-07'];
+  const BFT_HAS=[73,83];
+  // Données période S24 (15→21 juin 2026) — source JPEGs
+  const BFT_TVO_C=[85,27,46,27,73];
+  const BFT_TVO_P=[76,115,93,143,126];
+  const BFT_DATES=['06-15','06-16','06-17','06-18','06-19'];
+  const BFT_SAL_T=[13,8]; const BFT_SAL_A=[3,3]; // BL-07 / BL-03
+  const BFT_ACTES=['Arthroplastie genou','Amygdalectomie','Hystérectomie totale','Craniotomie tumeur','Remplacement valve','Pontage coronarien','Hernie inguinale','Cholécystectomie','Arthroplastie hanche'];
+  const BFT_ACT_T=[6,7,2,3,1,1,1,1,0]; const BFT_ACT_A=[2,1,1,0,0,0,0,0,1];
+  m.innerHTML=`
+  <div class="bil-hdr">
+    <div class="bil-title">BFASTTRACK_2025 — BILAN DU PÉRIMÈTRE</div>
+    <div class="bil-sub">Circuit court ambulatoire (fast-track) — salles BL-03 et BL-07 · Période analysée : 2026-06-15 → 2026-06-21 · Source : OPERA</div>
+    <div class="kpi-grid" style="margin-top:12px;margin-bottom:0">
+      ${kpi('TVO DU PÉRIMÈTRE','53.5','%','▼ 57.5 % vs période préc. · Cible ≥ 85 %','dn-bad','bad')}
+      ${kpi('NOMBRE DE VACATIONS','12','vac.','BL-03 + BL-07','neut','info')}
+      ${kpi('TROS','78.4','%','▼ 4.3 % vs préc.','dn-bad','warn')}
+      ${kpi('INTERVENTIONS TERMINÉES','21','','▼ 10 vs période précédente','dn-bad','warn')}
+      ${kpi('DÉMARRAGES TARDIFS (≤ 15 MIN)','76.2','%','▼ 10.9 % vs période précédente','dn-bad','warn')}
+      ${kpi('DURÉE MOYENNE OPÉRATOIRE','118','min','▼ 61.5 min vs période précédente','dn-good','info')}
+      ${kpi('DÉBORDEMENTS','3','cas / 22 min','▲ 1 cas vs préc.','up-bad','warn')}
+      ${kpi('SUSPENSIONS ET ABANDONS','1','cas','= 0 vs préc.','neut','info')}
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:10px">
+    <div class="card-title">TENDANCE TVO DU PÉRIMÈTRE</div>
+    <div class="ch" style="height:200px"><canvas id="c-bft-tvo"></canvas></div>
+  </div>
+
+  <div class="row2">
+    <div class="card"><div class="card-title">ACTIVITÉ PAR SALLE</div>
+      <div class="ch" style="height:180px"><canvas id="c-bft-sal"></canvas></div>
+    </div>
+    <div class="card"><div class="card-title">CONFORMITÉ CHECK-LIST HAS PAR SALLE</div>
+      <div class="ch" style="height:130px"><canvas id="c-bft-has"></canvas></div>
+      <div style="margin-top:8px">
+        ${BFT_HAS_S.map((s,i)=>pbar(s,BFT_HAS[i],110,BFT_HAS[i]>=95?'ok':BFT_HAS[i]>=80?'warn':'bad')).join('')}
+      </div>
+      <div class="info-note" style="margin-top:6px">🔴 BL-03 (73%) sous seuil 80 % — action corrective requise</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:10px">
+    <div class="card-title">ACTIVITÉ PAR TYPE D'ACTE</div>
+    <div class="ch" style="height:220px"><canvas id="c-bft-act"></canvas></div>
+  </div>
+
+  <div class="row2">
+    <div class="card"><div class="card-title">ACTIVITÉ CUMULÉE PAR SPÉCIALITÉ — 2025</div>
+      <table class="dtbl"><thead><tr><th>Spécialité</th><th>2025</th><th>% Total</th></tr></thead>
+      <tbody>${BFT_S.map((s,i)=>`<tr><td>${s}</td><td><strong>${BFT_D[i].toLocaleString()}</strong></td><td class="col-t">${(BFT_D[i]/2240*100).toFixed(1)}%</td></tr>`).join('')}
+      <tr style="background:#f0f7f7;font-weight:700"><td>TOTAL</td><td>2 240</td><td>100%</td></tr></tbody></table>
+    </div>
+    <div class="card"><div class="card-title">RÉPARTITION PAR SPÉCIALITÉ 2025</div>
+      <div class="ch" style="height:220px"><canvas id="c-bft"></canvas></div>
+    </div>
+  </div>`;
+
+  mkChart('c-bft-tvo',{type:'line',data:{labels:BFT_DATES,datasets:[
+    {label:'TVO période courante (%)',data:BFT_TVO_C,borderColor:'#0a1628',backgroundColor:'rgba(10,22,40,.06)',fill:true,tension:.4,borderWidth:2,pointRadius:4},
+    {label:'Période précédente (%)',data:BFT_TVO_P,borderColor:'#aabbcc',backgroundColor:'transparent',tension:.4,borderWidth:2,borderDash:[6,3],pointRadius:3}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{min:0,max:160,ticks:{callback:v=>v+' %',font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+
+  mkChart('c-bft-sal',{type:'bar',data:{labels:['BL-07','BL-03'],datasets:[
+    {label:'Terminées',data:BFT_SAL_T,backgroundColor:'#0ea5a0'},
+    {label:'Annulées',data:BFT_SAL_A,backgroundColor:'#e53e3e'}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{x:{stacked:true},y:{stacked:true,ticks:{font:{size:9}}}}}});
+
+  mkChart('c-bft-has',{type:'bar',data:{labels:BFT_HAS_S,datasets:[{data:BFT_HAS,backgroundColor:BFT_HAS.map(v=>v>=95?'#38a169':v>=80?'#ed8936':'#e53e3e')}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:110,ticks:{callback:v=>v+'%',font:{size:9}}}}}});
+
+  mkChart('c-bft-act',{type:'bar',data:{labels:BFT_ACTES,datasets:[
+    {label:'Terminées',data:BFT_ACT_T,backgroundColor:'#0ea5a0'},
+    {label:'Annulées',data:BFT_ACT_A,backgroundColor:'#e53e3e'}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{x:{stacked:true,ticks:{font:{size:9},maxRotation:45}},y:{stacked:true,ticks:{font:{size:9}}}}}});
+
+  mkChart('c-bft',{type:'bar',data:{labels:BFT_S,datasets:[{label:'2025',data:BFT_D,backgroundColor:'#3b82f6'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{font:{size:10}}},x:{ticks:{font:{size:10}}}}}});
+}
+
+// ═══════════════════════════════════════
+// VIEW : ROBOT
+// ═══════════════════════════════════════
+function vRobot(){
+  const m=document.getElementById('main');
+  const ROB_SAL_L=['BL-02','BL-03','BL-07','BL-08','BL-09'];
+  const ROB_ACTE_L=['Prostatectomie radicale','Cystectomie totale','Hystérectomie robot','Salpingo-ovariectomie','Colectomie droite','Gastrectomie','Thyroïdectomie','Lobectomie pulm.','Thymectomie'];
+  const rows=ROB_S.map((s,i)=>{const d=ROB_25[i]-ROB_24[i],p=Math.round(d/ROB_24[i]*100);return`<tr><td>${s}</td><td>${ROB_24[i]}</td><td><strong>${ROB_25[i]}</strong></td><td><span class="${d>=0?'ep':'en'}">${d>0?'+':''}${d}</span></td><td><span class="${p>=0?'evp':'evn'}">${p>0?'+':''}${p}%</span></td></tr>`;}).join('');
+
+  window._robPD={
+    jour:{
+      label:'Lundi 15 juin 2026',
+      tvo:'110',int_:'15',ponct:'73.3',ann:'0',dur:'182.9',cl:'100',
+      tvoSub:'vs préc. : n/d', intSub:'n/d', ponctSub:'n/d', annSub:'n/d', durSub:'n/d', clSub:'n/d',
+      tvoTrend:'neut', intTrend:'neut', ponctTrend:'neut', annTrend:'neut',
+      tvoL:['15/06'],tvoV:[110],
+      salT:[3,2,3,3,4],salA:[0,0,0,0,0],
+      hasV:[100,100,100,100,100],
+      acteT:[4,0,3,0,3,0,1,2,2],acteA:[0,0,0,0,0,0,0,0,0]
+    },
+    sem:{
+      label:'Semaine 15–19 juin 2026',
+      tvo:'98.2',int_:'79',ponct:'73.4',ann:'10.2',dur:'149.9',cl:'87.3',
+      tvoSub:'▲ 4.5 % vs préc.', intSub:'▼ 1 vs préc.', ponctSub:'▼ 7.9 % vs préc.', annSub:'▲ 4.5 % vs préc.', durSub:'▲ 10.8 min vs préc.', clSub:'▲ 1 % vs préc.',
+      tvoTrend:'up-good', intTrend:'dn-bad', ponctTrend:'dn-bad', annTrend:'up-bad',
+      tvoL:['15/06','16/06','17/06','18/06','19/06'],tvoV:[88,95,70,55,105],
+      salT:[17,8,14,18,22],salA:[2,1,4,2,0],
+      hasV:[82,75,83,96,83],
+      acteT:[18,10,14,7,9,5,5,7,4],acteA:[2,2,1,1,1,1,0,0,1]
+    },
+    mois:{
+      label:'Juin–Juillet 2026 (08/06 → 08/07)',
+      tvo:'51',int_:'175',ponct:'78.3',ann:'6.4',dur:'147.2',cl:'86.1',
+      tvoSub:'vs préc. : n/d', intSub:'n/d', ponctSub:'n/d', annSub:'n/d', durSub:'n/d', clSub:'n/d',
+      tvoTrend:'neut', intTrend:'neut', ponctTrend:'neut', annTrend:'neut',
+      tvoL:['08/06','15/06','22/06','29/06','06/07'],tvoV:[95,92,85,55,5],
+      salT:[42,33,29,33,38],salA:[2,5,7,5,3],
+      hasV:[83,67,83,87,83],
+      acteT:[40,22,32,15,20,11,11,15,9],acteA:[4,3,2,2,2,1,1,1,2]
+    },
+    tout:{
+      label:'Toute la période (début → fin)',
+      tvo:'51',int_:'175',ponct:'78.3',ann:'6.4',dur:'147.2',cl:'86.1',
+      tvoSub:'vs préc. : n/d', intSub:'n/d', ponctSub:'n/d', annSub:'n/d', durSub:'n/d', clSub:'n/d',
+      tvoTrend:'neut', intTrend:'neut', ponctTrend:'neut', annTrend:'neut',
+      tvoL:['2026-S23','2026-S24','2026-S25','2026-S26','2026-S27'],tvoV:[98,95,30,3,0],
+      salT:[43,25,32,35,40],salA:[2,9,8,5,4],
+      hasV:[83,67,83,87,83],
+      acteT:[40,22,32,15,20,11,11,15,9],acteA:[4,3,2,2,2,1,1,1,2]
+    }
+  };
+
+  m.innerHTML=`
+  <div class="bil-hdr">
+    <div class="bil-title">ROBOT_2025 — BILAN DU PÉRIMÈTRE</div>
+    <div class="bil-sub">Salles équipées du robot chirurgical Da Vinci · Période analyse : 2026-06-15 → 2026-06-19 (filtres courants appliqués)</div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:10px;margin:10px 0 6px">
+    <div class="fgrp">
+      <button class="fbtn" id="robg-jour" onclick="robGran('jour')">Jour</button>
+      <button class="fbtn active" id="robg-sem"  onclick="robGran('sem')">Semaine</button>
+      <button class="fbtn" id="robg-mois" onclick="robGran('mois')">Mois</button>
+      <button class="fbtn" id="robg-tout" onclick="robGran('tout')">Tout</button>
+    </div>
+    <span id="rob-gran-lbl" style="font-size:12px;color:var(--gray)">Semaine 15–19 juin 2026</span>
+  </div>
+
+  <div id="rob-kpi-block" class="kpi-grid" style="margin-bottom:10px"></div>
+
+  <div class="row2">
+    <div class="card"><div class="card-title">TENDANCE TVO DU PÉRIMÈTRE</div><div class="ch" style="height:190px"><canvas id="c-rob-tvo"></canvas></div></div>
+    <div class="card"><div class="card-title">ACTIVITÉ PAR SALLE — TERMINÉES / ANNULÉES</div><div class="ch" style="height:190px"><canvas id="c-rob-sal"></canvas></div></div>
+  </div>
+  <div class="row2">
+    <div class="card"><div class="card-title">ACTIVITÉ PAR TYPE D'ACTE</div><div class="ch" style="height:260px"><canvas id="c-rob-act"></canvas></div></div>
+    <div class="card"><div class="card-title">CONFORMITÉ CHECK-LIST HAS PAR SALLE</div>
+      <div class="ch" style="height:160px"><canvas id="c-rob-has"></canvas></div>
+      <div id="rob-has-bars" style="margin-top:8px"></div>
+    </div>
+  </div>
+
+  <div class="row2">
+    <div class="card"><div class="card-title">ACTIVITÉ ROBOT PAR SPÉCIALITÉ — 2024 vs 2025</div>
+      <table class="dtbl"><thead><tr><th>Spécialité</th><th>2024</th><th>2025</th><th>Écart</th><th>Évol.</th></tr></thead>
+      <tbody>${rows}<tr style="background:#f0f7f7;font-weight:700"><td>TOTAL</td><td>834</td><td>902</td><td><span class="ep">+68</span></td><td><span class="evp">+8%</span></td></tr></tbody></table>
+    </div>
+    <div class="card"><div class="card-title">PAR SPÉCIALITÉS — COMPARAISON 2024 / 2025</div><div class="ch" style="height:240px"><canvas id="c-rob"></canvas></div></div>
+  </div>`;
+
+  // Static chart
+  mkChart('c-rob',{type:'bar',data:{labels:ROB_S,datasets:[{label:'2024',data:ROB_24,backgroundColor:'#f4b942'},{label:'2025',data:ROB_25,backgroundColor:'#1a3a6b'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{font:{size:10}}},x:{ticks:{font:{size:10}}}}}});
+
+  // Granularity switcher
+  window.robGran=function(p){
+    const d=window._robPD[p];
+    document.getElementById('rob-gran-lbl').textContent=d.label;
+    ['jour','sem','mois','tout'].forEach(k=>document.getElementById('robg-'+k).classList.toggle('active',k===p));
+    // KPI cards
+    const tvoCl=parseFloat(d.tvo)>=85?'ok':'bad';
+    const ponctCl=parseFloat(d.ponct)>=80?'ok':'warn';
+    const annCl=parseFloat(d.ann)<=5?'ok':'bad';
+    const clCl=parseFloat(d.cl)>=95?'ok':parseFloat(d.cl)>=80?'warn':'bad';
+    document.getElementById('rob-kpi-block').innerHTML=
+      kpi('TVO DU PÉRIMÈTRE',d.tvo,'%',d.tvoSub,d.tvoTrend,tvoCl)+
+      kpi('NOMBRE DE VACATIONS','25','vac.','Salles robot','neut','info')+
+      kpi('TROS','91.3','%','▲ 2.4 % vs préc.','up-good','ok')+
+      kpi('INTERVENTIONS TERMINÉES',d.int_,'','▶ '+d.intSub,d.intTrend,'info')+
+      kpi('DÉMARRAGES TARDIFS (≤ 15 MIN)',d.ponct,'%',d.ponctSub,d.ponctTrend,ponctCl)+
+      kpi('DURÉE MOYENNE OPÉRATOIRE',d.dur,'min',d.durSub,'neut','info')+
+      kpi('DÉBORDEMENTS','4','cas / 31 min','▲ 1 cas vs préc.','up-bad','warn')+
+      kpi('SUSPENSIONS ET ABANDONS','1','cas','= 0 vs préc.','neut','info');
+    // Destroy old period charts
+    ['c-rob-tvo','c-rob-sal','c-rob-act','c-rob-has'].forEach(id=>{
+      if(charts[id]){try{charts[id].destroy();}catch(e){}delete charts[id];}
+    });
+    // TVO trend
+    mkChart('c-rob-tvo',{type:'line',data:{labels:d.tvoL,datasets:[
+      {label:'TVO (%)',data:d.tvoV,borderColor:'#0a1628',backgroundColor:'rgba(10,22,40,.08)',fill:true,tension:.3,borderWidth:2,pointRadius:5,pointBackgroundColor:'#0a1628'}
+    ]},options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw+'%'}}},
+      scales:{y:{min:0,max:130,ticks:{callback:v=>v+'%',font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:9}}}}
+    }});
+    // Activité par salle
+    mkChart('c-rob-sal',{type:'bar',data:{labels:ROB_SAL_L,datasets:[
+      {label:'Terminées',data:d.salT,backgroundColor:'#0ea5a0',stack:'s'},
+      {label:'Annulées', data:d.salA,backgroundColor:'#e53e3e',stack:'s'}
+    ]},options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{font:{size:10}}}},
+      scales:{x:{stacked:true,ticks:{font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}
+    }});
+    // Activité par type d'acte
+    mkChart('c-rob-act',{type:'bar',data:{labels:ROB_ACTE_L,datasets:[
+      {label:'Terminées',data:d.acteT,backgroundColor:'#0ea5a0',stack:'s'},
+      {label:'Annulées', data:d.acteA,backgroundColor:'#e53e3e',stack:'s'}
+    ]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{legend:{position:'top',labels:{font:{size:10}}}},
+      scales:{x:{stacked:true,ticks:{font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}
+    }});
+    // Check-list HAS
+    mkChart('c-rob-has',{type:'bar',data:{labels:ROB_SAL_L,datasets:[
+      {data:d.hasV,backgroundColor:d.hasV.map(v=>v>=95?'#38a169':v>=80?'#ed8936':'#e53e3e')}
+    ]},options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{y:{min:0,max:110,ticks:{callback:v=>v+'%',font:{size:9}}}}
+    }});
+    // HAS progress bars
+    document.getElementById('rob-has-bars').innerHTML=
+      ROB_SAL_L.map((s,i)=>pbar(s,d.hasV[i],110,d.hasV[i]>=95?'ok':d.hasV[i]>=80?'warn':'bad')).join('');
+  };
+
+  window.robGran('sem');
+}
+
+// ═══════════════════════════════════════
+// VIEW : MODULE E1 — OCCUPATION SALLES
+// ═══════════════════════════════════════
+function vOcc(){
+  const m=document.getElementById('main');
+  m.innerHTML=`
+  <div class="page-title">E1 · OCCUPATION DES SALLES — TVO & TROS [EF-01 à EF-08]</div>
+  <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+    ${kpi('TVO MOYEN SEMAINE','96.1','%','Cible ≥ 85 %','neut','ok')}
+    ${kpi('NOMBRE DE VACATIONS','48','vac.','Semaine du 15/06','neut','info')}
+    ${kpi('TROS','87.4','%','▲ 1.2 % vs préc. · Cible ≥ 85 %','up-good','ok')}
+    ${kpi('DÉBORDEMENTS','7','cas / 43 min','= 0 cas vs préc.','neut','warn')}
+  </div>
+  <div class="row2">
+    <div class="card"><div class="card-title">TVO PAR SALLE (semaine du 15/06) — SEUIL 85 %</div>
+      <div class="ch" style="height:200px"><canvas id="c-tvo-sal"></canvas></div>
+      <div class="info-note" style="margin-top:8px">🔴 BL-01, BL-03, BL-04 sous le seuil de 85 % — alertes actives [EF-03]</div>
+    </div>
+    <div class="card"><div class="card-title">DÉCOMPOSITION DU TEMPS PAR SALLE</div><div class="ch" style="height:200px"><canvas id="c-temps"></canvas></div></div>
+  </div>`;
+
+  const tvoColors=TVO_SAL.map(v=>v>=85?'#38a169':v>=75?'#ed8936':'#e53e3e');
+  mkChart('c-tvo-sal',{type:'bar',data:{labels:BC_SALLES,datasets:[
+    {label:'TVO %',data:TVO_SAL,backgroundColor:tvoColors},
+    {label:'Seuil 85%',data:Array(8).fill(85),type:'line',borderColor:'#e53e3e',borderDash:[4,3],borderWidth:2,pointRadius:0,order:0}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{min:0,max:120,ticks:{callback:v=>v+'%',font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+
+  mkChart('c-temps',{type:'bar',data:{labels:BC_SALLES,datasets:[
+    {label:'Temps opéré',data:[60,72,58,68,80,62,70,22],backgroundColor:'#0ea5a0'},
+    {label:'Turn-over',data:[12,14,11,15,10,13,12,8],backgroundColor:'#f4b942'},
+    {label:'Temps mort',data:[28,14,31,17,10,25,18,70],backgroundColor:'#e2e8f0'}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:9}}}},scales:{x:{stacked:true},y:{stacked:true,ticks:{callback:v=>v+' min',font:{size:9}}}}}});
+
+}
+
+// ═══════════════════════════════════════
+// VIEW : MODULE E2 — PONCTUALITÉ
+// ═══════════════════════════════════════
+function vPonct(){
+  const m=document.getElementById('main');
+  m.innerHTML=`
+  <div class="page-title">E2 · DÉMARRAGES TARDIFS [EF-09 à EF-12]</div>
+  <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+    ${kpi('DÉMARRAGES TARDIFS (≤ 15 MIN)','73.3','%','▲ 1.1 % vs préc. · Cible ≥ 80 %','up-good','warn')}
+    ${kpi('RETARDS > 30 MIN','12','cas','▲ 3 vs préc.','up-bad','bad')}
+    ${kpi('HEURE 1er DÉMARRAGE','08h14','moy.','Cible 08h00','up-bad','warn')}
+    ${kpi('RETARDS PRATICIEN','7','cas','Source principale','up-bad','bad')}
+  </div>
+  <div class="row2">
+    <div class="card"><div class="card-title">DÉMARRAGES TARDIFS PAR SALLE (% vacations démarrant ≤ 15 min) [EF-11]</div>
+      <div class="ch" style="height:200px"><canvas id="c-ponct"></canvas></div>
+    </div>
+    <div class="card"><div class="card-title">CAUSES DES RETARDS [EF-10]</div>
+      <div class="ch" style="height:200px"><canvas id="c-causes"></canvas></div>
+    </div>
+  </div>
+  <div class="card"><div class="card-title">TENDANCE DÉMARRAGES TARDIFS HEBDOMADAIRE [EF-12]</div><div class="ch" style="height:160px"><canvas id="c-ponct-trend"></canvas></div></div>`;
+
+  const pc=PONCT_DATA.map(v=>v>=80?'#38a169':v>=60?'#ed8936':'#e53e3e');
+  mkChart('c-ponct',{type:'bar',data:{labels:PONCT_SALLES,datasets:[
+    {label:'Ponctualité %',data:PONCT_DATA,backgroundColor:pc},
+    {label:'Cible 80%',data:Array(8).fill(80),type:'line',borderColor:'#38a169',borderDash:[4,3],borderWidth:2,pointRadius:0,order:0}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{min:0,max:105,ticks:{callback:v=>v+'%',font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+
+  mkChart('c-causes',{type:'doughnut',data:{labels:['Praticien non disponible','Patient non prêt','Matériel/équipement','Brancardage','Salle non disponible','Anesthésie'],datasets:[{data:[28,22,18,14,11,7],backgroundColor:['#e53e3e','#ed8936','#f4b942','#3b82f6','#8b5cf6','#0ea5a0'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},padding:8}}}}});
+
+  mkChart('c-ponct-trend',{type:'line',data:{labels:['S22','S23','S24','S25','S26','S27'],datasets:[
+    {label:'Ponctualité semaine %',data:[68,71,70,73,75,73],borderColor:'#0ea5a0',backgroundColor:'rgba(14,165,160,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:4},
+    {label:'Cible 80%',data:Array(6).fill(80),borderColor:'#38a169',borderDash:[5,3],borderWidth:1.5,pointRadius:0}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{min:50,max:100,ticks:{callback:v=>v+'%',font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+}
+
+// ═══════════════════════════════════════
+// VIEW : E3 — DURÉES
+// ═══════════════════════════════════════
+function vDuree(){
+  const m=document.getElementById('main');
+  m.innerHTML=`
+  <div class="page-title">E3 · DURÉES DES INTERVENTIONS [EF-13 à EF-16]</div>
+  <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+    ${kpi('DURÉE MOYENNE RÉELLE','142.3','min','▲ 8.8 min vs préc.','up-bad','bad')}
+    ${kpi('DÉPASSEMENT MOY.','12.4','min','Écart réel vs prévu','up-bad','warn')}
+    ${kpi('INTERV. DÉRIVÉES > 30%','8','actes','[EF-16] Arbitrage prog.','up-bad','bad')}
+    ${kpi('SPEC. MAÎTRISÉE','Ophtalo','','Écart -55.4 % vs prévu','neut','ok')}
+  </div>
+  <div class="row2">
+    <div class="card"><div class="card-title">TOP / FLOP — MAÎTRISE DES DURÉES PAR SPÉCIALITÉ</div>
+      <div class="row2" style="gap:8px;margin-bottom:0">
+        <div><div style="font-size:10px;font-weight:700;color:var(--green);margin-bottom:6px;">✓ TOP 5 MAÎTRISE</div>
+          <table class="dtbl"><thead><tr><th>Spécialité</th><th>Actes</th><th>Moy.</th><th>Écart</th></tr></thead>
+          <tbody>${TOP5.map(r=>`<tr><td>${r.s}</td><td>${r.a}</td><td class="col-t">${r.d}min</td><td class="ep">${r.e}%</td></tr>`).join('')}</tbody></table>
+        </div>
+        <div><div style="font-size:10px;font-weight:700;color:var(--red);margin-bottom:6px;">✗ FLOP 5 DÉRIVES</div>
+          <table class="dtbl"><thead><tr><th>Spécialité</th><th>Actes</th><th>Moy.</th><th>Écart</th></tr></thead>
+          <tbody>${FLOP5.map(r=>`<tr><td>${r.s}</td><td>${r.a}</td><td class="col-t">${r.d}min</td><td class="en">${r.e}%</td></tr>`).join('')}</tbody></table>
+        </div>
+      </div>
+    </div>
+    <div class="card"><div class="card-title">ÉCART DURÉE RÉELLE vs PRÉVISIONNELLE PAR SPÉCIALITÉ [EF-14]</div><div class="ch" style="height:220px"><canvas id="c-dur"></canvas></div></div>
+  </div>`;
+
+  mkChart('c-dur',{type:'bar',data:{labels:SPECS,datasets:[
+    {label:'Durée réelle (min)',data:[180,121,129,233,43,311,27,63],backgroundColor:'#3b82f6'},
+    {label:'Durée prévisionnelle (min)',data:[160,100,110,210,30,295,60,100],backgroundColor:'#e2e8f0'}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+}
+
+// ═══════════════════════════════════════
+// VIEW : E4 — ANNULATIONS
+// ═══════════════════════════════════════
+function vAnn(){
+  const m=document.getElementById('main');
+  m.innerHTML=`
+  <div class="page-title">E4 · DÉPROGRAMMATIONS & ANNULATIONS [EF-17 à EF-20]</div>
+  <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+    ${kpi('TAUX D\'ANNULATION','9.0','%','▲ 2.4 % · Seuil : 5 % [EF-20]','up-bad','bad')}
+    ${kpi('ANNULATIONS JOUR J','14','cas','Vs 6 déprogrammations','up-bad','bad')}
+    ${kpi('SUSPENSIONS ET ABANDONS','3','cas','▲ 1 vs préc.','up-bad','warn')}
+    ${kpi('SPÉCIALITÉ CRITIQUE','Gynéco','','6 annul. / semaine','up-bad','bad')}
+  </div>
+  <div class="row2">
+    <div class="card"><div class="card-title">ANNULATIONS PAR MOTIF [EF-17]</div><div class="ch" style="height:220px"><canvas id="c-ann-mot"></canvas></div></div>
+    <div class="card"><div class="card-title">TAUX D'ANNULATION PAR SPÉCIALITÉ [EF-18]</div><div class="ch" style="height:220px"><canvas id="c-ann-spec"></canvas></div></div>
+  </div>
+  <div class="card"><div class="card-title">ÉVOLUTION HEBDOMADAIRE DU TAUX D'ANNULATION</div><div class="ch" style="height:160px"><canvas id="c-ann-trend"></canvas></div></div>`;
+
+  mkChart('c-ann-mot',{type:'doughnut',data:{labels:MOTIFS,datasets:[{data:MDATA,backgroundColor:MCOLS,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},padding:8}}}}});
+  mkChart('c-ann-spec',{type:'bar',data:{labels:SPECS,datasets:[{label:'Annulations',data:SANN,backgroundColor:SANN.map(v=>v>=5?'#e53e3e':v>=3?'#ed8936':'#0ea5a0')}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+  mkChart('c-ann-trend',{type:'line',data:{labels:['S22','S23','S24','S25','S26','S27'],datasets:[
+    {label:'Taux annulation %',data:[6.2,7.1,8.0,7.8,9.5,9.0],borderColor:'#e53e3e',backgroundColor:'rgba(229,62,62,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:4},
+    {label:'Seuil 5%',data:Array(6).fill(5),borderColor:'#ed8936',borderDash:[5,3],borderWidth:1.5,pointRadius:0}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{min:0,max:14,ticks:{callback:v=>v+'%',font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+}
+
+// ═══════════════════════════════════════
+// VIEW : E5 — ACTIVITÉ MÉDICALE
+// ═══════════════════════════════════════
+function vAct(){
+  const m=document.getElementById('main');
+  m.innerHTML=`
+  <div class="page-title">E5 · ACTIVITÉ MÉDICALE & CASE-MIX [EF-21 à EF-24]</div>
+  <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+    ${kpi('INTERVENTIONS TOTALES','161','','Semaine du 15/06','neut','info')}
+    ${kpi('ICR PRODUITS','2 840','','Cible : 3 100','dn-bad','bad')}
+    ${kpi('GHM SPÉCIALITÉ N°1','Urologie','','2 038 actes 2025','neut','ok')}
+    ${kpi('ÉVOLUTION ACTIVITÉ','+ 6.5','%','vs 2024 (11 302 vs 10 616)','up-good','ok')}
+  </div>
+  <div class="card"><div class="card-title">ACTIVITÉ PAR SPÉCIALITÉ (TERMINÉES / ANNULÉES)</div><div class="ch" style="height:220px"><canvas id="c-act-spec"></canvas></div></div>
+  <div class="card"><div class="card-title">ACTIVITÉ PAR TYPE D'ACTE CCAM (TOP 11)</div><div class="ch" style="height:220px"><canvas id="c-act-acte"></canvas></div></div>`;
+
+  mkChart('c-act-spec',{type:'bar',data:{labels:SPECS,datasets:[{label:'Terminées',data:STERM,backgroundColor:'#0ea5a0'},{label:'Annulées',data:SANN,backgroundColor:'#e53e3e'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{x:{stacked:true,ticks:{font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}}});
+  mkChart('c-act-acte',{type:'bar',data:{labels:ACTES_L,datasets:[{label:'Terminées',data:ACTES_T,backgroundColor:'#0ea5a0'},{label:'Annulées',data:ACTES_A,backgroundColor:'#e53e3e'}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{position:'top',labels:{font:{size:9}}}},scales:{x:{stacked:true},y:{stacked:true,ticks:{font:{size:9}}}}}});
+}
+
+// ═══════════════════════════════════════
+// VIEW : E6 — QUALITÉ & SÉCURITÉ
+// ═══════════════════════════════════════
+function vQual(){
+  const m=document.getElementById('main');
+  m.innerHTML=`
+  <div class="page-title">E6 · QUALITÉ & SÉCURITÉ [EF-25 à EF-30]</div>
+  <div class="info-note blue" style="margin-bottom:10px">⚠ Module en cours de révision — <strong>Voir avec la direction de la qualité</strong> pour la définition des indicateurs et des seuils applicables.</div>
+  <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+    ${kpi('CHECK-LISTS CONFORMES','87.0','%','= 0 % vs préc. · Cible 95 %','neut','warn')}
+    ${kpi('ÉVÉNEMENTS INDÉSIRABLES','2','EI','= 0 vs préc.','neut','ok')}
+    ${kpi('RÉADMISSIONS < 30J','1.2','%','▼ 0.3 % vs préc.','dn-good','ok')}
+    ${kpi('INFECTIONS SITE OP.','0.4','%','≤ 0.5 % (seuil HAS)','neut','ok')}
+  </div>
+  <div class="row2">
+    <div class="card"><div class="card-title">CONFORMITÉ CHECK-LIST HAS PAR SALLE</div>
+      <div class="ch" style="height:180px"><canvas id="c-has2"></canvas></div>
+      <div style="margin-top:8px">${BC_HAS_S.map((s,i)=>pbar(s,BC_HAS[i],110,BC_HAS[i]>=95?'ok':BC_HAS[i]>=80?'warn':'bad')).join('')}</div>
+    </div>
+    <div class="card"><div class="card-title">TYPES D'ÉVÉNEMENTS INDÉSIRABLES</div>
+      <div class="ch" style="height:200px"><canvas id="c-ei"></canvas></div>
+    </div>
+  </div>`;
+
+  mkChart('c-has2',{type:'bar',data:{labels:BC_HAS_S,datasets:[{data:BC_HAS,backgroundColor:BC_HAS.map(v=>v>=95?'#38a169':v>=80?'#ed8936':'#e53e3e')}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:110,ticks:{callback:v=>v+'%',font:{size:9}}}}}});
+  mkChart('c-ei',{type:'doughnut',data:{labels:['Matériel défectueux','Erreur identité patient','Défaut stérilisation','Incident anesthésique','Chute','Autre'],datasets:[{data:[3,2,1,2,1,2],backgroundColor:['#e53e3e','#ed8936','#f4b942','#8b5cf6','#3b82f6','#a0aec0'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},padding:8}}}}});
+}
+
+// ═══════════════════════════════════════
+// VIEW : RH
+// ═══════════════════════════════════════
+function vRH(){
+  const m=document.getElementById('main');
+  m.innerHTML=`
+  <div class="page-title">👥 RESSOURCES HUMAINES — EFFECTIFS & ABSENTÉISME [EF-25 à EF-27]</div>
+  <div class="rh-grid">
+    <div class="rh-card"><div class="rh-ico">👨‍⚕️</div><div class="rh-lbl">Chirurgiens</div><div class="rh-val">24</div><div class="rh-sub">/ 28 planifiés</div></div>
+    <div class="rh-card"><div class="rh-ico">💉</div><div class="rh-lbl">Anesthésistes</div><div class="rh-val">12</div><div class="rh-sub">/ 14 planifiés</div></div>
+    <div class="rh-card"><div class="rh-ico">🏥</div><div class="rh-lbl">IBODE</div><div class="rh-val">18</div><div class="rh-sub">/ 20 planifiées</div></div>
+    <div class="rh-card"><div class="rh-ico">💊</div><div class="rh-lbl">IADE</div><div class="rh-val">10</div><div class="rh-sub">/ 11 planifiés</div></div>
+    <div class="rh-card"><div class="rh-ico">🤝</div><div class="rh-lbl">AS / Brancardiers</div><div class="rh-val">14</div><div class="rh-sub">/ 16 planifiés</div></div>
+    <div class="rh-card"><div class="rh-ico">📋</div><div class="rh-lbl">Secrétaires</div><div class="rh-val">4</div><div class="rh-sub">/ 5 planifiées</div></div>
+    <div class="rh-card"><div class="rh-ico">🔧</div><div class="rh-lbl">Techniciens</div><div class="rh-val">3</div><div class="rh-sub">/ 3 planifiés</div></div>
+    <div class="rh-card"><div class="rh-ico">⚡</div><div class="rh-lbl">Heures supp.</div><div class="rh-val">47</div><div class="rh-sub">cette semaine</div></div>
+  </div>
+  <div class="row2">
+    <div class="card"><div class="card-title">TAUX D'ABSENTÉISME PAR CATÉGORIE [EF-26]</div>
+      ${RH_ABS.map(r=>pbar(r.s,r.tx,12,r.tx>5?'bad':r.tx>3?'warn':'ok')).join('')}
+      <div class="info-note">Source : SIRH · Synchronisation J+1 ✓ · Données semaine du 15/06/2026</div>
+    </div>
+    <div class="card"><div class="card-title">PRÉSENCE PAR VACATION</div><div class="ch" style="height:200px"><canvas id="c-rh"></canvas></div></div>
+  </div>`;
+
+  mkChart('c-rh',{type:'bar',data:{labels:['Lun 15/06','Mar 16/06','Mer 17/06','Jeu 18/06','Ven 19/06'],datasets:[
+    {label:'Présents',data:[68,72,70,65,60],backgroundColor:'#0ea5a0'},
+    {label:'Absents',data:[10,6,8,13,18],backgroundColor:'#e53e3e'}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{x:{stacked:true},y:{stacked:true,ticks:{font:{size:9}}}}}});
+}
+
+// ═══════════════════════════════════════
+// VIEW : MÉDICO-ÉCONOMIQUE
+// ═══════════════════════════════════════
+function vEco(){
+  const m=document.getElementById('main');
+  m.innerHTML=`
+  <div class="page-title">💶 MÉDICO-ÉCONOMIQUE — T2A · GHM · COÛTS DE SALLE</div>
+  <div class="info-note blue" style="margin-bottom:10px">⚠ Module Sprint 3 · Données GAM/PMSI à J+3 (flux non encore journalisé) · Recettes T2A indicatives — validation DIM requise</div>
+  <div class="meco-kpi">
+    ${['Recettes T2A','Coût salle/h','ICR produits','Marge brute estimée'].map((l,i)=>{
+      const vals=[['9.0','M€','▲ 6% vs budget','up-good'],['1 240','€/h','= standard','neut'],['2 840','pts','▼ 8.4% vs cible','dn-bad'],['1.8','M€','Indicatif','neut']][i];
+      return`<div class="meco-card"><div class="meco-lbl">${l}</div><div class="meco-val">${vals[0]}<span class="meco-unit"> ${vals[1]}</span></div><div class="meco-trend ${vals[3]}">${vals[2]}</div></div>`;
+    }).join('')}
+  </div>
+  <div class="row2">
+    <div class="card"><div class="card-title">RECETTES T2A PAR SPÉCIALITÉ (k€) vs PRÉVISIONNEL</div><div class="ch" style="height:220px"><canvas id="c-t2a"></canvas></div></div>
+    <div class="card"><div class="card-title">RÉPARTITION GHM PAR SPÉCIALITÉ</div><div class="ch" style="height:220px"><canvas id="c-ghm"></canvas></div></div>
+  </div>`;
+
+  mkChart('c-t2a',{type:'bar',data:{labels:GHM_S,datasets:[
+    {label:'Réel (k€)',data:T2A_R,backgroundColor:'#0ea5a0'},
+    {label:'Prévisionnel (k€)',data:T2A_PREV,backgroundColor:'#e2e8f0',borderColor:'#aaa',borderWidth:1}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+
+  mkChart('c-ghm',{type:'doughnut',data:{labels:GHM_S,datasets:[{data:T2A_R,backgroundColor:['#0ea5a0','#1a3a6b','#f4b942','#3b82f6','#ed8936','#8b5cf6','#38a169','#e53e3e'],borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},padding:8}}}}});
+}
+
+// ═══════════════════════════════════════
+// VIEW : RECAP MENSUEL
+// ═══════════════════════════════════════
+function vRecapM(p){
+  const C={
+    dec25:{title:'DÉCEMBRE 2025',y1:2024,y2:2025,s:D25_S,d1:D25_24,d2:D25_25,t1:905,t2:916,sub1:776,sub2:812,
+      mo:'Décembre 2025',stats:['Sem. 49 à 1','LV > 23j','WE > 8j','25 Déc.'],mo2:'Décembre 2024',stats2:['Sem. 49 à 1','LV > 22j','WE > 9j','25 Déc.'],cumul:null,cid:'c-rdec25'},
+    jan26:{title:'JANVIER 2026',y1:2025,y2:2026,s:J26_S,d1:J26_25,d2:J26_26,t1:1093,t2:1010,sub1:943,sub2:916,
+      mo:'Janvier 2026',stats:['—','LV > 23j','WE > 8j','1er Jan.'],mo2:'Janvier 2025',stats2:['—','LV > 23j','WE > 8j','1er Jan.'],cumul:{t1:1093,t2:1010,evol:'-8%',neg:true},cid:'c-rjan26'},
+    fev26:{title:'FÉVRIER 2026',y1:2025,y2:2026,s:M26_S,d1:FEV26_25,d2:FEV26_26,t1:922,t2:945,sub1:789,sub2:854,
+      mo:'Février 2026',stats:['Sem. 6 à 9','LV > 20j','WE > 8j','Pâques S17'],mo2:'Février 2025',stats2:['Sem. 6 à 9','LV > 20j','WE > 8j','—'],
+      cumul:{t1:945,t2:945,evol:'+2.5%',neg:false},cid:'c-rfev26'},
+    mar26:{title:'MARS 2026',y1:2025,y2:2026,s:M26_S,d1:MAR26_25,d2:MAR26_26,t1:1319,t2:1246,sub1:955,sub2:884,
+      mo:'Mars 2026',stats:['Sem. 10 à 13','LV > 21j','WE > 10j','—'],mo2:'Mars 2025',stats2:['Sem. 10 à 13','LV > 21j','WE > 10j','—'],
+      note:'BC + FastTrack',cumul:{t1:1319,t2:1246,evol:'-5.5%',neg:true},cid:'c-rmar26',
+      rob:{r25:ROBM_MAR25,r26:ROBM_MAR26,rt1:88,rt2:98,cid:'c-rmar26-rob'}},
+    avr26:{title:'AVRIL 2026',y1:2025,y2:2026,s:M26_S,d1:AVR26_25,d2:AVR26_26,t1:1181,t2:1191,sub1:869,sub2:884,
+      mo:'Avril 2026',stats:['Sem. 14 à 18','LV > 21j','WE > 9j','Pâques S17'],mo2:'Avril 2025',stats2:['Sem. 14 à 18','LV > 21j','WE > 9j','—'],
+      note:'BC + FastTrack',cumul:{t1:1181,t2:1191,evol:'+0.8%',neg:false},cid:'c-ravr26',
+      rob:{r25:ROBM_AVR25,r26:ROBM_AVR26,rt1:74,rt2:88,cid:'c-ravr26-rob'}}
+  };
+  const cfg=C[p]; if(!cfg)return;
+  const m=document.getElementById('main');
+
+  const rows=cfg.s.map((s,i)=>{
+    const a=cfg.d1[i]||0,b=cfg.d2[i]||0,d=b-a;
+    const pp=a?Math.round(d/a*100):null;
+    const dc=d===0?'':(d>0?'ep':'en'),pc=pc2=pp===null?'':(pp>=0?'evp':'evn');
+    return`<tr><td>${s}</td><td>${a}</td><td>${b}</td><td><span class="${dc}">${d===0?0:(d>0?'+':'')+d}</span></td><td>${pp===null?'-':`<span class="${pc2}">${pp>0?'+':''}${pp}%</span>`}</td></tr>`;
+  }).join('');
+  const td=cfg.t2-cfg.t1,tp=cfg.t1?Math.round(td/cfg.t1*100):0,sd=cfg.s2-cfg.s1_,sp=cfg.sub1?Math.round((cfg.sub2-cfg.sub1)/cfg.sub1*100):0;
+
+  m.innerHTML=`
+  <div class="page-title">RÉCAPITULATIF ${cfg.note?'BC + FASTTRACK':'BLOC CENTRAL'} — ${cfg.title}</div>
+  ${cfg.note?`<div class="info-note blue" style="margin-bottom:10px">📊 Périmètre : ${cfg.note} · Source : Indicateur BC & BFT 2026 S24.xlsx</div>`:''}
+  ${cfg.empty?`<div class="info-note" style="margin-bottom:10px">${cfg.empty}</div>`:''}
+  <div class="recap-grid">
+    <div class="card" style="margin-bottom:0">
+      <div class="bil-title" style="margin-bottom:8px">Bloc Central — Mois de ${cfg.title}</div>
+      <table class="dtbl">
+        <thead><tr><th>Spécialité</th><th style="color:#b07d10">${cfg.y1}</th><th style="color:#2563eb">${cfg.y2}</th><th>Écart</th><th>Évol.</th></tr></thead>
+        <tbody>${rows}</tbody>
+        <tfoot>
+          <tr><td>TOTAL</td><td>${cfg.t1}</td><td>${cfg.t2}</td><td><span class="${td>=0?'ep':'en'}">${td>0?'+':''}${td}</span></td><td><span class="${tp>=0?'evp':'evn'}">${tp>0?'+':''}${tp}%</span></td></tr>
+          <tr><td><em>Hors Anesthésie EndoTho Endodig</em></td><td>${cfg.sub1}</td><td>${cfg.sub2}</td><td><span class="${(cfg.sub2-cfg.sub1)>=0?'ep':'en'}">${cfg.sub2-cfg.sub1>0?'+':''}${cfg.sub2-cfg.sub1}</span></td><td><span class="${sp>=0?'evp':'evn'}">${sp>0?'+':''}${sp}%</span></td></tr>
+        </tfoot>
+      </table>
+    </div>
+    <div>
+      <div class="cal-box" style="margin-bottom:8px"><div class="cal-title">${cfg.mo}</div><div class="cal-info">${cfg.stats.map(s=>`<div>${s}</div>`).join('')}</div></div>
+      <div class="cal-box"><div class="cal-title">${cfg.mo2}</div><div class="cal-info">${cfg.stats2.map(s=>`<div>${s}</div>`).join('')}</div></div>
+    </div>
+    ${cfg.cumul?`<div class="cum-box"><div style="font-weight:700;margin-bottom:6px">${cfg.mo}</div><div>Total ${cfg.y1} : ${cfg.cumul.t1} interv.</div><div>Total ${cfg.y2} : ${cfg.cumul.t2} interv.</div><div style="font-weight:700;color:${cfg.cumul.neg?'var(--red)':'var(--green)'};margin-top:4px">Évol. : ${cfg.cumul.evol}</div></div>`:'<div></div>'}
+  </div>
+  <div class="card"><div class="card-title">PAR SPÉCIALITÉS</div><div class="ch" style="height:220px"><canvas id="${cfg.cid}"></canvas></div></div>
+  ${cfg.rob?`
+  <div class="row2" style="margin-top:10px">
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title">ACTIVITÉ ROBOT — ${cfg.title}</div>
+      <table class="dtbl">
+        <thead><tr><th>Spécialité</th><th style="color:#b07d10">${cfg.y1}</th><th style="color:#2563eb">${cfg.y2}</th><th>Écart</th><th>Évol.</th></tr></thead>
+        <tbody>${ROB_CUM_S.map((s,i)=>{const d=cfg.rob.r26[i]-cfg.rob.r25[i],pp=cfg.rob.r25[i]?Math.round(d/cfg.rob.r25[i]*100):null;return`<tr><td>${s}</td><td>${cfg.rob.r25[i]}</td><td><strong>${cfg.rob.r26[i]}</strong></td><td><span class="${d>=0?'ep':'en'}">${d>0?'+':''}${d}</span></td><td>${pp===null?'-':`<span class="${pp>=0?'evp':'evn'}">${pp>0?'+':''}${pp}%</span>`}</td></tr>`;}).join('')}
+        <tr style="background:#f0f7f7;font-weight:700"><td>TOTAL</td><td>${cfg.rob.rt1}</td><td>${cfg.rob.rt2}</td><td><span class="${cfg.rob.rt2-cfg.rob.rt1>=0?'ep':'en'}">${cfg.rob.rt2-cfg.rob.rt1>0?'+':''}${cfg.rob.rt2-cfg.rob.rt1}</span></td><td><span class="${cfg.rob.rt2>=cfg.rob.rt1?'evp':'evn'}">${Math.round((cfg.rob.rt2-cfg.rob.rt1)/cfg.rob.rt1*100)>0?'+':''}${Math.round((cfg.rob.rt2-cfg.rob.rt1)/cfg.rob.rt1*100)}%</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title">ACTIVITÉ ROBOT PAR SPÉCIALITÉ ${cfg.y1} vs ${cfg.y2}</div>
+      <div class="ch" style="height:220px"><canvas id="${cfg.rob.cid}"></canvas></div>
+    </div>
+  </div>`:''}`;
+
+  mkChart(cfg.cid,{type:'bar',data:{labels:cfg.s,datasets:[{label:String(cfg.y1),data:cfg.d1,backgroundColor:'#f4b942'},{label:String(cfg.y2),data:cfg.d2,backgroundColor:'#1a3a6b'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+  if(cfg.rob) mkChart(cfg.rob.cid,{type:'bar',data:{labels:ROB_CUM_S,datasets:[{label:String(cfg.y1),data:cfg.rob.r25,backgroundColor:'#8090c0'},{label:String(cfg.y2),data:cfg.rob.r26,backgroundColor:'#3b82f6'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+}
+
+// ═══════════════════════════════════════
+// VIEW : RECAP CUMULÉ
+// ═══════════════════════════════════════
+function vRecapCum(){
+  const m=document.getElementById('main');
+  const rows=CUM_S.map((s,i)=>{const d=CUM_25[i]-CUM_24[i],p=Math.round(d/CUM_24[i]*100);return`<tr><td>${s}</td><td>${CUM_24[i].toLocaleString()}</td><td>${CUM_25[i].toLocaleString()}</td><td><span class="${d>=0?'ep':'en'}">${d>0?'+':''}${d}</span></td><td><span class="${p>=0?'evp':'evn'}">${p>0?'+':''}${p}%</span></td></tr>`;}).join('');
+  m.innerHTML=`
+  <div class="page-title">RÉCAPITULATIF CUMULÉ BLOC CENTRAL — 2025</div>
+  <div style="display:grid;grid-template-columns:1fr auto;gap:14px;align-items:start;margin-bottom:10px">
+    <div class="card" style="margin-bottom:0">
+      <div class="bil-title" style="margin-bottom:8px">Activité Cumulée — Bloc Central 2025 à Fin Décembre</div>
+      <table class="dtbl">
+        <thead><tr><th>Spécialité</th><th style="color:#b07d10;background:#fef9ee">2024</th><th style="color:#2563eb;background:#eff6ff">2025</th><th>Écart</th><th>Évol.</th></tr></thead>
+        <tbody>${rows}</tbody>
+        <tfoot><tr><td>TOTAL</td><td>10 616</td><td>11 302</td><td><span class="ep">+686</span></td><td><span class="evp">+6%</span></td></tr>
+        <tr><td><em>Hors Anesthésie EndoTho Endodig</em></td><td>9 440</td><td>10 051</td><td><span class="ep">+611</span></td><td><span class="evp">+6%</span></td></tr></tfoot>
+      </table>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div class="cum-box"><div style="font-weight:700;margin-bottom:5px">Décembre 2025</div><div>Sem. 49 à 1</div><div>LV > 23j | WE > 8j</div><div style="color:var(--teal);font-weight:700">Férié : 25 Déc.</div></div>
+      <div class="cum-box"><div style="font-weight:700;margin-bottom:5px">Cumul annuel</div><div>2024 : 10 616 interv.</div><div>2025 : 11 302 interv.</div><div style="font-weight:700;color:var(--green)">Évol. : +6%</div></div>
+      <div class="cum-box"><div style="font-weight:700;margin-bottom:5px">Décembre 2024</div><div>Sem. 49 à 1</div><div>LV > 22j | WE > 9j</div><div style="color:var(--teal);font-weight:700">Férié : 25 Déc.</div></div>
+    </div>
+  </div>
+  <div class="card"><div class="card-title">COMPARAISON 2024 / 2025 PAR SPÉCIALITÉ</div><div class="ch" style="height:240px"><canvas id="c-rcum"></canvas></div></div>`;
+
+  mkChart('c-rcum',{type:'bar',data:{labels:CUM_S,datasets:[{label:'2024',data:CUM_24,backgroundColor:'#8090c0'},{label:'2025',data:CUM_25,backgroundColor:'#c0c8e0'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+}
+
+// ═══════════════════════════════════════
+// VIEW : RECAP CUMULÉ 2026
+// ═══════════════════════════════════════
+function vRecapCum2026(p){
+  const C={
+    fev:{title:'À FIN FÉVRIER 2026',label:'Fin Fév 2026',src:'BC seul',t1:2015,t2:1952,sub1:1732,sub2:1767,s:M26_S,d1:CUMFEV26_25,d2:CUMFEV26_26,cid:'c-rcum26fev',rob:null},
+    mar:{title:'À FIN MARS 2026',label:'Fin Mars 2026',src:'BC + FastTrack',t1:3765,t2:3771,sub1:2687,sub2:2651,s:M26_S,d1:CUMMAR26_25,d2:CUMMAR26_26,cid:'c-rcum26mar',
+      rob:{r25:ROBMAR26_25,r26:ROBMAR26_26,rt1:240,rt2:283,cid:'c-rcum26mar-rob'}},
+    avr:{title:'À FIN AVRIL 2026',label:'Fin Avr 2026',src:'BC + FastTrack',t1:4946,t2:4962,sub1:3556,sub2:3535,s:M26_S,d1:CUMAVR26_25,d2:CUMAVR26_26,cid:'c-rcum26avr',
+      rob:{r25:ROBAVR26_25,r26:ROBAVR26_26,rt1:314,rt2:371,cid:'c-rcum26avr-rob'}}
+  };
+  const cfg=C[p]; if(!cfg)return;
+  const m=document.getElementById('main');
+  const td=cfg.t2-cfg.t1,tp=Math.round(td/cfg.t1*100);
+  const sd=cfg.sub2-cfg.sub1,sp=Math.round(sd/cfg.sub1*100);
+  const rows=cfg.s.map((s,i)=>{const a=cfg.d1[i]||0,b=cfg.d2[i]||0,d=b-a,pp=a?Math.round(d/a*100):null;
+    return`<tr><td>${s}</td><td>${a.toLocaleString()}</td><td>${b.toLocaleString()}</td><td><span class="${d>=0?'ep':'en'}">${d>0?'+':''}${d}</span></td><td>${pp===null?'-':`<span class="${pp>=0?'evp':'evn'}">${pp>0?'+':''}${pp}%</span>`}</td></tr>`;
+  }).join('');
+  m.innerHTML=`
+  <div class="page-title">RÉCAPITULATIF CUMULÉ — ${cfg.title}</div>
+  <div class="info-note blue" style="margin-bottom:10px">📊 Source : ${cfg.src} · Périmètre : ${cfg.label}</div>
+  <div style="display:grid;grid-template-columns:1fr auto;gap:14px;align-items:start;margin-bottom:10px">
+    <div class="card" style="margin-bottom:0">
+      <div class="bil-title" style="margin-bottom:8px">Activité Cumulée 2026 ${cfg.title} — 2025 vs 2026</div>
+      <table class="dtbl">
+        <thead><tr><th>Spécialité</th><th style="color:#b07d10;background:#fef9ee">2025</th><th style="color:#2563eb;background:#eff6ff">2026</th><th>Écart</th><th>Évol.</th></tr></thead>
+        <tbody>${rows}</tbody>
+        <tfoot>
+          <tr><td>TOTAL</td><td>${cfg.t1.toLocaleString()}</td><td>${cfg.t2.toLocaleString()}</td><td><span class="${td>=0?'ep':'en'}">${td>0?'+':''}${td}</span></td><td><span class="${tp>=0?'evp':'evn'}">${tp>0?'+':''}${tp}%</span></td></tr>
+          <tr><td><em>Hors Anesth. EndoTho Endodig</em></td><td>${cfg.sub1.toLocaleString()}</td><td>${cfg.sub2.toLocaleString()}</td><td><span class="${sd>=0?'ep':'en'}">${sd>0?'+':''}${sd}</span></td><td><span class="${sp>=0?'evp':'evn'}">${sp>0?'+':''}${sp}%</span></td></tr>
+        </tfoot>
+      </table>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div class="cum-box"><div style="font-weight:700;margin-bottom:5px">${cfg.label}</div><div>Cumul 2025 : ${cfg.t1.toLocaleString()} interv.</div><div>Cumul 2026 : ${cfg.t2.toLocaleString()} interv.</div><div style="font-weight:700;color:${td>=0?'var(--green)':'var(--red)'};margin-top:4px">Évol. : ${td>0?'+':''}${td} (${tp>0?'+':''}${tp}%)</div></div>
+      <div class="cum-box"><div style="font-weight:700;margin-bottom:5px">Hors flux masqués</div><div>2025 : ${cfg.sub1.toLocaleString()} interv.</div><div>2026 : ${cfg.sub2.toLocaleString()} interv.</div><div style="font-weight:700;color:${sd>=0?'var(--green)':'var(--red)'};margin-top:4px">Évol. : ${sd>0?'+':''}${sd} (${sp>0?'+':''}${sp}%)</div></div>
+    </div>
+  </div>
+  <div class="card"><div class="card-title">COMPARAISON 2025 / 2026 PAR SPÉCIALITÉ</div><div class="ch" style="height:240px"><canvas id="${cfg.cid}"></canvas></div></div>
+  ${cfg.rob?`
+  <div class="row2" style="margin-top:10px">
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title">ACTIVITÉ ROBOT CUMULÉE — ${cfg.title}</div>
+      <table class="dtbl">
+        <thead><tr><th>Spécialité</th><th style="color:#b07d10">2025</th><th style="color:#2563eb">2026</th><th>Écart</th><th>Évol.</th></tr></thead>
+        <tbody>${ROB_CUM_S.map((s,i)=>{const d=cfg.rob.r26[i]-cfg.rob.r25[i],pp=Math.round(d/cfg.rob.r25[i]*100);return`<tr><td>${s}</td><td>${cfg.rob.r25[i]}</td><td><strong>${cfg.rob.r26[i]}</strong></td><td><span class="${d>=0?'ep':'en'}">${d>0?'+':''}${d}</span></td><td><span class="${pp>=0?'evp':'evn'}">${pp>0?'+':''}${pp}%</span></td></tr>`;}).join('')}
+        <tr style="background:#f0f7f7;font-weight:700"><td>TOTAL</td><td>${cfg.rob.rt1}</td><td>${cfg.rob.rt2}</td><td><span class="${cfg.rob.rt2-cfg.rob.rt1>=0?'ep':'en'}">${cfg.rob.rt2-cfg.rob.rt1>0?'+':''}${cfg.rob.rt2-cfg.rob.rt1}</span></td><td><span class="${cfg.rob.rt2>=cfg.rob.rt1?'evp':'evn'}">${cfg.rob.rt2>=cfg.rob.rt1?'+':''}${Math.round((cfg.rob.rt2-cfg.rob.rt1)/cfg.rob.rt1*100)}%</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title">ACTIVITÉ ROBOT PAR SPÉCIALITÉ 2025 vs 2026</div>
+      <div class="ch" style="height:220px"><canvas id="${cfg.rob.cid}"></canvas></div>
+    </div>
+  </div>`:''}`;
+  mkChart(cfg.cid,{type:'bar',data:{labels:cfg.s,datasets:[{label:'2025',data:cfg.d1,backgroundColor:'#f4b942'},{label:'2026',data:cfg.d2,backgroundColor:'#1a3a6b'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+  if(cfg.rob) mkChart(cfg.rob.cid,{type:'bar',data:{labels:ROB_CUM_S,datasets:[{label:'2025',data:cfg.rob.r25,backgroundColor:'#8090c0'},{label:'2026',data:cfg.rob.r26,backgroundColor:'#3b82f6'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+}
+
+// ═══════════════════════════════════════
+// VIEW : SUIVI HEBDOMADAIRE S1–S24
+// ═══════════════════════════════════════
+function vSemaines(){
+  const m=document.getElementById('main');
+  const tvoColors=WK_TVO.map(v=>v>=85?'#38a169':v>=75?'#ed8936':'#e53e3e');
+  const avgTvo=Math.round(WK_TVO.reduce((a,b)=>a+b,0)/WK_TVO.length);
+  const maxI=WK_INT.reduce((a,b)=>a+b,0);
+  const avgI=Math.round(maxI/WK_INT.length);
+  const above75=WK_TVO.filter(v=>v>=75).length;
+  m.innerHTML=`
+  <div class="bil-hdr">
+    <div class="bil-title">SUIVI HEBDOMADAIRE — SEMAINES S1 À S24 · 2026</div>
+    <div class="bil-sub">Bloc Central · TVO & interventions par semaine · Source : Indicateur BC & BFT 2026 S24.xlsx</div>
+    <div class="kpi-grid" style="margin-top:12px;margin-bottom:0">
+      ${kpi('TVO MOYEN S1–S24',''+avgTvo,'%','Moyenne 24 semaines','neut',avgTvo>=80?'ok':avgTvo>=75?'warn':'bad')}
+      ${kpi('SEMAINES ≥ 85% TVO',''+above75,'/ 24','Seuil cible alerte','neut',above75>=20?'ok':above75>=15?'warn':'bad')}
+      ${kpi('INTERV. MOYENNES',''+avgI,'/ sem.','Hors S1 (fériée)','neut','info')}
+      ${kpi('SEMAINE RECORD','S18','88% TVO','199 interventions','up-good','ok')}
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:10px">
+    <div class="card-title">TVO BC PAR SEMAINE S1–S24 2026 (%)</div>
+    <div class="ch" style="height:220px"><canvas id="c-wk-tvo"></canvas></div>
+    <div class="info-note" style="margin-top:8px">🟢 ≥ 85 % · 🟡 75–84 % · 🔴 &lt; 85 % — S1 fériée (29 déc – 4 jan) · S17 Pâques</div>
+  </div>
+  <div class="row2">
+    <div class="card">
+      <div class="card-title">INTERVENTIONS HEBDOMADAIRES 2026</div>
+      <div class="ch" style="height:220px"><canvas id="c-wk-int"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">DÉTAIL TVO PAR SEMAINE</div>
+      <table class="dtbl" style="font-size:11px">
+        <thead><tr><th>Sem.</th><th>TVO BC</th><th>Interv.</th><th>Sem.</th><th>TVO BC</th><th>Interv.</th></tr></thead>
+        <tbody>
+          ${WK_L.slice(0,12).map((s,i)=>`<tr>
+            <td>${s}</td>
+            <td><span style="color:${WK_TVO[i]>=85?'#38a169':WK_TVO[i]>=75?'#ed8936':'#e53e3e'};font-weight:700">${WK_TVO[i]}%</span></td>
+            <td>${WK_INT[i]}</td>
+            <td>${WK_L[i+12]}</td>
+            <td><span style="color:${WK_TVO[i+12]>=85?'#38a169':WK_TVO[i+12]>=75?'#ed8936':'#e53e3e'};font-weight:700">${WK_TVO[i+12]}%</span></td>
+            <td>${WK_INT[i+12]}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+  mkChart('c-wk-tvo',{type:'bar',data:{labels:WK_L,datasets:[
+    {label:'TVO BC %',data:WK_TVO,backgroundColor:tvoColors},
+    {label:'Seuil 75%',data:Array(24).fill(75),type:'line',borderColor:'#e53e3e',borderDash:[4,3],borderWidth:2,pointRadius:0,order:0},
+    {label:'Seuil 85%',data:Array(24).fill(85),type:'line',borderColor:'#38a169',borderDash:[4,3],borderWidth:1.5,pointRadius:0,order:0}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{min:0,max:110,ticks:{callback:v=>v+'%',font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+  mkChart('c-wk-int',{type:'bar',data:{labels:WK_L,datasets:[
+    {label:'Interventions',data:WK_INT,backgroundColor:WK_INT.map(v=>v>=250?'#38a169':v>=180?'#3b82f6':'#ed8936')}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+}
+
+// ═══════════════════════════════════════
+// ═══════════════════════════════════════
+// VIEW : AUDIT RGPD [EF-34]
+// ═══════════════════════════════════════
+function vAudit(){
+  const m=document.getElementById('main');
+  const AUDIT_DATA=[
+    {dt:'2026-06-20 14:32',user:'chefbloc',action:'UPDATE_THRESHOLD',table:'app_thresholds',  detail:'tvo_min : 80 → 75 %'},
+    {dt:'2026-06-20 09:12',user:'cadre',   action:'ADD_ANNOTATION',  table:'app_annotations', detail:'Salle BL-01 · maintenance IBODE'},
+    {dt:'2026-06-19 17:05',user:'admin',   action:'CREATE_USER',      table:'app_users',       detail:'username=dr.moreau role=chirurgien'},
+    {dt:'2026-06-19 08:00',user:'dg',      action:'LOGIN',            table:'—',               detail:'IP 10.0.0.15'},
+    {dt:'2026-06-18 16:45',user:'chefbloc',action:'RESOLVE_ANNOTATION',table:'app_annotations',detail:'id=1'},
+    {dt:'2026-06-18 11:20',user:'cadre',   action:'ADD_ANNOTATION',  table:'app_annotations', detail:'BL-06 TVO faible — équipement en panne'},
+    {dt:'2026-06-17 15:10',user:'admin',   action:'UPDATE_THRESHOLD', table:'app_thresholds',  detail:'annulation_max : 3 → 5 %'},
+    {dt:'2026-06-17 08:02',user:'cme',     action:'LOGIN',            table:'—',               detail:'IP 10.0.0.22'},
+    {dt:'2026-06-16 14:55',user:'chefbloc',action:'UPDATE_THRESHOLD', table:'app_thresholds',  detail:'ponctualite_min : 70 → 60 %'},
+    {dt:'2026-06-16 10:30',user:'admin',   action:'DEACTIVATE_USER',  table:'app_users',       detail:'username=dr.durand (départ)'},
+    {dt:'2026-06-15 17:45',user:'cadre',   action:'ADD_ANNOTATION',  table:'app_annotations', detail:'BL-09 · BL-01 : résultats faibles semaine S24'},
+    {dt:'2026-06-15 08:00',user:'dg',      action:'LOGIN',            table:'—',               detail:'IP 10.0.0.15'},
+  ];
+  const actionColor={
+    'LOGIN':'#38a169','LOGOUT':'#718096',
+    'UPDATE_THRESHOLD':'#3b82f6','ADD_ANNOTATION':'#0ea5a0',
+    'RESOLVE_ANNOTATION':'#38a169','CREATE_USER':'#8b5cf6',
+    'DEACTIVATE_USER':'#e53e3e','DELETE_ANNOTATION':'#e53e3e'
+  };
+  m.innerHTML=`
+  <div class="page-title">🔒 AUDIT RGPD — TRAÇABILITÉ DES MODIFICATIONS [EF-34]</div>
+  <div class="info-note blue" style="margin-bottom:10px">
+    Toute modification de seuil, annotation, connexion ou gestion utilisateur est enregistrée dans <code>app_audit_log</code>.
+    Conformité : <strong>RGPD Art.30</strong> · <strong>PGSSI-S</strong> · <strong>HDS</strong> — Aucune donnée patient nominative dans ce système (données agrégées uniquement).
+  </div>
+  <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:10px">
+    ${kpi('CONNEXIONS (7J)','12','','semaine du 15/06','neut','info')}
+    ${kpi('MODIFICATIONS SEUILS','3','','par chefbloc / admin','neut','warn')}
+    ${kpi('ANNOTATIONS AJOUTÉES','3','','par cadre / chefbloc','neut','ok')}
+    ${kpi('ACTIONS SENSIBLES','2','','CREATE/DEACTIVATE_USER','neut','bad')}
+  </div>
+  <div class="row2">
+    <div class="card">
+      <div class="card-title">RÉPARTITION DES ACTIONS</div>
+      <div class="ch" style="height:180px"><canvas id="c-audit-act"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">ACTIONS PAR UTILISATEUR</div>
+      <div class="ch" style="height:180px"><canvas id="c-audit-usr"></canvas></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">JOURNAL COMPLET DES MODIFICATIONS</div>
+    <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+      <select id="audit-filter-user" class="fsel" onchange="filterAudit()" style="padding:4px 6px;border:1.5px solid var(--border);border-radius:5px;font-size:11px;background:white">
+        <option value="">Tous utilisateurs</option>
+        <option>dg</option><option>cme</option><option>chefbloc</option>
+        <option>cadre</option><option>chirurgien</option><option>admin</option>
+      </select>
+      <select id="audit-filter-action" class="fsel" onchange="filterAudit()" style="padding:4px 6px;border:1.5px solid var(--border);border-radius:5px;font-size:11px;background:white">
+        <option value="">Toutes actions</option>
+        <option>LOGIN</option><option>UPDATE_THRESHOLD</option>
+        <option>ADD_ANNOTATION</option><option>RESOLVE_ANNOTATION</option>
+        <option>CREATE_USER</option><option>DEACTIVATE_USER</option>
+      </select>
+    </div>
+    <table class="dtbl" id="audit-table">
+      <thead><tr>
+        <th>Date / Heure</th><th>Utilisateur</th><th>Action</th><th>Table</th><th>Détail</th>
+      </tr></thead>
+      <tbody id="audit-tbody">
+        ${AUDIT_DATA.map(r=>`<tr data-user="${r.user}" data-action="${r.action}">
+          <td style="color:var(--gray);font-size:10px">${r.dt}</td>
+          <td><strong>${r.user}</strong></td>
+          <td><span style="background:${actionColor[r.action]||'#718096'}22;color:${actionColor[r.action]||'#718096'};padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700">${r.action}</span></td>
+          <td style="color:var(--gray);font-size:10px">${r.table}</td>
+          <td>${r.detail}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+    <div style="margin-top:10px;display:flex;gap:8px">
+      <button onclick="exportAuditCSV()" class="ebtn" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;font-size:10px;background:white;cursor:pointer;font-weight:600">📊 Exporter CSV</button>
+      <span style="font-size:10px;color:var(--gray);line-height:28px">Export mensuel recommandé vers SIEM (Art.30 RGPD)</span>
+    </div>
+  </div>`;
+
+  mkChart('c-audit-act',{type:'doughnut',data:{labels:['LOGIN','UPDATE_THRESHOLD','ADD_ANNOTATION','RESOLVE_ANNOTATION','CREATE_USER','DEACTIVATE_USER'],
+    datasets:[{data:[3,3,3,1,1,1],backgroundColor:['#38a169','#3b82f6','#0ea5a0','#68d391','#8b5cf6','#e53e3e'],borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},padding:8}}}}});
+
+  mkChart('c-audit-usr',{type:'bar',data:{labels:['chefbloc','cadre','admin','dg','cme'],
+    datasets:[{label:'Actions',data:[4,3,2,2,1],backgroundColor:['#0ea5a0','#3b82f6','#e53e3e','#f4b942','#8b5cf6']}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+}
+
+// ═══════════════════════════════════════
+// VIEW : AUTRES BLOCS (placeholder)
+// ═══════════════════════════════════════
+function vBloc(nom, detail){
+  const m=document.getElementById('main');
+  m.innerHTML=`
+  <div class="bil-hdr">
+    <div class="bil-title">BLOC ${nom.toUpperCase()} — TABLEAU DE BORD</div>
+    <div class="bil-sub">${detail} · Données en cours d'intégration</div>
+  </div>
+  <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+    ${kpi('TVO','—','%','Données à venir','neut','info')}
+    ${kpi('NOMBRE DE VACATIONS','—','vac.','Données à venir','neut','info')}
+    ${kpi('TROS','—','%','Données à venir','neut','info')}
+    ${kpi('DÉMARRAGES TARDIFS','—','%','Données à venir','neut','info')}
+    ${kpi('INTERVENTIONS','—','','Données à venir','neut','info')}
+    ${kpi('DURÉE MOYENNE OPÉRATOIRE','—','min','Données à venir','neut','info')}
+    ${kpi('DÉBORDEMENTS','—','cas','Données à venir','neut','info')}
+    ${kpi('SUSPENSIONS ET ABANDONS','—','cas','Données à venir','neut','info')}
+  </div>
+  <div class="info-note blue" style="margin-top:12px">
+    📊 Ce bloc (${nom}) est en cours d'intégration dans le tableau de bord global.<br>
+    Les indicateurs TVO, TROS, Démarrages tardifs, Débordements, Suspensions et abandons seront disponibles dès la connexion des sources de données OPERA correspondantes.
+  </div>`;
+}
+
+function filterAudit(){
+  const fu=document.getElementById('audit-filter-user').value;
+  const fa=document.getElementById('audit-filter-action').value;
+  document.querySelectorAll('#audit-tbody tr').forEach(tr=>{
+    const matchU=!fu||tr.dataset.user===fu;
+    const matchA=!fa||tr.dataset.action===fa;
+    tr.style.display=(matchU&&matchA)?'':'none';
+  });
+}
+
+function exportAuditCSV(){
+  const rows=[['Date/Heure','Utilisateur','Action','Table','Détail'],
+    ['2026-06-20 14:32','chefbloc','UPDATE_THRESHOLD','app_thresholds','tvo_min : 80 → 75 %'],
+    ['2026-06-20 09:12','cadre','ADD_ANNOTATION','app_annotations','Salle BL-01 · maintenance IBODE'],
+    ['2026-06-19 17:05','admin','CREATE_USER','app_users','username=dr.moreau role=chirurgien'],
+    ['2026-06-19 08:00','dg','LOGIN','—','IP 10.0.0.15'],
+    ['2026-06-18 16:45','chefbloc','RESOLVE_ANNOTATION','app_annotations','id=1'],
+  ];
+  const csv=rows.map(r=>r.map(c=>'"'+c+'"').join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,﻿'+encodeURIComponent(csv);
+  a.download='audit_rgpd_foch_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+document.getElementById('lpwd').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+</script>
+</body>
+</html>

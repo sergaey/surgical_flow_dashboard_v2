@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Surgical Flow Dashboard — Bloc central (Lot 1)</title>
+<title>Surgical Flow Dashboard — Hôpital Foch</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -86,12 +86,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 .sb-ico{font-size:13px;width:20px;text-align:center;}
 .sb-badge{background:var(--red);color:white;border-radius:10px;padding:1px 6px;font-size:9px;font-weight:700;margin-left:2px;}
 .sb-chev{color:var(--gray);font-size:10px;margin-left:auto;}
-[id^="s-"]{margin-left:20px;border-left:1.5px solid #dde3ee;}
-.sb-item{display:flex;align-items:center;justify-content:space-between;padding:5px 12px 5px 14px;font-size:11px;color:#556;cursor:pointer;position:relative;}
-.sb-item::before{content:'';position:absolute;left:0;top:50%;width:10px;height:0;border-top:1.5px solid #dde3ee;transform:translateY(-50%);pointer-events:none;}
+.sb-item{display:flex;align-items:center;justify-content:space-between;padding:5px 12px 5px 34px;font-size:11px;color:#556;cursor:pointer;border-left:2px solid transparent;}
 .sb-item:hover{background:#f8f9fc;color:#334;}
-.sb-item.on{background:var(--teal-lt);color:var(--teal);font-weight:700;box-shadow:inset 2px 0 0 var(--teal);}
-.sb-sub{padding-left:30px !important;}
+.sb-item.on{background:var(--teal-lt);color:var(--teal);font-weight:700;border-left-color:var(--teal);}
+.sb-sub{padding-left:50px !important;}
 .sb-divider{height:1px;background:var(--border);margin:4px 12px;}
 .etl-status{margin:8px 12px;background:#f8f9fc;border-radius:6px;padding:8px 10px;font-size:10px;}
 .etl-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;}
@@ -244,7 +242,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   <div class="hsp"></div>
   <div class="hdb">🟢 ETL : J+1 synchronisé · 2026-07-22 06:47 · 31 728 lignes</div>
   <div class="hrole" id="urole">Direction Générale</div>
-  <span class="rbadge direction" id="ubadge">Direction</span>
+  <span class="rbadge direction" id="ubadge">direction</span>
   <button class="hnotif" title="31 alertes actives"><span>🔔</span><span class="nbub">31</span></button>
   <button class="hdeco" onclick="logout()">Déconnexion</button>
 </header>
@@ -296,7 +294,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <span class="sb-chev" id="cv-vue">∨</span>
   </div>
   <div id="s-vue">
-    <div class="sb-item on" id="n-dash" onclick="go('dash')"><span>Dashboard global</span><span style="color:#bbc;font-size:10px;">›</span></div>
+    <div class="sb-item on" id="n-dash" onclick="go('dash')"><span>• Dashboard global</span><span style="color:#bbc;font-size:10px;">›</span></div>
     <div class="sb-item" id="n-alerte" onclick="go('alerte')"><span>Alertes actives</span><span class="sb-badge">31</span></div>
     <div class="sb-item" id="n-bil-hdr" onclick="togSec('bil')"><span>Bilans</span><span class="sb-chev" id="cv-bil">›</span></div>
     <div id="s-bil" style="display:none">
@@ -312,21 +310,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
       <div class="sb-item sb-sub" id="n-r-dec25" onclick="go('r-dec25')">Déc 2025</div>
       <div class="sb-item sb-sub" id="n-r-cum25" onclick="go('r-cum25')">Cumul 2025</div>
       <div class="sb-item sb-sub" id="n-r-jan26" onclick="go('r-jan26')">Jan 2026</div>
-      <div class="sb-item sb-sub" id="n-r-fev26" onclick="go('r-fev26')">Fév 2026 ⚠</div>
-      <div class="sb-item sb-sub" id="n-r-mar26" onclick="go('r-mar26')">Mar 2026</div>
+      <div class="sb-item sb-sub" id="n-r-fev26" onclick="go('r-fev26')">Fév 2026</div>
+      <div class="sb-item sb-sub" id="n-r-cum26fev" onclick="go('r-cum26fev')">Cumul Fév 2026</div>
+      <div class="sb-item sb-sub" id="n-r-mar26" onclick="go('r-mar26')">Mars 2026</div>
+      <div class="sb-item sb-sub" id="n-r-cum26mar" onclick="go('r-cum26mar')">Cumul Mars 2026</div>
       <div class="sb-item sb-sub" id="n-r-avr26" onclick="go('r-avr26')">Avr 2026</div>
-      <div class="sb-item sb-sub" id="n-r-mai26" onclick="go('r-mai26')">Mai 2026</div>
-      <div class="sb-item sb-sub" id="n-r-jun26" onclick="go('r-jun26')">Jun 2026</div>
-      <div class="sb-item sb-sub" id="n-r-cum26jun" onclick="go('r-cum26jun')">Cumul Juin 2026</div>
-      <div class="sb-item sb-sub" id="n-r-jul26" onclick="go('r-jul26')">Jul 2026 <span style="font-size:9px;color:var(--gray);margin-left:4px">En cours</span></div>
-      <div class="sb-item sb-sub" id="n-r-aou26" onclick="go('r-aou26')" style="opacity:.6">Aoû 2026 <span style="font-size:9px;color:var(--gray)">À venir</span></div>
-      <div class="sb-item sb-sub" id="n-r-sep26" onclick="go('r-sep26')" style="opacity:.6">Sep 2026 <span style="font-size:9px;color:var(--gray)">À venir</span></div>
-      <div class="sb-item sb-sub" id="n-r-oct26" onclick="go('r-oct26')" style="opacity:.6">Oct 2026 <span style="font-size:9px;color:var(--gray)">À venir</span></div>
-      <div class="sb-item sb-sub" id="n-r-nov26" onclick="go('r-nov26')" style="opacity:.6">Nov 2026 <span style="font-size:9px;color:var(--gray)">À venir</span></div>
-      <div class="sb-item sb-sub" id="n-r-dec26" onclick="go('r-dec26')" style="opacity:.6">Déc 2026 <span style="font-size:9px;color:var(--gray)">À venir</span></div>
-      <div class="sb-item sb-sub" id="n-r-cum26dec" onclick="go('r-cum26dec')" style="opacity:.6">Cumul Déc 2026 <span style="font-size:9px;color:var(--gray)">À venir</span></div>
+      <div class="sb-item sb-sub" id="n-r-cum26avr" onclick="go('r-cum26avr')">Cumul Avr 2026</div>
     </div>
-    <div class="sb-item" id="n-hebdo" onclick="go('hebdo')"><span>Activités Hebdo</span></div>
   </div>
   <div class="sb-divider"></div>
 
@@ -336,13 +326,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
     <span class="sb-chev" id="cv-mod">›</span>
   </div>
   <div id="s-mod" style="display:none">
-    <div class="sb-item" id="n-occ" onclick="go('occ')"><span>E1 · Occupation salles</span></div>
-    <div class="sb-item" id="n-ponct" onclick="go('ponct')"><span>E2 · Ponctualité</span></div>
+    <div class="sb-item" id="n-ponct" onclick="go('ponct')"><span>E2 · Démarrages tardifs</span></div>
     <div class="sb-item" id="n-duree" onclick="go('duree')"><span>E3 · Durées interventions</span></div>
     <div class="sb-item" id="n-ann" onclick="go('ann')"><span>E4 · Annulations</span></div>
     <div class="sb-item" id="n-act" onclick="go('act')"><span>E5 · Activité médicale</span></div>
     <div class="sb-item" id="n-qual" onclick="go('qual')"><span>E6 · Qualité & Sécurité</span></div>
-    <div class="sb-item" id="n-e7parcours" onclick="go('e7parcours')"><span>E7 · Qualité & Parcours</span></div>
   </div>
   <div class="sb-divider"></div>
 
@@ -364,29 +352,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
   </div>
   <div class="sb-divider"></div>
 
-  <div class="sb-sec-hdr" onclick="togSec('outils')"><span class="sb-ico">🔧</span><span>Outils</span><span class="sb-chev" id="cv-outils" style="margin-left:auto;">›</span></div>
-  <div id="s-outils" style="display:none">
-    <div class="sb-item" id="n-outils" onclick="go('outils')"><span>Exports données</span></div>
+  <!-- AUTRES BLOCS -->
+  <div class="sb-sec-hdr" onclick="togSec('oblocs')">
+    <span class="sb-ico">🏥</span><span>Autres blocs</span>
+    <span class="sb-chev" id="cv-oblocs" style="margin-left:auto;">›</span>
+  </div>
+  <div id="s-oblocs" style="display:none">
+    <div class="sb-item" id="n-oph" onclick="go('oph')"><span>Bloc OPH</span><span style="color:#bbc;font-size:10px;">›</span></div>
+    <div class="sb-item" id="n-amp" onclick="go('amp')"><span>Bloc AMP</span><span style="color:#bbc;font-size:10px;">›</span></div>
+    <div class="sb-item" id="n-endouro" onclick="go('endouro')"><span>Bloc Endo-Uro</span><span style="color:#bbc;font-size:10px;">›</span></div>
+    <div class="sb-item" id="n-naissance" onclick="go('naissance')"><span>Salle de naissance</span><span style="color:#bbc;font-size:10px;">›</span></div>
+    <div class="sb-item" id="n-radiobloc" onclick="go('radiobloc')"><span>Radio-Bloc</span><span style="color:#bbc;font-size:10px;">›</span></div>
   </div>
   <div class="sb-divider"></div>
-
-  <div class="sb-sec-hdr" onclick="togSec('reporting')"><span class="sb-ico">📋</span><span>Reporting</span><span class="sb-chev" id="cv-reporting" style="margin-left:auto;">›</span></div>
-  <div id="s-reporting" style="display:none">
-    <div class="sb-item" id="n-interventions" onclick="go('interventions')"><span>Interventions</span></div>
-  </div>
-  <div class="sb-divider"></div>
-
-  <div class="sb-sec-hdr" onclick="togSec('archives')"><span class="sb-ico">🗄️</span><span>Archives</span><span class="sb-chev" id="cv-archives" style="margin-left:auto;">›</span></div>
-  <div id="s-archives" style="display:none">
-    <div class="sb-item" id="n-archives" onclick="go('archives')"><span>Bilans archivés</span></div>
-  </div>
-  <div class="sb-divider"></div>
-
+  <div class="sb-sec-hdr"><span class="sb-ico">📋</span><span>Reporting</span><span class="sb-chev" style="margin-left:auto;">›</span></div>
+  <div class="sb-sec-hdr"><span class="sb-ico">🗄️</span><span>Archives</span><span class="sb-chev" style="margin-left:auto;">›</span></div>
   <div class="sb-sec-hdr" onclick="togSec('admin')"><span class="sb-ico">⚙️</span><span>Administration</span><span class="sb-chev" id="cv-admin" style="margin-left:auto;">›</span></div>
   <div id="s-admin" style="display:none">
-    <div class="sb-item" id="n-admin-rgpd" onclick="go('admin-rgpd')"><span>RGPD & Conformité</span></div>
-    <div class="sb-item" id="n-admin-audit" onclick="go('admin-audit')"><span>Journal d'audit</span></div>
-    <div class="sb-item" id="n-admin-roles" onclick="go('admin-roles')"><span>Rôles & Accès</span></div>
+    <div class="sb-item" id="n-audit" onclick="go('audit')"><span>🔒 Audit RGPD</span></div>
   </div>
 </nav>
 
@@ -401,14 +384,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;b
 // DATA
 // ═══════════════════════════════════════
 const USERS={
-  dg:{n:'Direction Générale / DAF',b:'direction',lbl:'Direction'},
-  cme:{n:'Commission Médicale',b:'cme',lbl:'CME'},
-  chefbloc:{n:'Chef de Bloc',b:'chefbloc',lbl:'Chef Bloc'},
-  cadre:{n:'Cadre de Bloc',b:'cadre',lbl:'Cadre'},
-  chirurgien:{n:'Chirurgien',b:'chirurgien',lbl:'Chirurgien'},
-  anesthesiste:{n:'Anesthésiste',b:'anesth',lbl:'Anesthésiste'},
-  cdg:{n:'Contrôle de Gestion',b:'cdg',lbl:'CDG'},
-  admin:{n:'Administrateur',b:'admin',lbl:'Admin'}
+  dg:{n:'Direction Générale / DAF',b:'direction'},
+  cme:{n:'Commission Médicale',b:'cme'},
+  chefbloc:{n:'Chef de Bloc',b:'chefbloc'},
+  cadre:{n:'Cadre de Bloc',b:'cadre'},
+  chirurgien:{n:'Chirurgien',b:'chirurgien'},
+  anesthesiste:{n:'Anesthésiste',b:'anesth'},
+  cdg:{n:'Contrôle de Gestion',b:'cdg'},
+  admin:{n:'Administrateur',b:'admin'}
 };
 
 const DATES=['15/06','16/06','17/06','18/06','19/06'];
@@ -441,19 +424,43 @@ const D25_S=CUM_S; const D25_24=[68,4,138,0,61,125,106,0,79,91,165,68]; const D2
 const J26_S=['Anesthésie','Cardiologie','Digestif','Endo Thor.','Endodig','Gynécologie','Neurochirurgie','ORL','Thoracique','Urologie','Vasculaire'];
 const J26_25=[80,5,149,69,1,151,127,100,113,212,86]; const J26_26=[68,8,169,26,0,140,133,84,94,216,72];
 
+// ── DONNÉES MENSUELLES 2026 (source : Indicateur BC & BFT 2026 S24.xlsx) ────
+const M26_S=['Anesthésie','Cardiologie','Digestif','Endo Thoracique','Endodig','Gynécologie','Neurochirurgie','ORL','Thoracique','Urologie','Vasculaire'];
+const FEV26_25=[70,7,139,59,4,126,120,81,97,147,72];  const FEV26_26=[60,11,163,30,1,127,133,80,83,182,75];
+const MAR26_25=[64,10,160,65,235,136,144,102,110,206,87]; const MAR26_26=[35,8,162,60,267,147,128,85,114,165,75];
+const AVR26_25=[22,6,166,64,226,130,140,90,99,172,66];  const AVR26_26=[49,6,177,61,197,135,125,78,100,192,71];
+
+// ── DONNÉES CUMULÉES 2026 (BC seul pour Fév, BC+BFT pour Mars/Avr) ──────────
+const CUMFEV26_25=[150,12,288,128,5,277,247,181,210,359,158]; const CUMFEV26_26=[128,19,331,56,1,267,266,164,177,396,147];
+const CUMMAR26_25=[214,22,448,193,671,413,391,283,320,565,245]; const CUMMAR26_26=[181,27,493,195,744,414,394,249,291,561,222];
+const CUMAVR26_25=[236,28,614,257,897,543,531,373,419,737,311]; const CUMAVR26_26=[230,33,670,256,941,549,519,327,391,753,293];
+
+// ── ACTIVITÉ ROBOT CUMULÉE 2026 (source : Indicateur BC & BFT 2026 S24.xlsx + jpeg) ─
+const ROB_CUM_S=['Digestif','Gynécologie','ORL','Thoracique','Urologie'];
+const ROBMAR26_25=[21,30,9,49,131]; const ROBMAR26_26=[20,44,3,69,147]; // cumul à fin Mars
+const ROBAVR26_25=[27,42,10,72,163]; const ROBAVR26_26=[25,52,3,98,193]; // cumul à fin Avril
+// Robot mensuel
+const ROBM_MAR25=[8,12,3,18,47];  const ROBM_MAR26=[7,15,2,26,48];  // Mars mensuel
+const ROBM_AVR25=[6,12,1,23,32];  const ROBM_AVR26=[5,8,0,29,46];   // Avril mensuel
+
+// ── DONNÉES HEBDOMADAIRES S1–S24 (TVO BC + interventions) ───────────────────
+const WK_L=['S1','S2','S3','S4','S5','S6','S7','S8','S9','S10','S11','S12','S13','S14','S15','S16','S17','S18','S19','S20','S21','S22','S23','S24'];
+const WK_TVO=[58,78,78,76,79,78,79,80,83,81,77,74,80,84,83,83,85,88,84,84,81,82,80,84];
+const WK_INT=[126,247,269,259,235,259,273,216,179,241,252,267,279,271,248,197,144,199,213,239,222,166,246,202];
+
 const BFT_S=['Anesthésie','Cardiologie','Endodig','Endo Thoracique','Vasculaire'];
 const BFT_D=[31,1,1939,266,3];
 const ROB_S=['Chir DIG','Gynécologie','ORL','Chir THO','Urologie'];
 const ROB_24=[79,108,20,131,496]; const ROB_25=[67,104,26,214,491];
 
 const ALERTS=[
-  {t:'rouge',m:'TVO < 75 %  BL-01 le 18/06 : TVO 19.8 %  [EF-03]'},
-  {t:'rouge',m:'TVO < 75 %  BL-01 le 19/06 : TVO 21.2 %  [EF-03]'},
-  {t:'rouge',m:'TVO < 75 %  BL-03 le 15/06 : TVO 25.5 %  [EF-03]'},
-  {t:'rouge',m:'TVO < 75 %  BL-03 le 16/06 : TVO 34.5 %  [EF-03]'},
-  {t:'rouge',m:'TVO < 75 %  BL-03 le 17/06 : TVO 19.2 %  [EF-03]'},
-  {t:'rouge',m:'TVO < 75 %  BL-06 le 15/06 : TVO 45.2 %  [EF-03]'},
-  {t:'rouge',m:'TVO < 75 %  BL-04 le 19/06 : TVO 30.3 %  [EF-03]'},
+  {t:'rouge',m:'TVO < 85 %  BL-01 le 18/06 : TVO 19.8 %  [EF-03]'},
+  {t:'rouge',m:'TVO < 85 %  BL-01 le 19/06 : TVO 21.2 %  [EF-03]'},
+  {t:'rouge',m:'TVO < 85 %  BL-03 le 15/06 : TVO 25.5 %  [EF-03]'},
+  {t:'rouge',m:'TVO < 85 %  BL-03 le 16/06 : TVO 34.5 %  [EF-03]'},
+  {t:'rouge',m:'TVO < 85 %  BL-03 le 17/06 : TVO 19.2 %  [EF-03]'},
+  {t:'rouge',m:'TVO < 85 %  BL-06 le 15/06 : TVO 45.2 %  [EF-03]'},
+  {t:'rouge',m:'TVO < 85 %  BL-04 le 19/06 : TVO 30.3 %  [EF-03]'},
   {t:'orange',m:'Taux annulation > 5 %  Gynéco 19/06 : 6 annul.  [EF-20]'},
   {t:'orange',m:'Ponctualité < 60 %  BL-02 le 18/06 : 4 retards  [EF-11]'},
   {t:'orange',m:'Durée dérivée  Dr Leclerc · Neurochirurgie +38 min  [EF-16]'},
@@ -494,7 +501,7 @@ function doLogin(){
   const usr=USERS[u]||USERS.dg;
   document.getElementById('urole').textContent=usr.n;
   const b=document.getElementById('ubadge');
-  b.textContent=usr.lbl||usr.b; b.className='rbadge '+usr.b;
+  b.textContent=usr.b; b.className='rbadge '+usr.b;
   document.getElementById('login').style.display='none';
   document.getElementById('app').classList.add('on');
   go('dash');
@@ -515,17 +522,7 @@ function togSec(id){
   el.style.display=v?'none':'block';
   if(cv)cv.textContent=v?'›':'∨';
 }
-function setPer(b){
-  document.querySelectorAll('.fgrp .fbtn').forEach(x=>x.classList.remove('on'));
-  b.classList.add('on');
-  const pmap={'Jour':'jour','Semaine':'sem','Mois':'mois','Tout':'tout'};
-  const p=pmap[b.textContent.trim()];
-  if(!p) return;
-  if(curView==='dash'    && window.dashGran)  window.dashGran(p);
-  if(curView==='bc2025'  && window.bcGran)    window.bcGran(p);
-  if(curView==='bft2025' && window.bftGran)   window.bftGran(p);
-  if(curView==='rob2025' && window.robGran)   window.robGran(p);
-}
+function setPer(b){document.querySelectorAll('.fgrp .fbtn').forEach(x=>x.classList.remove('on'));b.classList.add('on');}
 function killCharts(){Object.values(charts).forEach(c=>{try{c.destroy();}catch(e){}});charts={};}
 function mkChart(id,cfg){if(document.getElementById(id))charts[id]=new Chart(document.getElementById(id),cfg);}
 
@@ -534,29 +531,24 @@ function go(v){
   document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('on'));
   const el=document.getElementById('n-'+v); if(el)el.classList.add('on');
   // open parent sections
-  if(['bc2025','bft2025','rob2025'].includes(v)){document.getElementById('s-bil').style.display='block';document.getElementById('cv-bil').textContent='∨';}
+  if(['bc2025','bft2025','rob2025','semaines'].includes(v)){document.getElementById('s-bil').style.display='block';document.getElementById('cv-bil').textContent='∨';}
   if(v.startsWith('r-')){document.getElementById('s-recap').style.display='block';document.getElementById('cv-recap').textContent='∨';}
-  if(['occ','ponct','duree','ann','act','qual'].includes(v)){document.getElementById('s-mod').style.display='block';document.getElementById('cv-mod').textContent='∨';}
+  if(['ponct','duree','ann','act','qual'].includes(v)){document.getElementById('s-mod').style.display='block';document.getElementById('cv-mod').textContent='∨';}
+  if(['oph','amp','endouro','naissance','radiobloc'].includes(v)){document.getElementById('s-oblocs').style.display='block';document.getElementById('cv-oblocs').textContent='∨';}
   if(v==='rh'){document.getElementById('s-rh').style.display='block';document.getElementById('cv-rh').textContent='∨';}
   if(v==='eco'){document.getElementById('s-eco').style.display='block';document.getElementById('cv-eco').textContent='∨';}
-  if(v==='interventions'){document.getElementById('s-reporting').style.display='block';document.getElementById('cv-reporting').textContent='∨';}
-  if(v==='outils'){document.getElementById('s-outils').style.display='block';document.getElementById('cv-outils').textContent='∨';}
-  if(v==='archives'||v==='bilandetail'){document.getElementById('s-archives').style.display='block';document.getElementById('cv-archives').textContent='∨';}
-  if(v==='admin-rgpd'||v==='admin-audit'||v==='admin-roles'){document.getElementById('s-admin').style.display='block';document.getElementById('cv-admin').textContent='∨';}
-  if(['occ','ponct','duree','ann','act','qual','e7parcours'].includes(v)){document.getElementById('s-mod').style.display='block';document.getElementById('cv-mod').textContent='∨';}
-  if(v==='hebdo'||v.startsWith('r-')){document.getElementById('s-vue').style.display='block';}
 
   const m=document.getElementById('main');
   const fn={dash:vDash,alerte:vAlertes,bc2025:vBc2025,bft2025:vBft,rob2025:vRobot,
-    'r-dec25':()=>vRecapM('dec25'),'r-cum25':vRecapCum,'r-jan26':()=>vRecapM('jan26'),'r-fev26':()=>vRecapM('fev26'),
-    'r-mar26':()=>vRecapM('mar26'),'r-avr26':()=>vRecapM('avr26'),'r-mai26':()=>vRecapM('mai26'),
-    'r-jun26':()=>vRecapM('jun26'),'r-cum26jun':()=>vRecapFutur('Cumul Juin 2026'),
-    'r-jul26':()=>vRecapM('jul26'),'r-aou26':()=>vRecapFutur('Aoû 2026'),'r-sep26':()=>vRecapFutur('Sep 2026'),
-    'r-oct26':()=>vRecapFutur('Oct 2026'),'r-nov26':()=>vRecapFutur('Nov 2026'),'r-dec26':()=>vRecapFutur('Déc 2026'),
-    'r-cum26dec':()=>vRecapFutur('Cumul Déc 2026'),
-    'admin-rgpd':vAdminRGPD,'admin-audit':vAdminAudit,'admin-roles':vAdminRoles,
-    occ:vOcc,ponct:vPonct,duree:vDuree,ann:vAnn,act:vAct,qual:vQual,e7parcours:vParcours,
-    rh:vRH,eco:vEco,interventions:vInterventions,outils:vOutils,archives:vArchives,bilandetail:vBilanDetail,hebdo:vHebdo}[v];
+    oph:()=>vBloc('OPH','Ophtalmologie'),amp:()=>vBloc('AMP','Assistance Médicale à la Procréation'),
+    endouro:()=>vBloc('Endo-Uro','Endoscopie-Urologie'),naissance:()=>vBloc('Salle de naissance','Maternité'),
+    radiobloc:()=>vBloc('Radio-Bloc','Radiologie Interventionnelle'),
+    'r-dec25':()=>vRecapM('dec25'),'r-cum25':vRecapCum,
+    'r-jan26':()=>vRecapM('jan26'),'r-fev26':()=>vRecapM('fev26'),
+    'r-mar26':()=>vRecapM('mar26'),'r-avr26':()=>vRecapM('avr26'),
+    'r-cum26fev':()=>vRecapCum2026('fev'),'r-cum26mar':()=>vRecapCum2026('mar'),'r-cum26avr':()=>vRecapCum2026('avr'),
+    occ:vOcc,ponct:vPonct,duree:vDuree,ann:vAnn,act:vAct,qual:vQual,rh:vRH,eco:vEco,audit:vAudit}[v];
+  if(v==='audit'){document.getElementById('s-admin').style.display='block';document.getElementById('cv-admin').textContent='∨';}
   if(fn)fn(m); else m.innerHTML='<div class="card" style="padding:20px;color:#aaa;">Vue en cours de développement — Sprint à venir.</div>';
 }
 
@@ -580,71 +572,19 @@ function drow(a,b){
 // ═══════════════════════════════════════
 function vDash(){
   const m=document.getElementById('main');
-  // ── Datasets par période ──────────────────────────────────────────────────
-  window._dashPD={
-    jour:{
-      lbl:'Journée du 21/06/2026',
-      kpis:[['TVO — OCCUPATION SALLES','80.2','%','▼ 3.4 % vs veille','dn-bad','warn'],
-            ['PONCTUALITÉ (≤ 15 MIN)','68.5','%','▼ 2.1 % vs veille','dn-bad','warn'],
-            ['INTERVENTIONS TERMINÉES','28','','▼ 4 vs veille','dn-bad','warn'],
-            ['TAUX D\'ANNULATION','9.5','%','▲ 1.2 % vs veille','up-bad','bad'],
-            ['DURÉE MOYENNE','152.1','min','▲ 12.3 min vs veille','up-bad','bad'],
-            ['CHECK-LISTS CONFORMES','87','%','= 0 % vs veille','neut','ok']],
-      tvo:{labels:['21/06'],cur:[80],prev:[78]},
-      spec:{term:[4,3,3,2,3,2,2,2],ann:[0,1,0,0,0,0,0,0]},
-      motif:{data:[5,4,3,2,1,1]},
-      top5:[{s:'Ophtalmologie',a:4,d:'23',e:-60.1},{s:'ORL',a:3,d:'39',e:-48.2},{s:'Viscéral',a:3,d:'63',e:-38.4},{s:'Gynécologie',a:4,d:'98',e:-22.1},{s:'Orthopédie',a:2,d:'129',e:-18.5}],
-      flop5:[{s:'Neurochirurgie',a:0,d:'—',e:0},{s:'Cardiologie',a:4,d:'201',e:-8.2},{s:'Urologie',a:4,d:'180',e:-12.4},{s:'Gynécologie',a:4,d:'98',e:-22.1},{s:'Orthopédie',a:2,d:'129',e:-18.5}]
-    },
-    sem:{
-      lbl:'Semaine du 15 au 21/06/2026',
-      kpis:[['TVO — OCCUPATION SALLES','96.1','%','= 0 % vs période préc.','neut','info'],
-            ['PONCTUALITÉ (≤ 15 MIN)','73.3','%','▲ 1.1 % vs préc.','up-good','ok'],
-            ['INTERVENTIONS TERMINÉES','161','','▼ 8 vs préc.','dn-bad','warn'],
-            ['TAUX D\'ANNULATION','9','%','▲ 2.4 % vs préc.','up-bad','bad'],
-            ['DURÉE MOYENNE','142.3','min','▲ 8.8 min vs préc.','up-bad','bad'],
-            ['CHECK-LISTS CONFORMES','87','%','= 0 % vs préc.','neut','ok']],
-      tvo:{labels:DATES,cur:TVO_C,prev:TVO_P},
-      spec:{term:STERM,ann:SANN},
-      motif:{data:MDATA},
-      top5:TOP5,
-      flop5:FLOP5
-    },
-    mois:{
-      lbl:'Mois de Juin 2026',
-      kpis:[['TVO — OCCUPATION SALLES','82.4','%','▲ 2.1 % vs Mai 2026','up-good','ok'],
-            ['PONCTUALITÉ (≤ 15 MIN)','75.1','%','▲ 3.2 % vs Mai 2026','up-good','ok'],
-            ['INTERVENTIONS TERMINÉES','641','','▲ 22 vs Mai 2026','up-good','ok'],
-            ['TAUX D\'ANNULATION','7.2','%','▼ 0.6 % vs Mai 2026','dn-good','ok'],
-            ['DURÉE MOYENNE','138.4','min','▼ 4.2 min vs Mai 2026','dn-good','ok'],
-            ['CHECK-LISTS CONFORMES','88','%','▲ 1 % vs Mai 2026','up-good','ok']],
-      tvo:{labels:['S21','S22','S23','S24'],cur:[76,71,67,53],prev:[74,69,65,51]},
-      spec:{term:[108,94,86,78,82,71,68,64],ann:[4,8,5,6,2,1,1,2]},
-      motif:{data:[110,88,72,60,34,14]},
-      top5:[{s:'Ophtalmologie',a:68,d:'25',e:-58.2},{s:'ORL',a:82,d:'42',e:-44.1},{s:'Viscéral',a:62,d:'61',e:-36.5},{s:'Orthopédie',a:80,d:'126',e:-21.8},{s:'Gynécologie',a:94,d:'118',e:-17.4}],
-      flop5:[{s:'Neurochirurgie',a:71,d:'308',e:-6.1},{s:'Cardiologie',a:88,d:'228',e:-12.3},{s:'Urologie',a:108,d:'176',e:-15.8},{s:'Gynécologie',a:94,d:'118',e:-17.4},{s:'Orthopédie',a:80,d:'126',e:-21.8}]
-    },
-    tout:{
-      lbl:'Cumul annuel 2026 (Jan–Jun)',
-      kpis:[['TVO — OCCUPATION SALLES','81.4','%','▲ 3.1 % vs 2025','up-good','ok'],
-            ['PONCTUALITÉ (≤ 15 MIN)','67.2','%','▼ 1.8 % vs 2025','dn-bad','warn'],
-            ['INTERVENTIONS TERMINÉES','3 842','','▲ 218 vs S1 2025','up-good','ok'],
-            ['TAUX D\'ANNULATION','6.8','%','▼ 0.8 % vs 2025','dn-good','ok'],
-            ['DURÉE MOYENNE','143.6','min','▲ 2.1 min vs 2025','up-bad','warn'],
-            ['CHECK-LISTS CONFORMES','86','%','▼ 1 % vs 2025','dn-bad','warn']],
-      tvo:{labels:['Jan','Fév','Mar','Avr','Mai','Jun'],cur:[78,81,84,80,83,82],prev:[74,77,80,78,79,79]},
-      spec:{term:[648,562,518,460,492,420,410,380],ann:[22,48,30,38,12,6,6,12]},
-      motif:{data:[660,528,432,360,204,84]},
-      top5:[{s:'Ophtalmologie',a:408,d:'26',e:-57.4},{s:'ORL',a:492,d:'44',e:-43.2},{s:'Viscéral',a:372,d:'62',e:-35.1},{s:'Orthopédie',a:480,d:'128',e:-22.6},{s:'Cardiologie',a:264,d:'118',e:-16.8}],
-      flop5:[{s:'Neurochirurgie',a:426,d:'312',e:-5.2},{s:'Cardiologie',a:264,d:'118',e:-16.8},{s:'Urologie',a:648,d:'182',e:-13.9},{s:'Gynécologie',a:564,d:'122',e:-18.8},{s:'Orthopédie',a:480,d:'128',e:-22.6}]
-    }
-  };
-
   m.innerHTML=`
-  <div id="dash-lbl" style="font-size:10px;color:var(--gray);margin-bottom:6px;font-style:italic"></div>
-  <div class="kpi-grid" id="dash-kpis"></div>
+  <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+    ${kpi('TVO — OCCUPATION SALLES','96.1','%','= 0 % vs période préc.','neut','info')}
+    ${kpi('NOMBRE DE VACATIONS','48','vac.','Semaine du 15/06','neut','info')}
+    ${kpi('TROS (TEMPS RÉEL OCC.)','87.4','%','▲ 1.2 % vs préc.','up-good','ok')}
+    ${kpi('DÉMARRAGES TARDIFS (≤ 15 MIN)','73.3','%','▲ 1.1 % vs préc.','up-good','warn')}
+    ${kpi('INTERVENTIONS TERMINÉES','161','','▼ 8 vs préc.','dn-bad','warn')}
+    ${kpi('DURÉE MOYENNE OPÉRATOIRE','142.3','min','▲ 8.8 min vs préc.','up-bad','bad')}
+    ${kpi('DÉBORDEMENTS','7','cas / 43 min','= 0 cas vs préc.','neut','warn')}
+    ${kpi('SUSPENSIONS ET ABANDONS','3','cas','▼ 1 vs préc.','dn-good','ok')}
+  </div>
   <div class="row-65">
-    <div class="card"><div class="card-title" id="dash-tvo-lbl">TENDANCE TVO — COMPARATIF PÉRIODE PRÉCÉDENTE</div><div class="ch" style="height:195px"><canvas id="c-tvo"></canvas></div></div>
+    <div class="card"><div class="chart-title card-title">TENDANCE TVO — COMPARATIF PÉRIODE PRÉCÉDENTE</div><div class="ch" style="height:195px"><canvas id="c-tvo"></canvas></div></div>
     <div class="card"><div class="card-title">ALERTES &amp; ANOMALIES <span class="card-badge">31</span></div><div class="al-list" id="al-list"></div></div>
   </div>
   <div class="row2">
@@ -653,42 +593,33 @@ function vDash(){
   </div>
   <div class="card">
     <div class="row2">
-      <div id="dash-top5"></div>
-      <div id="dash-flop5"></div>
+      <div><div class="card-title">TOP 5 — MAÎTRISE DES DURÉES</div>
+        <table class="dtbl"><thead><tr><th>Spécialité</th><th>Actes</th><th>Durée moy.</th><th>Écart vs prévu</th></tr></thead>
+        <tbody>${TOP5.map(r=>`<tr><td>${r.s}</td><td>${r.a}</td><td class="col-t">${r.d} min</td><td class="ep">${r.e} %</td></tr>`).join('')}</tbody></table>
+      </div>
+      <div><div class="card-title">FLOP 5 — DÉRIVES DE DURÉE</div>
+        <table class="dtbl"><thead><tr><th>Spécialité</th><th>Actes</th><th>Durée moy.</th><th>Écart vs prévu</th></tr></thead>
+        <tbody>${FLOP5.map(r=>`<tr><td>${r.s}</td><td>${r.a}</td><td class="col-t">${r.d} min</td><td class="ep">${r.e} %</td></tr>`).join('')}</tbody></table>
+      </div>
     </div>
     <div class="info-note">📌 Module médico-économique (T2A, GHM, coûts de salle) → Sprint 3 · données GAM/PMSI non encore intégrées.</div>
   </div>`;
 
+  // Alerts
   const al=document.getElementById('al-list');
   ALERTS.forEach(a=>{al.innerHTML+=`<div class="al-item"><span class="chip ${a.t}">${a.t}</span>${a.m}</div>`;});
 
-  window.dashGran=function(p){
-    const d=window._dashPD[p]||window._dashPD.sem;
-    // label période
-    document.getElementById('dash-lbl').textContent='📅 '+d.lbl;
-    // KPIs
-    document.getElementById('dash-kpis').innerHTML=d.kpis.map(([l,v,u,t,cls,st])=>kpi(l,v,u,t,cls,st)).join('');
-    // Charts
-    if(charts['c-tvo'])charts['c-tvo'].destroy();
-    if(charts['c-spec'])charts['c-spec'].destroy();
-    if(charts['c-motif'])charts['c-motif'].destroy();
-    delete charts['c-tvo'];delete charts['c-spec'];delete charts['c-motif'];
-    mkChart('c-tvo',{type:'line',data:{labels:d.tvo.labels,datasets:[
-      {label:'TVO courant (%)',data:d.tvo.cur,borderColor:'#0a1628',backgroundColor:'rgba(10,22,40,.07)',tension:.3,borderWidth:2,pointRadius:4,fill:true},
-      {label:'Période préc. (%)',data:d.tvo.prev,borderColor:'#aabbcc',backgroundColor:'transparent',tension:.3,borderWidth:2,borderDash:[6,3],pointRadius:3}
-    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{min:0,max:130,ticks:{callback:v=>v+'%',font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
-    mkChart('c-spec',{type:'bar',data:{labels:SPECS,datasets:[
-      {label:'Terminées',data:d.spec.term,backgroundColor:'#0ea5a0'},
-      {label:'Annulées',data:d.spec.ann,backgroundColor:'#e53e3e'}
-    ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{x:{stacked:true,ticks:{font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}}});
-    mkChart('c-motif',{type:'doughnut',data:{labels:MOTIFS,datasets:[{data:d.motif.data,backgroundColor:MCOLS,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},padding:10}}}}});
-    // TOP5 / FLOP5 — mise à jour par période
-    const mkT5=rows=>`<table class="dtbl"><thead><tr><th>Spécialité</th><th>Actes</th><th>Durée moy.</th><th>Écart vs prévu</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${r.s}</td><td>${r.a}</td><td class="col-t">${r.d} min</td><td class="ep">${r.e} %</td></tr>`).join('')}</tbody></table>`;
-    const mkF5=rows=>`<table class="dtbl"><thead><tr><th>Spécialité</th><th>Actes</th><th>Durée moy.</th><th>Écart vs prévu</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${r.s}</td><td>${r.a}</td><td class="col-t">${r.d} min</td><td class="ep">${r.e} %</td></tr>`).join('')}</tbody></table>`;
-    document.getElementById('dash-top5').innerHTML=`<div class="card-title">TOP 5 — MAÎTRISE DES DURÉES</div>${mkT5(d.top5)}`;
-    document.getElementById('dash-flop5').innerHTML=`<div class="card-title">FLOP 5 — DÉRIVES DE DURÉE</div>${mkF5(d.flop5)}`;
-  };
-  window.dashGran('sem');
+  mkChart('c-tvo',{type:'line',data:{labels:DATES,datasets:[
+    {label:'TVO courant (%)',data:TVO_C,borderColor:'#0a1628',backgroundColor:'rgba(10,22,40,.07)',tension:.3,borderWidth:2,pointRadius:4,fill:true},
+    {label:'Période préc. (%)',data:TVO_P,borderColor:'#aabbcc',backgroundColor:'transparent',tension:.3,borderWidth:2,borderDash:[6,3],pointRadius:3}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{min:0,max:130,ticks:{callback:v=>v+'%',font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+
+  mkChart('c-spec',{type:'bar',data:{labels:SPECS,datasets:[
+    {label:'Terminées',data:STERM,backgroundColor:'#0ea5a0'},
+    {label:'Annulées',data:SANN,backgroundColor:'#e53e3e'}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{x:{stacked:true,ticks:{font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}}});
+
+  mkChart('c-motif',{type:'doughnut',data:{labels:MOTIFS,datasets:[{data:MDATA,backgroundColor:MCOLS,borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},padding:10}}}}});
 }
 
 // ═══════════════════════════════════════
@@ -728,69 +659,192 @@ function vAlertes(){
 // ═══════════════════════════════════════
 function vBc2025(){
   const m=document.getElementById('main');
+
+  // ── Cumulative data 2024/2025
+  const ACT_S=['Anesthésie','Cardiologie','Digestif','Endodig','Endo Thoracique','Gynécologie','Neurochirurgie','Ophtalmo','ORL','Thoracique','Urologie','Vasculaire'];
+  const ACT_24=[452,75,1654,52,672,1422,1470,14,935,1018,2003,849];
+  const ACT_25=[626,95,1828,136,489,1507,1555,0,1021,1159,2038,848];
+
+  const actRows=ACT_S.map((s,i)=>{
+    const d=ACT_25[i]-ACT_24[i];
+    const p=ACT_24[i]?Math.round(d/ACT_24[i]*100):null;
+    const dc=d>0?'ep':d<0?'en':'';
+    const pc=p===null?'':p>0?'evp':'evn';
+    return`<tr>
+      <td>${s}</td>
+      <td>${ACT_24[i].toLocaleString('fr-FR')}</td>
+      <td><strong>${ACT_25[i].toLocaleString('fr-FR')}</strong></td>
+      <td><span class="${dc}">${d>0?'+':''}${d.toLocaleString('fr-FR')}</span></td>
+      <td><span class="${pc}">${p===null?'—':(p>0?'+':'')+p+'%'}</span></td>
+    </tr>`;
+  }).join('');
+
+  // ── Datasets Jour / Semaine / Mois (source : OPERA — semaine S24, juin 2026)
+  const BC_SAL_L=['BL-01','BL-02','BL-03','BL-04','BL-05','BL-06','BL-07','BL-08','BL-09','BL-10'];
+  const BC_TYPE_L=['Hybride','Bloc froid','Ambulatoire','Urgence'];
   window._bcPD={
-    jour:{lbl:'Journée du 21/06/2026',
-      kpis:[['TVO DU PÉRIMÈTRE','95.2','%','▼ 5.1 % vs veille','dn-bad','warn'],['INTERVENTIONS','26','','▼ 3 vs veille','dn-bad','warn'],['PONCTUALITÉ (≤ 15 MIN)','69.2','%','▼ 3.1 % vs veille','dn-bad','warn'],['TAUX D\'ANNULATION','7.4','%','▲ 0.9 % vs veille','up-bad','bad'],['DURÉE MOYENNE','148.2','min','▲ 5.1 min vs veille','up-bad','bad'],['CHECK-LISTS CONFORMES','88.2','%','▲ 0.3 % vs veille','up-good','ok']],
-      tvo:{labels:['21/06'],cur:[95],prev:[88]},sal:{term:[3,2,3,2,3,2,3,2],ann:[0,1,0,1,0,0,0,0]},act:{t:[5,4,3,2,2,1,1,1,1,1,1],a:[0,1,0,0,0,0,0,0,0,0,0]},has:[71,83,94,90,82,100,87,95]},
-    sem:{lbl:'Semaine du 15 au 21/06/2026',
-      kpis:[['TVO DU PÉRIMÈTRE','106.7','%','▲ 14.3 % vs préc.','up-good','ok'],['INTERVENTIONS','140','','▲ 2 vs préc.','up-good','ok'],['PONCTUALITÉ (≤ 15 MIN)','72.9','%','▲ 4.1 % vs préc.','up-good','ok'],['TAUX D\'ANNULATION','6.7','%','▼ 0.7 % vs préc.','dn-good','ok'],['DURÉE MOYENNE','145.9','min','▲ 22.8 min vs préc.','up-bad','bad'],['CHECK-LISTS CONFORMES','87.9','%','▼ 0.5 % vs préc.','dn-bad','warn']],
-      tvo:{labels:DATES,cur:BC_TVO_C,prev:BC_TVO_P},sal:{term:BC_TERM,ann:BC_ANN},act:{t:ACTES_T,a:ACTES_A},has:BC_HAS},
-    mois:{lbl:'Mois de Juin 2026',
-      kpis:[['TVO DU PÉRIMÈTRE','82.4','%','▲ 3.1 % vs Mai 2026','up-good','ok'],['INTERVENTIONS','561','','▲ 18 vs Mai 2026','up-good','ok'],['PONCTUALITÉ (≤ 15 MIN)','75.2','%','▲ 2.8 % vs Mai 2026','up-good','ok'],['TAUX D\'ANNULATION','5.4','%','▼ 0.4 % vs Mai 2026','dn-good','ok'],['DURÉE MOYENNE','141.2','min','▼ 2.1 min vs Mai 2026','dn-good','ok'],['CHECK-LISTS CONFORMES','88.4','%','▲ 0.5 % vs Mai 2026','up-good','ok']],
-      tvo:{labels:['S21','S22','S23','S24'],cur:[84,82,80,82],prev:[80,78,77,79]},sal:{term:[68,62,74,56,60,66,70,52],ann:[3,2,4,5,2,3,3,2]},act:{t:[108,88,64,56,52,36,28,24,24,24,20],a:[8,8,0,4,8,0,4,4,8,4,0]},has:[74,86,96,92,85,102,88,97]},
-    tout:{lbl:'Cumul annuel 2026 (Jan–Jun)',
-      kpis:[['TVO DU PÉRIMÈTRE','81.4','%','▲ 3.1 % vs S1 2025','up-good','ok'],['INTERVENTIONS','3 362','','▲ 202 vs S1 2025','up-good','ok'],['PONCTUALITÉ (≤ 15 MIN)','67.4','%','▼ 1.2 % vs S1 2025','dn-bad','warn'],['TAUX D\'ANNULATION','4.8','%','▼ 0.6 % vs S1 2025','dn-good','ok'],['DURÉE MOYENNE','142.1','min','▲ 1.8 min vs S1 2025','up-bad','warn'],['CHECK-LISTS CONFORMES','86.2','%','▼ 0.8 % vs S1 2025','dn-bad','warn']],
-      tvo:{labels:['Jan','Fév','Mar','Avr','Mai','Jun'],cur:[78,81,84,80,83,82],prev:[74,77,80,78,79,79]},sal:{term:[408,372,444,336,360,396,420,312],ann:[18,12,24,30,12,18,18,12]},act:{t:[648,532,384,336,312,216,168,144,144,144,120],a:[48,48,0,24,48,0,24,24,48,24,0]},has:[75,87,97,93,86,103,89,98]}
+    jour:{
+      label:'Lundi 15 juin 2026',
+      tvoL:['15/06'],       tvoV:[102],
+      incL:['Lun'],         incV:[8.6],
+      salT:[2,2,2,4,4,2,3,3,4,2],   salA:[0,0,0,0,0,0,0,0,0,1],
+      typeT:[10,11,5,3],    typeA:[1,0,0,0]
+    },
+    sem:{
+      label:'Semaine S24 — 8 au 14 juin 2026',
+      tvoL:['2026-S24'],    tvoV:[97],
+      incL:['Lun','Mar','Mer','Jeu','Ven'], incV:[8.7,8.3,8.4,7.15,8.55],
+      salT:[8,20,9,16,21,16,13,18,22,16],  salA:[6,0,2,0,0,2,3,1,0,4],
+      typeT:[60,65,21,19],  typeA:[3,2,7,1]
+    },
+    mois:{
+      label:'Juin 2026 — Semaines S23 à S27',
+      tvoL:['S23','S24','S25','S26','S27'], tvoV:[97,99,30,2,0],
+      incL:['Lun','Mar','Mer','Jeu','Ven','Sam'], incV:[8.9,8.5,9.2,8.4,8.3,7.1],
+      salT:[35,40,25,37,45,38,25,32,40,40], salA:[2,5,8,0,3,5,8,10,2,5],
+      typeT:[118,150,57,37], typeA:[12,12,10,7]
+    }
   };
 
   m.innerHTML=`
   <div class="bil-hdr">
     <div class="bil-title">BCENTRAL BC_2025 — BILAN DU PÉRIMÈTRE</div>
-    <div class="bil-sub" id="bc-sub">Bloc central — salles conventionnelles, urgences et hybrides (hors ambulatoire) · Source : OPERA (Bloc) + DxCare (DPI)</div>
-    <div class="kpi-grid" id="bc-kpis" style="margin-top:12px;margin-bottom:0"></div>
+    <div class="bil-sub">Bloc central — salles conventionnelles, urgences et hybrides (hors ambulatoire) · 2026-06-15 → 2026-06-21 · Source : OPERA (Bloc) + DxCare (DPI)</div>
+    <div class="kpi-grid" style="margin-top:12px;margin-bottom:0">
+      ${kpi('TVO DU PÉRIMÈTRE','106.7','%','▲ 14.3 % vs préc.','up-good','ok')}
+      ${kpi('NOMBRE DE VACATIONS','40','vac.','Semaine S24','neut','info')}
+      ${kpi('TROS','89.2','%','▲ 2.1 % vs préc.','up-good','ok')}
+      ${kpi('INTERVENTIONS','140','','▲ 2 vs préc.','up-good','ok')}
+      ${kpi('DÉMARRAGES TARDIFS (≤ 15 MIN)','72.9','%','▲ 4.1 % vs préc.','up-good','ok')}
+      ${kpi('DURÉE MOYENNE OPÉRATOIRE','145.9','min','▲ 22.8 min vs préc.','up-bad','bad')}
+      ${kpi('DÉBORDEMENTS','5','cas / 38 min','▼ 2 cas vs préc.','dn-good','ok')}
+      ${kpi('SUSPENSIONS ET ABANDONS','2','cas','= 0 vs préc.','neut','info')}
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:10px;margin:10px 0 6px">
+    <div class="fgrp">
+      <button class="fbtn" id="bcg-jour" onclick="bcGran('jour')">Jour</button>
+      <button class="fbtn active" id="bcg-sem"  onclick="bcGran('sem')">Semaine</button>
+      <button class="fbtn" id="bcg-mois" onclick="bcGran('mois')">Mois</button>
+    </div>
+    <span id="bc-gran-lbl" style="font-size:12px;color:var(--gray)">Semaine S24 — 8 au 14 juin 2026</span>
+  </div>
+
+  <div class="row2">
+    <div class="card"><div class="card-title">TENDANCE TVO (OBJECTIF 85 %)</div><div class="ch" style="height:190px"><canvas id="c-bc-tvo"></canvas></div></div>
+    <div class="card"><div class="card-title">DÉMARRAGE TARDIF — MOYENNE PAR JOUR</div><div class="ch" style="height:190px"><canvas id="c-bc-inc"></canvas></div></div>
   </div>
   <div class="row2">
-    <div class="card"><div class="card-title">TENDANCE TVO vs PÉRIODE PRÉCÉDENTE</div><div class="ch" style="height:190px"><canvas id="c-bc-tvo"></canvas></div></div>
-    <div class="card"><div class="card-title">ACTIVITÉ PAR SALLE — TERMINÉES / ANNULÉES</div><div class="ch" style="height:190px"><canvas id="c-bc-sal"></canvas></div></div>
+    <div class="card"><div class="card-title">ACTIVITÉ PAR SALLE — TERMINÉES / ANNULÉES</div><div class="ch" style="height:200px"><canvas id="c-bc-sal"></canvas></div></div>
+    <div class="card"><div class="card-title">ACTIVITÉ PAR TYPE DE SALLE</div><div class="ch" style="height:200px"><canvas id="c-bc-type"></canvas></div></div>
   </div>
+
+  <div class="card" style="margin-bottom:10px">
+    <div class="card-title">ACTIVITÉ CUMULÉE PAR SPÉCIALITÉ — 2024 / 2025</div>
+    <table class="dtbl">
+      <thead>
+        <tr>
+          <th>Spécialité</th>
+          <th style="color:#b07d10">2024</th>
+          <th style="color:#2563eb">2025</th>
+          <th>Écart</th>
+          <th>Évol.</th>
+        </tr>
+      </thead>
+      <tbody>${actRows}</tbody>
+      <tfoot>
+        <tr>
+          <td><strong>TOTAL</strong></td>
+          <td><strong>10 616</strong></td>
+          <td><strong>11 302</strong></td>
+          <td><span class="ep">+686</span></td>
+          <td><span class="evp">+6,5%</span></td>
+        </tr>
+        <tr>
+          <td><em>TOTAL hors Anesthésie EndoTho Endodig</em></td>
+          <td><em>9 440</em></td>
+          <td><em>10 051</em></td>
+          <td><span class="ep">+611</span></td>
+          <td><span class="evp">+6,5%</span></td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <div class="card" style="margin-bottom:10px">
+    <div class="card-title">PAR SPÉCIALITÉS — COMPARAISON 2024 / 2025</div>
+    <div class="ch" style="height:260px"><canvas id="c-bc-cum"></canvas></div>
+  </div>
+
   <div class="row2">
     <div class="card"><div class="card-title">ACTIVITÉ PAR TYPE D'ACTE (TOP 11)</div><div class="ch" style="height:250px"><canvas id="c-bc-act"></canvas></div></div>
     <div class="card"><div class="card-title">CONFORMITÉ CHECK-LIST HAS PAR SALLE</div>
       <div class="ch" style="height:180px"><canvas id="c-bc-has"></canvas></div>
-      <div id="bc-pbar" style="margin-top:10px"></div>
+      <div style="margin-top:10px">
+        ${BC_HAS_S.map((s,i)=>pbar(s,BC_HAS[i],110,BC_HAS[i]>=95?'ok':BC_HAS[i]>=80?'warn':'bad')).join('')}
+      </div>
     </div>
-  <div class="row2" style="margin-top:0">
-    <div class="card">
-      <div class="card-title">ACTIVITÉ CUMULÉE PAR SPÉCIALITÉ</div>
-      <table class="dtbl" style="font-size:11px">
-        <thead style="background:#f8f9fc"><tr><th>Spécialité</th><th style="color:#b07d10">2024</th><th style="color:#2563eb">2025</th><th>Écart</th><th>Évol.</th></tr></thead>
-        <tbody>${CUM_S.map((s,i)=>{const d=CUM_25[i]-CUM_24[i],p=CUM_24[i]?Math.round(d/CUM_24[i]*100):0;return`<tr><td>${s}</td><td>${CUM_24[i].toLocaleString()}</td><td>${CUM_25[i].toLocaleString()}</td><td><span class="${d>=0?'ep':'en'}">${d>0?'+':''}${d}</span></td><td><span class="${p>=0?'evp':'evn'}">${p>0?'+':''}${p}%</span></td></tr>`;}).join('')}
-        </tbody>
-        <tfoot>
-          <tr style="font-weight:700"><td>TOTAL</td><td>10 616</td><td>11 302</td><td><span class="ep">+686</span></td><td><span class="evp">+6%</span></td></tr>
-          <tr style="font-weight:600;font-style:italic"><td>Hors Anesthésie EndoTho Endodig</td><td>9 440</td><td>10 051</td><td><span class="ep">+611</span></td><td><span class="evp">+6.5%</span></td></tr>
-        </tfoot>
-      </table>
-    </div>
-    <div class="card"><div class="card-title">PAR SPÉCIALITÉS — COMPARAISON 2024 / 2025</div><div class="ch" style="height:260px"><canvas id="c-bc-cum"></canvas></div></div>
   </div>`;
 
-  const optLn={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{min:0,max:150,ticks:{callback:v=>v+'%',font:{size:9}}},x:{ticks:{font:{size:9}}}}};
-  const optBar={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{x:{stacked:true},y:{stacked:true,ticks:{font:{size:9}}}}};
+  // ── Static charts (cumulative + acte + HAS)
+  mkChart('c-bc-cum',{type:'bar',data:{labels:ACT_S,datasets:[
+    {label:'2024',data:ACT_24,backgroundColor:'#f4b942'},
+    {label:'2025',data:ACT_25,backgroundColor:'#3b82f6'}
+  ]},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{position:'bottom',labels:{font:{size:11},padding:16,boxWidth:14,usePointStyle:true}}},
+    scales:{y:{min:0,max:2200,ticks:{stepSize:550,font:{size:9}}},x:{ticks:{font:{size:9},maxRotation:45}}}
+  }});
 
+  mkChart('c-bc-act',{type:'bar',data:{labels:ACTES_L,datasets:[
+    {label:'Terminées',data:ACTES_T,backgroundColor:'#0ea5a0'},
+    {label:'Annulées',data:ACTES_A,backgroundColor:'#e53e3e'}
+  ]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{position:'top',labels:{font:{size:9}}}},scales:{x:{stacked:true},y:{stacked:true,ticks:{font:{size:9}}}}}});
+
+  mkChart('c-bc-has',{type:'bar',data:{labels:BC_HAS_S,datasets:[{data:BC_HAS,backgroundColor:BC_HAS.map(v=>v>=95?'#38a169':v>=80?'#ed8936':'#e53e3e')}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:110,ticks:{callback:v=>v+'%',font:{size:9}}}}}});
+
+  // ── Granularity switcher
   window.bcGran=function(p){
-    const d=window._bcPD[p]||window._bcPD.sem;
-    document.getElementById('bc-sub').textContent='Bloc central — salles conventionnelles, urgences et hybrides · '+d.lbl+' · Source : OPERA (Bloc) + DxCare (DPI)';
-    document.getElementById('bc-kpis').innerHTML=d.kpis.map(([l,v,u,t,cls,st])=>kpi(l,v,u,t,cls,st)).join('');
-    ['c-bc-tvo','c-bc-sal','c-bc-act','c-bc-has'].forEach(id=>{if(charts[id]){charts[id].destroy();delete charts[id];}});
-    mkChart('c-bc-tvo',{type:'line',data:{labels:d.tvo.labels,datasets:[{label:'TVO courant (%)',data:d.tvo.cur,borderColor:'#0a1628',backgroundColor:'rgba(10,22,40,.06)',fill:true,tension:.3,borderWidth:2,pointRadius:4},{label:'Période préc. (%)',data:d.tvo.prev,borderColor:'#aabbcc',backgroundColor:'transparent',tension:.3,borderWidth:2,borderDash:[6,3],pointRadius:3}]},options:optLn});
-    mkChart('c-bc-sal',{type:'bar',data:{labels:BC_SALLES,datasets:[{label:'Terminées',data:d.sal.term,backgroundColor:'#0ea5a0'},{label:'Annulées',data:d.sal.ann,backgroundColor:'#e53e3e'}]},options:optBar});
-    mkChart('c-bc-act',{type:'bar',data:{labels:ACTES_L,datasets:[{label:'Terminées',data:d.act.t,backgroundColor:'#0ea5a0'},{label:'Annulées',data:d.act.a,backgroundColor:'#e53e3e'}]},options:{...optBar,indexAxis:'y',plugins:{legend:{position:'top',labels:{font:{size:9}}}}}});
-    mkChart('c-bc-has',{type:'bar',data:{labels:BC_HAS_S,datasets:[{data:d.has,backgroundColor:d.has.map(v=>v>=95?'#38a169':v>=80?'#ed8936':'#e53e3e')}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:115,ticks:{callback:v=>v+'%',font:{size:9}}}}}});
-    document.getElementById('bc-pbar').innerHTML=BC_HAS_S.map((s,i)=>pbar(s,d.has[i],110,d.has[i]>=95?'ok':d.has[i]>=80?'warn':'bad')).join('');
+    const d=window._bcPD[p];
+    document.getElementById('bc-gran-lbl').textContent=d.label;
+    ['jour','sem','mois'].forEach(k=>document.getElementById('bcg-'+k).classList.toggle('active',k===p));
+    // Destroy old period charts before redraw
+    ['c-bc-tvo','c-bc-inc','c-bc-sal','c-bc-type'].forEach(id=>{
+      if(charts[id]){try{charts[id].destroy();}catch(e){}delete charts[id];}
+    });
+    // TVO trend
+    const tvoDs=[{label:'TVO (%)',data:d.tvoV,borderColor:'#0a1628',backgroundColor:'rgba(10,22,40,.08)',fill:true,tension:.3,borderWidth:2,pointRadius:5,pointBackgroundColor:'#0a1628'}];
+    mkChart('c-bc-tvo',{type:'line',data:{labels:d.tvoL,datasets:tvoDs},options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw+'%'}}},
+      scales:{y:{min:0,max:120,ticks:{callback:v=>v+'%',font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:9}}}}
+    }});
+    // Heure 1ère incision
+    mkChart('c-bc-inc',{type:'bar',data:{labels:d.incL,datasets:[
+      {label:'h moy.',data:d.incV,backgroundColor:d.incV.map(v=>v<8?'#ed8936':'#3b82f6'),borderRadius:4}
+    ]},options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>{const h=Math.floor(ctx.raw);const mn=Math.round((ctx.raw-h)*60);return h+'h'+String(mn).padStart(2,'0');}}}},
+      scales:{y:{min:6.5,max:10,ticks:{stepSize:.5,callback:v=>{const h=Math.floor(v);const mn=Math.round((v-h)*60);return h+'h'+(mn?String(mn).padStart(2,'0'):'');},font:{size:9}}},x:{ticks:{font:{size:9}}}}
+    }});
+    // Activité par salle
+    mkChart('c-bc-sal',{type:'bar',data:{labels:BC_SAL_L,datasets:[
+      {label:'Terminées',data:d.salT,backgroundColor:'#0ea5a0',stack:'s'},
+      {label:'Annulées', data:d.salA,backgroundColor:'#e53e3e',stack:'s'}
+    ]},options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{font:{size:10}}}},
+      scales:{x:{stacked:true,ticks:{font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}
+    }});
+    // Activité par type de salle
+    mkChart('c-bc-type',{type:'bar',data:{labels:BC_TYPE_L,datasets:[
+      {label:'Terminées',data:d.typeT,backgroundColor:'#0ea5a0',stack:'s'},
+      {label:'Annulées', data:d.typeA,backgroundColor:'#e53e3e',stack:'s'}
+    ]},options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{font:{size:10}}}},
+      scales:{x:{stacked:true,ticks:{font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}
+    }});
   };
+
+  // Default: Semaine
   window.bcGran('sem');
-  mkChart('c-bc-cum',{type:'bar',data:{labels:CUM_S,datasets:[{label:'2024',data:CUM_24,backgroundColor:'#f4b942'},{label:'2025',data:CUM_25,backgroundColor:'#1a3a6b'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:10}}}},scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:8},maxRotation:45}}}}});
 }
 
 // ═══════════════════════════════════════
@@ -798,134 +852,236 @@ function vBc2025(){
 // ═══════════════════════════════════════
 function vBft(){
   const m=document.getElementById('main');
-  const BFT_SAL=['BL-07','BL-03'];
-  const BFT_ACTES=['Arthroplastie genou','Amygdalectomie','Hystérectomie totale','Pontage coronarien','Valve aortique','Hernie inguinale','Cholécystectomie','Arthroplastie hanche'];
-  const BFT_HAS_V=[72,82]; const BFT_HAS_C=['#e53e3e','#ed8936'];
-  window._bftPD={
-    jour:{lbl:'Journée du 21/06/2026',
-      kpis:[['TVO DU PÉRIMÈTRE','62','%','▼ 8 % vs veille','dn-bad','warn'],['INTERVENTIONS TERMINÉES','4','','▼ 1 vs veille','dn-bad','warn'],['PONCTUALITÉ (≤ 15 MIN)','75','%','= vs veille','neut','ok'],["TAUX D'ANNULATION",'20','%','▲ 5 % vs veille','up-bad','bad'],['DURÉE MOYENNE','122','min','▲ 4 min vs veille','up-bad','warn'],['CHECK-LISTS CONFORMES','80','%','= vs veille','neut','ok']],
-      tvo:{labels:['21/06'],cur:[62],prev:[70]},sal:{term:[2,2],ann:[1,0]},act:{t:[1,1,1,0,0,1,0,0],a:[0,0,0,0,0,0,0,1]},has:[70,80]},
-    sem:{lbl:'Semaine du 15 au 21/06/2026',
-      kpis:[['TVO DU PÉRIMÈTRE','53.5','%','▼ 57.5 % vs période précédente','dn-bad','bad'],['INTERVENTIONS TERMINÉES','21','','▼ 10 vs période précédente','dn-bad','bad'],['PONCTUALITÉ (≤ 15 MIN)','76.2','%','▼ 10.9 % vs période précédente','dn-bad','warn'],["TAUX D'ANNULATION",'22.2','%','▲ 19.1 % vs période précédente','up-bad','bad'],['DURÉE MOYENNE','118','min','▼ 61.5 min vs période précédente','dn-good','ok'],['CHECK-LISTS CONFORMES','81','%','▲ 0.4 % vs période précédente','up-good','ok']],
-      tvo:{labels:DATES,cur:[82,18,42,65,60],prev:[118,128,148,155,138]},sal:{term:[13,8],ann:[4,5]},act:{t:[5,4,4,3,2,1,1,1],a:[2,1,1,1,1,0,0,0]},has:[72,82]},
-    mois:{lbl:'Mois de Juin 2026',
-      kpis:[['TVO DU PÉRIMÈTRE','50','%','▼ 12 % vs Mai 2026','dn-bad','warn'],['INTERVENTIONS TERMINÉES','82','','▼ 18 vs Mai 2026','dn-bad','warn'],['PONCTUALITÉ (≤ 15 MIN)','74','%','▼ 6 % vs Mai 2026','dn-bad','warn'],["TAUX D'ANNULATION",'18','%','▲ 8 % vs Mai 2026','up-bad','bad'],['DURÉE MOYENNE','122','min','▼ 10 min vs Mai 2026','dn-good','ok'],['CHECK-LISTS CONFORMES','79','%','▼ 2 % vs Mai 2026','dn-bad','warn']],
-      tvo:{labels:['S21','S22','S23','S24'],cur:[88,90,52,28],prev:[92,95,88,110]},sal:{term:[44,38],ann:[8,12]},act:{t:[18,16,15,12,8,5,4,4],a:[4,4,3,3,2,0,1,1]},has:[70,79]},
-    tout:{lbl:'Cumul annuel 2026 (Jan–Jun)',
-      kpis:[['TVO DU PÉRIMÈTRE','52','%','▼ 8 % vs S1 2025','dn-bad','warn'],['INTERVENTIONS TERMINÉES','495','','▼ 55 vs S1 2025','dn-bad','warn'],['PONCTUALITÉ (≤ 15 MIN)','75','%','▲ 2 % vs S1 2025','up-good','ok'],["TAUX D'ANNULATION",'20','%','▲ 5 % vs S1 2025','up-bad','bad'],['DURÉE MOYENNE','119','min','▲ 2 min vs S1 2025','up-bad','warn'],['CHECK-LISTS CONFORMES','80','%','= vs S1 2025','neut','ok']],
-      tvo:{labels:['Jan','Fév','Mar','Avr','Mai','Jun'],cur:[88,90,85,82,92,53],prev:[90,92,88,86,96,60]},sal:{term:[265,230],ann:[58,70]},act:{t:[108,96,90,72,48,32,24,24],a:[24,24,18,18,12,0,6,6]},has:[72,81]}
-  };
+  const BFT_HAS_S=['BL-03','BL-07'];
+  const BFT_HAS=[73,83];
+  // Données période S24 (15→21 juin 2026) — source JPEGs
+  const BFT_TVO_C=[85,27,46,27,73];
+  const BFT_TVO_P=[76,115,93,143,126];
+  const BFT_DATES=['06-15','06-16','06-17','06-18','06-19'];
+  const BFT_SAL_T=[13,8]; const BFT_SAL_A=[3,3]; // BL-07 / BL-03
+  const BFT_ACTES=['Arthroplastie genou','Amygdalectomie','Hystérectomie totale','Craniotomie tumeur','Remplacement valve','Pontage coronarien','Hernie inguinale','Cholécystectomie','Arthroplastie hanche'];
+  const BFT_ACT_T=[6,7,2,3,1,1,1,1,0]; const BFT_ACT_A=[2,1,1,0,0,0,0,0,1];
   m.innerHTML=`
   <div class="bil-hdr">
     <div class="bil-title">BFASTTRACK_2025 — BILAN DU PÉRIMÈTRE</div>
-    <div class="bil-sub" id="bft-sub">Circuit court ambulatoire (fast-track) — salles BL-03 et BL-07 · Source : OPERA</div>
-    <div class="kpi-grid" id="bft-kpis" style="margin-top:12px;margin-bottom:0"></div>
-  </div>
-  <div class="row2">
-    <div class="card"><div class="card-title">TENDANCE TVO DU PÉRIMÈTRE</div><div class="ch" style="height:190px"><canvas id="c-bft-tvo"></canvas></div></div>
-    <div class="card"><div class="card-title">ACTIVITÉ PAR SALLE — TERMINÉES / ANNULÉES</div><div class="ch" style="height:190px"><canvas id="c-bft-sal"></canvas></div></div>
-  </div>
-  <div class="row2">
-    <div class="card"><div class="card-title">ACTIVITÉ PAR TYPE D'ACTE</div><div class="ch" style="height:230px"><canvas id="c-bft-act"></canvas></div></div>
-    <div class="card"><div class="card-title">CONFORMITÉ CHECK-LIST HAS</div><div class="ch" style="height:230px"><canvas id="c-bft-has"></canvas></div></div>
-  </div>
-  <div style="font-size:10px;color:var(--gray);margin-bottom:6px">* Ouverture 31 Mars 2025</div>
-  <div class="row2">
-    <div class="card">
-      <div class="card-title">ACTIVITÉ CUMULÉE PAR SPÉCIALITÉ</div>
-      <table class="dtbl" style="font-size:11px">
-        <thead style="background:#f8f9fc"><tr><th>Spécialité</th><th>2025</th></tr></thead>
-        <tbody>${BFT_S.map((s,i)=>`<tr><td style="color:var(--navy);font-weight:600">${s}</td><td style="font-weight:700">${BFT_D[i].toLocaleString()}</td></tr>`).join('')}
-        <tr style="background:#f0f7f7;font-weight:800"><td>TOTAL</td><td>2 240</td></tr></tbody>
-      </table>
+    <div class="bil-sub">Circuit court ambulatoire (fast-track) — salles BL-03 et BL-07 · Période analysée : 2026-06-15 → 2026-06-21 · Source : OPERA</div>
+    <div class="kpi-grid" style="margin-top:12px;margin-bottom:0">
+      ${kpi('TVO DU PÉRIMÈTRE','53.5','%','▼ 57.5 % vs période préc. · Cible ≥ 85 %','dn-bad','bad')}
+      ${kpi('NOMBRE DE VACATIONS','12','vac.','BL-03 + BL-07','neut','info')}
+      ${kpi('TROS','78.4','%','▼ 4.3 % vs préc.','dn-bad','warn')}
+      ${kpi('INTERVENTIONS TERMINÉES','21','','▼ 10 vs période précédente','dn-bad','warn')}
+      ${kpi('DÉMARRAGES TARDIFS (≤ 15 MIN)','76.2','%','▼ 10.9 % vs période précédente','dn-bad','warn')}
+      ${kpi('DURÉE MOYENNE OPÉRATOIRE','118','min','▼ 61.5 min vs période précédente','dn-good','info')}
+      ${kpi('DÉBORDEMENTS','3','cas / 22 min','▲ 1 cas vs préc.','up-bad','warn')}
+      ${kpi('SUSPENSIONS ET ABANDONS','1','cas','= 0 vs préc.','neut','info')}
     </div>
-    <div class="card"><div class="card-title">PAR SPÉCIALITÉS — ANNÉE 2025</div><div class="ch" style="height:220px"><canvas id="c-bft-cum"></canvas></div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:10px">
+    <div class="card-title">TENDANCE TVO DU PÉRIMÈTRE</div>
+    <div class="ch" style="height:200px"><canvas id="c-bft-tvo"></canvas></div>
+  </div>
+
+  <div class="row2">
+    <div class="card"><div class="card-title">ACTIVITÉ PAR SALLE</div>
+      <div class="ch" style="height:180px"><canvas id="c-bft-sal"></canvas></div>
+    </div>
+    <div class="card"><div class="card-title">CONFORMITÉ CHECK-LIST HAS PAR SALLE</div>
+      <div class="ch" style="height:130px"><canvas id="c-bft-has"></canvas></div>
+      <div style="margin-top:8px">
+        ${BFT_HAS_S.map((s,i)=>pbar(s,BFT_HAS[i],110,BFT_HAS[i]>=95?'ok':BFT_HAS[i]>=80?'warn':'bad')).join('')}
+      </div>
+      <div class="info-note" style="margin-top:6px">🔴 BL-03 (73%) sous seuil 80 % — action corrective requise</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:10px">
+    <div class="card-title">ACTIVITÉ PAR TYPE D'ACTE</div>
+    <div class="ch" style="height:220px"><canvas id="c-bft-act"></canvas></div>
+  </div>
+
+  <div class="row2">
+    <div class="card"><div class="card-title">ACTIVITÉ CUMULÉE PAR SPÉCIALITÉ — 2025</div>
+      <table class="dtbl"><thead><tr><th>Spécialité</th><th>2025</th><th>% Total</th></tr></thead>
+      <tbody>${BFT_S.map((s,i)=>`<tr><td>${s}</td><td><strong>${BFT_D[i].toLocaleString()}</strong></td><td class="col-t">${(BFT_D[i]/2240*100).toFixed(1)}%</td></tr>`).join('')}
+      <tr style="background:#f0f7f7;font-weight:700"><td>TOTAL</td><td>2 240</td><td>100%</td></tr></tbody></table>
+    </div>
+    <div class="card"><div class="card-title">RÉPARTITION PAR SPÉCIALITÉ 2025</div>
+      <div class="ch" style="height:220px"><canvas id="c-bft"></canvas></div>
+    </div>
   </div>`;
 
-  const optLn2={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{min:0,max:180,ticks:{callback:v=>v+'%',font:{size:9}}},x:{ticks:{font:{size:9}}}}};
-  const optBar2={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{x:{stacked:true},y:{stacked:true,ticks:{font:{size:9}}}}};
+  mkChart('c-bft-tvo',{type:'line',data:{labels:BFT_DATES,datasets:[
+    {label:'TVO période courante (%)',data:BFT_TVO_C,borderColor:'#0a1628',backgroundColor:'rgba(10,22,40,.06)',fill:true,tension:.4,borderWidth:2,pointRadius:4},
+    {label:'Période précédente (%)',data:BFT_TVO_P,borderColor:'#aabbcc',backgroundColor:'transparent',tension:.4,borderWidth:2,borderDash:[6,3],pointRadius:3}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{min:0,max:160,ticks:{callback:v=>v+' %',font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
 
-  window.bftGran=function(p){
-    const d=window._bftPD[p]||window._bftPD.sem;
-    document.getElementById('bft-sub').textContent='Circuit court ambulatoire (fast-track) — salles BL-03 et BL-07 · '+d.lbl+' · Source : OPERA';
-    document.getElementById('bft-kpis').innerHTML=d.kpis.map(([l,v,u,t,cls,st])=>kpi(l,v,u,t,cls,st)).join('');
-    ['c-bft-tvo','c-bft-sal','c-bft-act','c-bft-has'].forEach(id=>{if(charts[id]){charts[id].destroy();delete charts[id];}});
-    mkChart('c-bft-tvo',{type:'line',data:{labels:d.tvo.labels,datasets:[{label:'TVO courant (%)',data:d.tvo.cur,borderColor:'#0a1628',backgroundColor:'rgba(10,22,40,.06)',fill:true,tension:.3,borderWidth:2,pointRadius:4},{label:'Période préc. (%)',data:d.tvo.prev,borderColor:'#aabbcc',backgroundColor:'transparent',tension:.3,borderWidth:2,borderDash:[6,3],pointRadius:3}]},options:optLn2});
-    mkChart('c-bft-sal',{type:'bar',data:{labels:BFT_SAL,datasets:[{label:'Terminées',data:d.sal.term,backgroundColor:'#0ea5a0'},{label:'Annulées',data:d.sal.ann,backgroundColor:'#e53e3e'}]},options:optBar2});
-    mkChart('c-bft-act',{type:'bar',data:{labels:BFT_ACTES,datasets:[{label:'Terminées',data:d.act.t,backgroundColor:'#0ea5a0'},{label:'Annulées',data:d.act.a,backgroundColor:'#e53e3e'}]},options:{...optBar2,scales:{x:{ticks:{font:{size:9},maxRotation:45}},y:{stacked:true,ticks:{font:{size:9}}}}}});
-    mkChart('c-bft-has',{type:'bar',data:{labels:BFT_SAL,datasets:[{label:'Conformité (%)',data:d.has,backgroundColor:d.has.map(v=>v>=85?'#38a169':v>=75?'#ed8936':'#e53e3e')}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%',font:{size:9}}},x:{ticks:{font:{size:10}}}}}});
-  };
-  window.bftGran('sem');
-  mkChart('c-bft-cum',{type:'bar',data:{labels:BFT_S,datasets:[{label:'2025',data:BFT_D,backgroundColor:'#1a3a6b'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+  mkChart('c-bft-sal',{type:'bar',data:{labels:['BL-07','BL-03'],datasets:[
+    {label:'Terminées',data:BFT_SAL_T,backgroundColor:'#0ea5a0'},
+    {label:'Annulées',data:BFT_SAL_A,backgroundColor:'#e53e3e'}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{x:{stacked:true},y:{stacked:true,ticks:{font:{size:9}}}}}});
+
+  mkChart('c-bft-has',{type:'bar',data:{labels:BFT_HAS_S,datasets:[{data:BFT_HAS,backgroundColor:BFT_HAS.map(v=>v>=95?'#38a169':v>=80?'#ed8936':'#e53e3e')}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:110,ticks:{callback:v=>v+'%',font:{size:9}}}}}});
+
+  mkChart('c-bft-act',{type:'bar',data:{labels:BFT_ACTES,datasets:[
+    {label:'Terminées',data:BFT_ACT_T,backgroundColor:'#0ea5a0'},
+    {label:'Annulées',data:BFT_ACT_A,backgroundColor:'#e53e3e'}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{x:{stacked:true,ticks:{font:{size:9},maxRotation:45}},y:{stacked:true,ticks:{font:{size:9}}}}}});
+
+  mkChart('c-bft',{type:'bar',data:{labels:BFT_S,datasets:[{label:'2025',data:BFT_D,backgroundColor:'#3b82f6'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{font:{size:10}}},x:{ticks:{font:{size:10}}}}}});
 }
 
 // ═══════════════════════════════════════
 // VIEW : ROBOT
 // ═══════════════════════════════════════
-// VIEW : ROBOT
-// ═══════════════════════════════════════
 function vRobot(){
   const m=document.getElementById('main');
-  const ROB_SAL=['BL-09','BL-02','BL-08','BL-07','BL-03'];
-  const ROB_HAS_S=['BL-02','BL-03','BL-07','BL-08','BL-09'];
-  const ROB_ACTES=['Prostatectomie radicale','Pontage coronarien','Hystérectomie totale','Amygdalectomie','Cure hernie inguinale','Craniotomie tumeur','Cholécystectomie','Arthroplastie hanche'];
+  const ROB_SAL_L=['BL-02','BL-03','BL-07','BL-08','BL-09'];
+  const ROB_ACTE_L=['Prostatectomie radicale','Cystectomie totale','Hystérectomie robot','Salpingo-ovariectomie','Colectomie droite','Gastrectomie','Thyroïdectomie','Lobectomie pulm.','Thymectomie'];
+  const rows=ROB_S.map((s,i)=>{const d=ROB_25[i]-ROB_24[i],p=Math.round(d/ROB_24[i]*100);return`<tr><td>${s}</td><td>${ROB_24[i]}</td><td><strong>${ROB_25[i]}</strong></td><td><span class="${d>=0?'ep':'en'}">${d>0?'+':''}${d}</span></td><td><span class="${p>=0?'evp':'evn'}">${p>0?'+':''}${p}%</span></td></tr>`;}).join('');
+
   window._robPD={
-    jour:{lbl:'Journée du 21/06',
-      kpis:[['TVO DU PÉRIMÈTRE','95','%','▲ 4.5 % vs veille','up-good','ok'],['INTERVENTIONS TERMINÉES','16','','= vs veille','neut','ok'],['PONCTUALITÉ (≤ 15 MIN)','72','%','▼ 8 % vs veille','dn-bad','warn'],["TAUX D'ANNULATION",'8','%','▲ 3 % vs veille','up-bad','warn'],['DURÉE MOYENNE','152','min','▲ 11 min vs veille','up-bad','warn'],['CHECK-LISTS CONFORMES','88','%','▲ 5 % vs veille','up-good','ok']],
-      tvo:{labels:['21/06'],cur:[95],prev:[90]},sal:{term:[4,3,3,3,2],ann:[0,1,0,1,0]},act:{t:[3,3,2,2,2,1,1,1],a:[0,0,0,0,0,0,1,0]},has:[85,75,88,92,82],
-      y1:2024,y2:'21/06',d1:ROB_24.map(v=>Math.round(v/260)),d2:ROB_25.map(v=>Math.round(v/252)),t1:3,t2:4},
-    sem:{lbl:'Semaine du 15 au 21/06/2026',
-      kpis:[['TVO DU PÉRIMÈTRE','98.2','%','▲ 4.5 % vs période précédente','up-good','ok'],['INTERVENTIONS TERMINÉES','79','','▼ 1 vs période précédente','dn-bad','warn'],['PONCTUALITÉ (≤ 15 MIN)','73.4','%','▼ 7.9 % vs période précédente','dn-bad','warn'],["TAUX D'ANNULATION",'10.2','%','▲ 4.5 % vs période précédente','up-bad','bad'],['DURÉE MOYENNE','149.9','min','▲ 10.8 min vs période précédente','up-bad','bad'],['CHECK-LISTS CONFORMES','87.3','%','▲ 5 % vs période précédente','up-good','ok']],
-      tvo:{labels:DATES,cur:[95,98,100,102,97],prev:[90,94,96,98,93]},sal:{term:[22,18,17,14,8],ann:[2,2,2,2,1]},act:{t:[14,14,12,10,9,8,7,5],a:[2,1,1,1,1,1,2,0]},has:[85,75,88,92,82],
-      y1:2024,y2:2025,d1:ROB_24.map(v=>Math.round(v/52)),d2:ROB_25.map(v=>Math.round(v/52)),t1:16,t2:17},
-    mois:{lbl:'Mois de Juin 2026',
-      kpis:[['TVO DU PÉRIMÈTRE','82','%','▲ 3 % vs Mai 2026','up-good','ok'],['INTERVENTIONS TERMINÉES','312','','▲ 8 vs Mai 2026','up-good','ok'],['PONCTUALITÉ (≤ 15 MIN)','71','%','▼ 5 % vs Mai 2026','dn-bad','warn'],["TAUX D'ANNULATION",'9.8','%','▲ 2 % vs Mai 2026','up-bad','warn'],['DURÉE MOYENNE','151','min','▲ 8 min vs Mai 2026','up-bad','warn'],['CHECK-LISTS CONFORMES','86','%','▲ 2 % vs Mai 2026','up-good','ok']],
-      tvo:{labels:['S21','S22','S23','S24'],cur:[85,82,80,82],prev:[80,78,77,79]},sal:{term:[68,58,62,54,30],ann:[8,6,6,6,4]},act:{t:[56,56,48,40,36,32,28,20],a:[8,4,4,4,4,4,8,0]},has:[86,76,90,94,83],
-      y1:2025,y2:'Jun 2026',d1:ROB_25.map(v=>Math.round(v/12)),d2:ROB_25.map(v=>Math.round(v/11.2)),t1:70,t2:81},
-    tout:{lbl:'Cumul annuel 2026 (Jan–Jun)',
-      kpis:[['TVO DU PÉRIMÈTRE','78','%','▲ 2 % vs S1 2025','up-good','ok'],['INTERVENTIONS TERMINÉES','902','','▲ 68 vs 2024','up-good','ok'],['PONCTUALITÉ (≤ 15 MIN)','70','%','▼ 2 % vs 2024','dn-bad','warn'],["TAUX D'ANNULATION",'8.5','%','▲ 1 % vs 2024','up-bad','warn'],['DURÉE MOYENNE','155','min','▼ 5 min vs 2024','dn-good','ok'],['CHECK-LISTS CONFORMES','85','%','▲ 1 % vs 2024','up-good','ok']],
-      tvo:{labels:['Jan','Fév','Mar','Avr','Mai','Jun'],cur:[78,80,82,79,82,80],prev:[74,76,78,76,79,77]},sal:{term:[382,308,314,280,140],ann:[32,24,26,24,14]},act:{t:[312,260,220,190,170,150,130,100],a:[20,16,14,12,10,10,16,6]},has:[86,76,89,93,82],
-      y1:2024,y2:2025,d1:ROB_24,d2:ROB_25,t1:834,t2:902}
+    jour:{
+      label:'Lundi 15 juin 2026',
+      tvo:'110',int_:'15',ponct:'73.3',ann:'0',dur:'182.9',cl:'100',
+      tvoSub:'vs préc. : n/d', intSub:'n/d', ponctSub:'n/d', annSub:'n/d', durSub:'n/d', clSub:'n/d',
+      tvoTrend:'neut', intTrend:'neut', ponctTrend:'neut', annTrend:'neut',
+      tvoL:['15/06'],tvoV:[110],
+      salT:[3,2,3,3,4],salA:[0,0,0,0,0],
+      hasV:[100,100,100,100,100],
+      acteT:[4,0,3,0,3,0,1,2,2],acteA:[0,0,0,0,0,0,0,0,0]
+    },
+    sem:{
+      label:'Semaine 15–19 juin 2026',
+      tvo:'98.2',int_:'79',ponct:'73.4',ann:'10.2',dur:'149.9',cl:'87.3',
+      tvoSub:'▲ 4.5 % vs préc.', intSub:'▼ 1 vs préc.', ponctSub:'▼ 7.9 % vs préc.', annSub:'▲ 4.5 % vs préc.', durSub:'▲ 10.8 min vs préc.', clSub:'▲ 1 % vs préc.',
+      tvoTrend:'up-good', intTrend:'dn-bad', ponctTrend:'dn-bad', annTrend:'up-bad',
+      tvoL:['15/06','16/06','17/06','18/06','19/06'],tvoV:[88,95,70,55,105],
+      salT:[17,8,14,18,22],salA:[2,1,4,2,0],
+      hasV:[82,75,83,96,83],
+      acteT:[18,10,14,7,9,5,5,7,4],acteA:[2,2,1,1,1,1,0,0,1]
+    },
+    mois:{
+      label:'Juin–Juillet 2026 (08/06 → 08/07)',
+      tvo:'51',int_:'175',ponct:'78.3',ann:'6.4',dur:'147.2',cl:'86.1',
+      tvoSub:'vs préc. : n/d', intSub:'n/d', ponctSub:'n/d', annSub:'n/d', durSub:'n/d', clSub:'n/d',
+      tvoTrend:'neut', intTrend:'neut', ponctTrend:'neut', annTrend:'neut',
+      tvoL:['08/06','15/06','22/06','29/06','06/07'],tvoV:[95,92,85,55,5],
+      salT:[42,33,29,33,38],salA:[2,5,7,5,3],
+      hasV:[83,67,83,87,83],
+      acteT:[40,22,32,15,20,11,11,15,9],acteA:[4,3,2,2,2,1,1,1,2]
+    },
+    tout:{
+      label:'Toute la période (début → fin)',
+      tvo:'51',int_:'175',ponct:'78.3',ann:'6.4',dur:'147.2',cl:'86.1',
+      tvoSub:'vs préc. : n/d', intSub:'n/d', ponctSub:'n/d', annSub:'n/d', durSub:'n/d', clSub:'n/d',
+      tvoTrend:'neut', intTrend:'neut', ponctTrend:'neut', annTrend:'neut',
+      tvoL:['2026-S23','2026-S24','2026-S25','2026-S26','2026-S27'],tvoV:[98,95,30,3,0],
+      salT:[43,25,32,35,40],salA:[2,9,8,5,4],
+      hasV:[83,67,83,87,83],
+      acteT:[40,22,32,15,20,11,11,15,9],acteA:[4,3,2,2,2,1,1,1,2]
+    }
   };
+
   m.innerHTML=`
-  <div class="bil-hdr"><div class="bil-title">ROBOT_2025 — BILAN DU PÉRIMÈTRE</div>
-  <div class="bil-sub" id="rob-sub">Salles équipées du robot chirurgical Da Vinci · Source : OPERA</div>
-  <div class="kpi-grid" id="rob-kpis" style="margin-top:12px;margin-bottom:0"></div></div>
+  <div class="bil-hdr">
+    <div class="bil-title">ROBOT_2025 — BILAN DU PÉRIMÈTRE</div>
+    <div class="bil-sub">Salles équipées du robot chirurgical Da Vinci · Période analyse : 2026-06-15 → 2026-06-19 (filtres courants appliqués)</div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:10px;margin:10px 0 6px">
+    <div class="fgrp">
+      <button class="fbtn" id="robg-jour" onclick="robGran('jour')">Jour</button>
+      <button class="fbtn active" id="robg-sem"  onclick="robGran('sem')">Semaine</button>
+      <button class="fbtn" id="robg-mois" onclick="robGran('mois')">Mois</button>
+      <button class="fbtn" id="robg-tout" onclick="robGran('tout')">Tout</button>
+    </div>
+    <span id="rob-gran-lbl" style="font-size:12px;color:var(--gray)">Semaine 15–19 juin 2026</span>
+  </div>
+
+  <div id="rob-kpi-block" class="kpi-grid" style="margin-bottom:10px"></div>
+
   <div class="row2">
     <div class="card"><div class="card-title">TENDANCE TVO DU PÉRIMÈTRE</div><div class="ch" style="height:190px"><canvas id="c-rob-tvo"></canvas></div></div>
     <div class="card"><div class="card-title">ACTIVITÉ PAR SALLE — TERMINÉES / ANNULÉES</div><div class="ch" style="height:190px"><canvas id="c-rob-sal"></canvas></div></div>
   </div>
   <div class="row2">
-    <div class="card"><div class="card-title">ACTIVITÉ PAR TYPE D'ACTE</div><div class="ch" style="height:230px"><canvas id="c-rob-act"></canvas></div></div>
-    <div class="card"><div class="card-title">CONFORMITÉ CHECK-LIST HAS</div><div class="ch" style="height:230px"><canvas id="c-rob-has"></canvas></div></div>
+    <div class="card"><div class="card-title">ACTIVITÉ PAR TYPE D'ACTE</div><div class="ch" style="height:260px"><canvas id="c-rob-act"></canvas></div></div>
+    <div class="card"><div class="card-title">CONFORMITÉ CHECK-LIST HAS PAR SALLE</div>
+      <div class="ch" style="height:160px"><canvas id="c-rob-has"></canvas></div>
+      <div id="rob-has-bars" style="margin-top:8px"></div>
+    </div>
   </div>
+
   <div class="row2">
-    <div class="card"><div class="card-title">ACTIVITÉ ROBOT PAR SPÉCIALITÉ</div>
-      <table class="dtbl"><thead><tr><th>Spécialité</th><th id="rob-th1">2024</th><th id="rob-th2">2025</th><th>Écart</th><th>Évol.</th></tr></thead>
-      <tbody id="rob-rows"></tbody></table>
+    <div class="card"><div class="card-title">ACTIVITÉ ROBOT PAR SPÉCIALITÉ — 2024 vs 2025</div>
+      <table class="dtbl"><thead><tr><th>Spécialité</th><th>2024</th><th>2025</th><th>Écart</th><th>Évol.</th></tr></thead>
+      <tbody>${rows}<tr style="background:#f0f7f7;font-weight:700"><td>TOTAL</td><td>834</td><td>902</td><td><span class="ep">+68</span></td><td><span class="evp">+8%</span></td></tr></tbody></table>
     </div>
     <div class="card"><div class="card-title">PAR SPÉCIALITÉS — COMPARAISON 2024 / 2025</div><div class="ch" style="height:240px"><canvas id="c-rob"></canvas></div></div>
   </div>`;
 
-  const optRLn={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{min:0,max:130,ticks:{callback:v=>v+'%',font:{size:9}}},x:{ticks:{font:{size:9}}}}};
-  const optRBar={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{x:{stacked:true},y:{stacked:true,ticks:{font:{size:9}}}}};
+  // Static chart
+  mkChart('c-rob',{type:'bar',data:{labels:ROB_S,datasets:[{label:'2024',data:ROB_24,backgroundColor:'#f4b942'},{label:'2025',data:ROB_25,backgroundColor:'#1a3a6b'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{font:{size:10}}},x:{ticks:{font:{size:10}}}}}});
 
+  // Granularity switcher
   window.robGran=function(p){
-    const d=window._robPD[p]||window._robPD.tout;
-    document.getElementById('rob-sub').textContent='Salles équipées du robot chirurgical Da Vinci · Période analysée : '+d.lbl+' (filtres courants appliqués)';
-    document.getElementById('rob-kpis').innerHTML=d.kpis.map(([l,v,u,t,cls,st])=>kpi(l,v,u,t,cls,st)).join('');
-    ['c-rob-tvo','c-rob-sal','c-rob-act','c-rob-has','c-rob'].forEach(id=>{if(charts[id]){charts[id].destroy();delete charts[id];}});
-    mkChart('c-rob-tvo',{type:'line',data:{labels:d.tvo.labels,datasets:[{label:'TVO courant (%)',data:d.tvo.cur,borderColor:'#0a1628',backgroundColor:'rgba(10,22,40,.06)',fill:true,tension:.3,borderWidth:2,pointRadius:4},{label:'Période préc. (%)',data:d.tvo.prev,borderColor:'#aabbcc',backgroundColor:'transparent',tension:.3,borderWidth:2,borderDash:[6,3],pointRadius:3}]},options:optRLn});
-    mkChart('c-rob-sal',{type:'bar',data:{labels:ROB_SAL,datasets:[{label:'Terminées',data:d.sal.term,backgroundColor:'#0ea5a0'},{label:'Annulées',data:d.sal.ann,backgroundColor:'#e53e3e'}]},options:optRBar});
-    mkChart('c-rob-act',{type:'bar',data:{labels:ROB_ACTES,datasets:[{label:'Terminées',data:d.act.t,backgroundColor:'#0ea5a0'},{label:'Annulées',data:d.act.a,backgroundColor:'#e53e3e'}]},options:{...optRBar,scales:{x:{ticks:{font:{size:8},maxRotation:45}},y:{stacked:true,ticks:{font:{size:9}}}}}});
-    mkChart('c-rob-has',{type:'bar',data:{labels:ROB_HAS_S,datasets:[{data:d.has,backgroundColor:d.has.map(v=>v>=90?'#38a169':v>=80?'#ed8936':'#e53e3e')}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{min:0,max:100,ticks:{callback:v=>v+'%',font:{size:9}}},x:{ticks:{font:{size:10}}}}}});
-    document.getElementById('rob-th1').textContent=d.y1;
-    document.getElementById('rob-th2').textContent=d.y2;
-    const rows=ROB_S.map((s,i)=>{const diff=d.d2[i]-d.d1[i],pct=d.d1[i]?Math.round(diff/d.d1[i]*100):0;return`<tr><td>${s}</td><td>${d.d1[i]}</td><td><strong>${d.d2[i]}</strong></td><td><span class="${diff>=0?'ep':'en'}">${diff>0?'+':''}${diff}</span></td><td><span class="${pct>=0?'evp':'evn'}">${pct>0?'+':''}${pct}%</span></td></tr>`;}).join('');
-    const td=d.t2-d.t1,tp=Math.round(td/d.t1*100);
-    document.getElementById('rob-rows').innerHTML=rows+`<tr style="background:#f0f7f7;font-weight:700"><td>TOTAL</td><td>${d.t1}</td><td>${d.t2}</td><td><span class="${td>=0?'ep':'en'}">${td>0?'+':''}${td}</span></td><td><span class="${tp>=0?'evp':'evn'}">${tp>0?'+':''}${tp}%</span></td></tr>`;
-    mkChart('c-rob',{type:'bar',data:{labels:ROB_S,datasets:[{label:String(d.y1),data:d.d1,backgroundColor:'#f4b942'},{label:String(d.y2),data:d.d2,backgroundColor:'#1a3a6b'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{font:{size:10}}},x:{ticks:{font:{size:10}}}}}});
+    const d=window._robPD[p];
+    document.getElementById('rob-gran-lbl').textContent=d.label;
+    ['jour','sem','mois','tout'].forEach(k=>document.getElementById('robg-'+k).classList.toggle('active',k===p));
+    // KPI cards
+    const tvoCl=parseFloat(d.tvo)>=85?'ok':'bad';
+    const ponctCl=parseFloat(d.ponct)>=80?'ok':'warn';
+    const annCl=parseFloat(d.ann)<=5?'ok':'bad';
+    const clCl=parseFloat(d.cl)>=95?'ok':parseFloat(d.cl)>=80?'warn':'bad';
+    document.getElementById('rob-kpi-block').innerHTML=
+      kpi('TVO DU PÉRIMÈTRE',d.tvo,'%',d.tvoSub,d.tvoTrend,tvoCl)+
+      kpi('NOMBRE DE VACATIONS','25','vac.','Salles robot','neut','info')+
+      kpi('TROS','91.3','%','▲ 2.4 % vs préc.','up-good','ok')+
+      kpi('INTERVENTIONS TERMINÉES',d.int_,'','▶ '+d.intSub,d.intTrend,'info')+
+      kpi('DÉMARRAGES TARDIFS (≤ 15 MIN)',d.ponct,'%',d.ponctSub,d.ponctTrend,ponctCl)+
+      kpi('DURÉE MOYENNE OPÉRATOIRE',d.dur,'min',d.durSub,'neut','info')+
+      kpi('DÉBORDEMENTS','4','cas / 31 min','▲ 1 cas vs préc.','up-bad','warn')+
+      kpi('SUSPENSIONS ET ABANDONS','1','cas','= 0 vs préc.','neut','info');
+    // Destroy old period charts
+    ['c-rob-tvo','c-rob-sal','c-rob-act','c-rob-has'].forEach(id=>{
+      if(charts[id]){try{charts[id].destroy();}catch(e){}delete charts[id];}
+    });
+    // TVO trend
+    mkChart('c-rob-tvo',{type:'line',data:{labels:d.tvoL,datasets:[
+      {label:'TVO (%)',data:d.tvoV,borderColor:'#0a1628',backgroundColor:'rgba(10,22,40,.08)',fill:true,tension:.3,borderWidth:2,pointRadius:5,pointBackgroundColor:'#0a1628'}
+    ]},options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>ctx.raw+'%'}}},
+      scales:{y:{min:0,max:130,ticks:{callback:v=>v+'%',font:{size:9}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:9}}}}
+    }});
+    // Activité par salle
+    mkChart('c-rob-sal',{type:'bar',data:{labels:ROB_SAL_L,datasets:[
+      {label:'Terminées',data:d.salT,backgroundColor:'#0ea5a0',stack:'s'},
+      {label:'Annulées', data:d.salA,backgroundColor:'#e53e3e',stack:'s'}
+    ]},options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'top',labels:{font:{size:10}}}},
+      scales:{x:{stacked:true,ticks:{font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}
+    }});
+    // Activité par type d'acte
+    mkChart('c-rob-act',{type:'bar',data:{labels:ROB_ACTE_L,datasets:[
+      {label:'Terminées',data:d.acteT,backgroundColor:'#0ea5a0',stack:'s'},
+      {label:'Annulées', data:d.acteA,backgroundColor:'#e53e3e',stack:'s'}
+    ]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',
+      plugins:{legend:{position:'top',labels:{font:{size:10}}}},
+      scales:{x:{stacked:true,ticks:{font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}
+    }});
+    // Check-list HAS
+    mkChart('c-rob-has',{type:'bar',data:{labels:ROB_SAL_L,datasets:[
+      {data:d.hasV,backgroundColor:d.hasV.map(v=>v>=95?'#38a169':v>=80?'#ed8936':'#e53e3e')}
+    ]},options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{y:{min:0,max:110,ticks:{callback:v=>v+'%',font:{size:9}}}}
+    }});
+    // HAS progress bars
+    document.getElementById('rob-has-bars').innerHTML=
+      ROB_SAL_L.map((s,i)=>pbar(s,d.hasV[i],110,d.hasV[i]>=95?'ok':d.hasV[i]>=80?'warn':'bad')).join('');
   };
+
   window.robGran('sem');
 }
 
@@ -935,26 +1091,25 @@ function vRobot(){
 function vOcc(){
   const m=document.getElementById('main');
   m.innerHTML=`
-  <div class="page-title">E1 · OCCUPATION DES SALLES — TVO & TEMPS MORTS [EF-01 à EF-08]</div>
+  <div class="page-title">E1 · OCCUPATION DES SALLES — TVO & TROS [EF-01 à EF-08]</div>
   <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
     ${kpi('TVO MOYEN SEMAINE','96.1','%','Cible ≥ 85 %','neut','ok')}
-    ${kpi('SALLES < 75 % TVO','4','salles','Seuil alerte [EF-03]','up-bad','bad')}
-    ${kpi('TURN-OVER MOYEN','23','min','Cible ≤ 18 min','up-bad','warn')}
-    ${kpi('DÉBORDEMENTS VACATION','7','cas','= 0 vs préc.','neut','warn')}
+    ${kpi('NOMBRE DE VACATIONS','48','vac.','Semaine du 15/06','neut','info')}
+    ${kpi('TROS','87.4','%','▲ 1.2 % vs préc. · Cible ≥ 85 %','up-good','ok')}
+    ${kpi('DÉBORDEMENTS','7','cas / 43 min','= 0 cas vs préc.','neut','warn')}
   </div>
   <div class="row2">
-    <div class="card"><div class="card-title">TVO PAR SALLE (semaine du 15/06)</div>
+    <div class="card"><div class="card-title">TVO PAR SALLE (semaine du 15/06) — SEUIL 85 %</div>
       <div class="ch" style="height:200px"><canvas id="c-tvo-sal"></canvas></div>
-      <div class="info-note" style="margin-top:8px">🔴 BL-01, BL-03, BL-04 sous le seuil de 75 % — alertes actives [EF-03]</div>
+      <div class="info-note" style="margin-top:8px">🔴 BL-01, BL-03, BL-04 sous le seuil de 85 % — alertes actives [EF-03]</div>
     </div>
     <div class="card"><div class="card-title">DÉCOMPOSITION DU TEMPS PAR SALLE</div><div class="ch" style="height:200px"><canvas id="c-temps"></canvas></div></div>
-  </div>
-  <div class="card"><div class="card-title">TURN-OVER INTER-ACTES — RÉEL vs OBJECTIF [EF-07 / EF-08]</div><div class="ch" style="height:180px"><canvas id="c-to"></canvas></div></div>`;
+  </div>`;
 
   const tvoColors=TVO_SAL.map(v=>v>=85?'#38a169':v>=75?'#ed8936':'#e53e3e');
   mkChart('c-tvo-sal',{type:'bar',data:{labels:BC_SALLES,datasets:[
     {label:'TVO %',data:TVO_SAL,backgroundColor:tvoColors},
-    {label:'Seuil 75%',data:Array(8).fill(75),type:'line',borderColor:'#e53e3e',borderDash:[4,3],borderWidth:2,pointRadius:0,order:0}
+    {label:'Seuil 85%',data:Array(8).fill(85),type:'line',borderColor:'#e53e3e',borderDash:[4,3],borderWidth:2,pointRadius:0,order:0}
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{min:0,max:120,ticks:{callback:v=>v+'%',font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
 
   mkChart('c-temps',{type:'bar',data:{labels:BC_SALLES,datasets:[
@@ -963,10 +1118,6 @@ function vOcc(){
     {label:'Temps mort',data:[28,14,31,17,10,25,18,70],backgroundColor:'#e2e8f0'}
   ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:9}}}},scales:{x:{stacked:true},y:{stacked:true,ticks:{callback:v=>v+' min',font:{size:9}}}}}});
 
-  mkChart('c-to',{type:'bar',data:{labels:TURNOVER_SPECS,datasets:[
-    {label:'Réel (min)',data:TURNOVER_REEL,backgroundColor:'#e53e3e'},
-    {label:'Objectif (min)',data:TURNOVER_CIBLE,backgroundColor:'#38a169'}
-  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
 }
 
 // ═══════════════════════════════════════
@@ -975,22 +1126,22 @@ function vOcc(){
 function vPonct(){
   const m=document.getElementById('main');
   m.innerHTML=`
-  <div class="page-title">E2 · PONCTUALITÉ & DÉMARRAGE [EF-09 à EF-12]</div>
+  <div class="page-title">E2 · DÉMARRAGES TARDIFS [EF-09 à EF-12]</div>
   <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
-    ${kpi('PONCTUALITÉ GLOBALE','73.3','%','▲ 1.1 % vs préc. · Cible ≥ 80 %','up-good','warn')}
+    ${kpi('DÉMARRAGES TARDIFS (≤ 15 MIN)','73.3','%','▲ 1.1 % vs préc. · Cible ≥ 80 %','up-good','warn')}
     ${kpi('RETARDS > 30 MIN','12','cas','▲ 3 vs préc.','up-bad','bad')}
-    ${kpi('HEURE 1er COUTEAU','08h14','moy.','Cible 08h00','up-bad','warn')}
+    ${kpi('HEURE 1er DÉMARRAGE','08h14','moy.','Cible 08h00','up-bad','warn')}
     ${kpi('RETARDS PRATICIEN','7','cas','Source principale','up-bad','bad')}
   </div>
   <div class="row2">
-    <div class="card"><div class="card-title">PONCTUALITÉ PAR SALLE (% vacations démarrant ≤ 15 min) [EF-11]</div>
+    <div class="card"><div class="card-title">DÉMARRAGES TARDIFS PAR SALLE (% vacations démarrant ≤ 15 min) [EF-11]</div>
       <div class="ch" style="height:200px"><canvas id="c-ponct"></canvas></div>
     </div>
     <div class="card"><div class="card-title">CAUSES DES RETARDS [EF-10]</div>
       <div class="ch" style="height:200px"><canvas id="c-causes"></canvas></div>
     </div>
   </div>
-  <div class="card"><div class="card-title">TENDANCE PONCTUALITÉ HEBDOMADAIRE [EF-12]</div><div class="ch" style="height:160px"><canvas id="c-ponct-trend"></canvas></div></div>`;
+  <div class="card"><div class="card-title">TENDANCE DÉMARRAGES TARDIFS HEBDOMADAIRE [EF-12]</div><div class="ch" style="height:160px"><canvas id="c-ponct-trend"></canvas></div></div>`;
 
   const pc=PONCT_DATA.map(v=>v>=80?'#38a169':v>=60?'#ed8936':'#e53e3e');
   mkChart('c-ponct',{type:'bar',data:{labels:PONCT_SALLES,datasets:[
@@ -1051,7 +1202,7 @@ function vAnn(){
   <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
     ${kpi('TAUX D\'ANNULATION','9.0','%','▲ 2.4 % · Seuil : 5 % [EF-20]','up-bad','bad')}
     ${kpi('ANNULATIONS JOUR J','14','cas','Vs 6 déprogrammations','up-bad','bad')}
-    ${kpi('IMPACT TVO','−6.8','pts','Salles libérées non réatt.','up-bad','bad')}
+    ${kpi('SUSPENSIONS ET ABANDONS','3','cas','▲ 1 vs préc.','up-bad','warn')}
     ${kpi('SPÉCIALITÉ CRITIQUE','Gynéco','','6 annul. / semaine','up-bad','bad')}
   </div>
   <div class="row2">
@@ -1075,22 +1226,16 @@ function vAct(){
   const m=document.getElementById('main');
   m.innerHTML=`
   <div class="page-title">E5 · ACTIVITÉ MÉDICALE & CASE-MIX [EF-21 à EF-24]</div>
-  <div class="kpi-grid">
+  <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
     ${kpi('INTERVENTIONS TOTALES','161','','Semaine du 15/06','neut','info')}
-    ${kpi('AMBULATOIRE','34','%','Cible ATIH ≥ 40 %','dn-bad','warn')}
     ${kpi('ICR PRODUITS','2 840','','Cible : 3 100','dn-bad','bad')}
     ${kpi('GHM SPÉCIALITÉ N°1','Urologie','','2 038 actes 2025','neut','ok')}
     ${kpi('ÉVOLUTION ACTIVITÉ','+ 6.5','%','vs 2024 (11 302 vs 10 616)','up-good','ok')}
-    ${kpi('TAUX AMBULATOIRE','34.2','%','▲ 2.1 % vs 2024','up-good','ok')}
   </div>
-  <div class="row2">
-    <div class="card"><div class="card-title">ACTIVITÉ PAR SPÉCIALITÉ (TERMINÉES / ANNULÉES)</div><div class="ch" style="height:200px"><canvas id="c-act-spec"></canvas></div></div>
-    <div class="card"><div class="card-title">ACTIVITÉ CUMULÉE 2024 vs 2025</div><div class="ch" style="height:200px"><canvas id="c-act-cum"></canvas></div></div>
-  </div>
+  <div class="card"><div class="card-title">ACTIVITÉ PAR SPÉCIALITÉ (TERMINÉES / ANNULÉES)</div><div class="ch" style="height:220px"><canvas id="c-act-spec"></canvas></div></div>
   <div class="card"><div class="card-title">ACTIVITÉ PAR TYPE D'ACTE CCAM (TOP 11)</div><div class="ch" style="height:220px"><canvas id="c-act-acte"></canvas></div></div>`;
 
   mkChart('c-act-spec',{type:'bar',data:{labels:SPECS,datasets:[{label:'Terminées',data:STERM,backgroundColor:'#0ea5a0'},{label:'Annulées',data:SANN,backgroundColor:'#e53e3e'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{x:{stacked:true,ticks:{font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}}});
-  mkChart('c-act-cum',{type:'bar',data:{labels:CUM_S,datasets:[{label:'2024',data:CUM_24,backgroundColor:'#f4b942'},{label:'2025',data:CUM_25,backgroundColor:'#1a3a6b'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
   mkChart('c-act-acte',{type:'bar',data:{labels:ACTES_L,datasets:[{label:'Terminées',data:ACTES_T,backgroundColor:'#0ea5a0'},{label:'Annulées',data:ACTES_A,backgroundColor:'#e53e3e'}]},options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{position:'top',labels:{font:{size:9}}}},scales:{x:{stacked:true},y:{stacked:true,ticks:{font:{size:9}}}}}});
 }
 
@@ -1101,6 +1246,7 @@ function vQual(){
   const m=document.getElementById('main');
   m.innerHTML=`
   <div class="page-title">E6 · QUALITÉ & SÉCURITÉ [EF-25 à EF-30]</div>
+  <div class="info-note blue" style="margin-bottom:10px">⚠ Module en cours de révision — <strong>Voir avec la direction de la qualité</strong> pour la définition des indicateurs et des seuils applicables.</div>
   <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
     ${kpi('CHECK-LISTS CONFORMES','87.0','%','= 0 % vs préc. · Cible 95 %','neut','warn')}
     ${kpi('ÉVÉNEMENTS INDÉSIRABLES','2','EI','= 0 vs préc.','neut','ok')}
@@ -1188,18 +1334,17 @@ function vRecapM(p){
       mo:'Décembre 2025',stats:['Sem. 49 à 1','LV > 23j','WE > 8j','25 Déc.'],mo2:'Décembre 2024',stats2:['Sem. 49 à 1','LV > 22j','WE > 9j','25 Déc.'],cumul:null,cid:'c-rdec25'},
     jan26:{title:'JANVIER 2026',y1:2025,y2:2026,s:J26_S,d1:J26_25,d2:J26_26,t1:1093,t2:1010,sub1:943,sub2:916,
       mo:'Janvier 2026',stats:['—','LV > 23j','WE > 8j','1er Jan.'],mo2:'Janvier 2025',stats2:['—','LV > 23j','WE > 8j','1er Jan.'],cumul:{t1:1093,t2:1010,evol:'-8%',neg:true},cid:'c-rjan26'},
-    fev26:{title:'FÉVRIER 2026',y1:2025,y2:2026,s:J26_S,d1:[75,6,138,62,2,138,118,92,104,198,80],d2:[71,7,152,30,0,148,124,88,98,208,78],t1:1013,t2:1004,sub1:874,sub2:903,
-      mo:'Février 2026',stats:['Sem. 5 à 9','LV > 20j','WE > 8j','Mois court'],mo2:'Février 2025',stats2:['Sem. 5 à 9','LV > 20j','WE > 8j','Mois court'],cumul:{t1:2106,t2:2014,evol:'-4%',neg:true},cid:'c-rfev26'},
-    mar26:{title:'MARS 2026',y1:2025,y2:2026,s:J26_S,d1:[85,7,162,72,3,158,135,108,118,224,92],d2:[78,9,178,32,1,168,141,98,108,232,84],t1:1164,t2:1129,sub1:1004,sub2:1018,
-      mo:'Mars 2026',stats:['Sem. 10 à 13','LV > 22j','WE > 9j','Pâques 5 Avr.'],mo2:'Mars 2025',stats2:['Sem. 10 à 13','LV > 22j','WE > 9j','—'],cumul:{t1:3270,t2:3143,evol:'-4%',neg:true},cid:'c-rmar26'},
-    avr26:{title:'AVRIL 2026',y1:2025,y2:2026,s:J26_S,d1:[72,5,140,58,2,134,112,88,96,188,76],d2:[68,8,155,25,0,144,118,82,90,196,70],t1:971,t2:956,sub1:839,sub2:863,
-      mo:'Avril 2026',stats:['Sem. 14 à 17','LV > 19j','WE > 9j','Pâques / Pont'],mo2:'Avril 2025',stats2:['Sem. 14 à 17','LV > 19j','WE > 9j','—'],cumul:{t1:4241,t2:4099,evol:'-3%',neg:true},cid:'c-ravr26'},
-    mai26:{title:'MAI 2026',y1:2025,y2:2026,s:J26_S,d1:[78,6,148,65,2,142,120,95,102,204,82],d2:[74,8,162,28,0,152,128,88,96,212,76],t1:1044,t2:1024,sub1:899,sub2:922,
-      mo:'Mai 2026',stats:['Sem. 18 à 22','LV > 18j','WE > 8j','1 Mai · 8 Mai · Ascension'],mo2:'Mai 2025',stats2:['Sem. 18 à 22','LV > 18j','WE > 8j','1 Mai · 8 Mai'],cumul:{t1:5285,t2:5123,evol:'-3%',neg:true},cid:'c-rmai26'},
-    jun26:{title:'JUIN 2026',y1:2025,y2:2026,s:J26_S,d1:[82,7,155,68,3,148,128,102,110,218,85],d2:[76,9,170,30,1,158,134,92,102,222,80],t1:1106,t2:1074,sub1:953,sub2:967,
-      mo:'Juin 2026',stats:['Sem. 23 à 26','LV > 21j','WE > 8j','Pentecôte'],mo2:'Juin 2025',stats2:['Sem. 23 à 26','LV > 21j','WE > 8j','Pentecôte'],cumul:{t1:6391,t2:6197,evol:'-3%',neg:true},cid:'c-rjun26'},
-    jul26:{title:'JUILLET 2026 (en cours)',y1:2025,y2:2026,s:J26_S,d1:[62,5,118,52,2,112,98,78,84,162,66],d2:[55,7,128,22,0,118,104,68,78,168,58],t1:839,t2:806,sub1:723,sub2:729,
-      mo:'Juillet 2026',stats:['Sem. 27 à 31','LV > 22j','WE > 9j','14 Juillet'],mo2:'Juillet 2025',stats2:['Sem. 27 à 31','LV > 22j','WE > 9j','14 Juillet'],empty:'⚠ Données partielles — mois en cours (S27–S32).',cumul:{t1:7230,t2:7003,evol:'-3%',neg:true},cid:'c-rjul26'}
+    fev26:{title:'FÉVRIER 2026',y1:2025,y2:2026,s:M26_S,d1:FEV26_25,d2:FEV26_26,t1:922,t2:945,sub1:789,sub2:854,
+      mo:'Février 2026',stats:['Sem. 6 à 9','LV > 20j','WE > 8j','Pâques S17'],mo2:'Février 2025',stats2:['Sem. 6 à 9','LV > 20j','WE > 8j','—'],
+      cumul:{t1:945,t2:945,evol:'+2.5%',neg:false},cid:'c-rfev26'},
+    mar26:{title:'MARS 2026',y1:2025,y2:2026,s:M26_S,d1:MAR26_25,d2:MAR26_26,t1:1319,t2:1246,sub1:955,sub2:884,
+      mo:'Mars 2026',stats:['Sem. 10 à 13','LV > 21j','WE > 10j','—'],mo2:'Mars 2025',stats2:['Sem. 10 à 13','LV > 21j','WE > 10j','—'],
+      note:'BC + FastTrack',cumul:{t1:1319,t2:1246,evol:'-5.5%',neg:true},cid:'c-rmar26',
+      rob:{r25:ROBM_MAR25,r26:ROBM_MAR26,rt1:88,rt2:98,cid:'c-rmar26-rob'}},
+    avr26:{title:'AVRIL 2026',y1:2025,y2:2026,s:M26_S,d1:AVR26_25,d2:AVR26_26,t1:1181,t2:1191,sub1:869,sub2:884,
+      mo:'Avril 2026',stats:['Sem. 14 à 18','LV > 21j','WE > 9j','Pâques S17'],mo2:'Avril 2025',stats2:['Sem. 14 à 18','LV > 21j','WE > 9j','—'],
+      note:'BC + FastTrack',cumul:{t1:1181,t2:1191,evol:'+0.8%',neg:false},cid:'c-ravr26',
+      rob:{r25:ROBM_AVR25,r26:ROBM_AVR26,rt1:74,rt2:88,cid:'c-ravr26-rob'}}
   };
   const cfg=C[p]; if(!cfg)return;
   const m=document.getElementById('main');
@@ -1213,7 +1358,8 @@ function vRecapM(p){
   const td=cfg.t2-cfg.t1,tp=cfg.t1?Math.round(td/cfg.t1*100):0,sd=cfg.s2-cfg.s1_,sp=cfg.sub1?Math.round((cfg.sub2-cfg.sub1)/cfg.sub1*100):0;
 
   m.innerHTML=`
-  <div class="page-title">RÉCAPITULATIF BLOC CENTRAL — ${cfg.title}</div>
+  <div class="page-title">RÉCAPITULATIF ${cfg.note?'BC + FASTTRACK':'BLOC CENTRAL'} — ${cfg.title}</div>
+  ${cfg.note?`<div class="info-note blue" style="margin-bottom:10px">📊 Périmètre : ${cfg.note} · Source : Indicateur BC & BFT 2026 S24.xlsx</div>`:''}
   ${cfg.empty?`<div class="info-note" style="margin-bottom:10px">${cfg.empty}</div>`:''}
   <div class="recap-grid">
     <div class="card" style="margin-bottom:0">
@@ -1233,9 +1379,26 @@ function vRecapM(p){
     </div>
     ${cfg.cumul?`<div class="cum-box"><div style="font-weight:700;margin-bottom:6px">${cfg.mo}</div><div>Total ${cfg.y1} : ${cfg.cumul.t1} interv.</div><div>Total ${cfg.y2} : ${cfg.cumul.t2} interv.</div><div style="font-weight:700;color:${cfg.cumul.neg?'var(--red)':'var(--green)'};margin-top:4px">Évol. : ${cfg.cumul.evol}</div></div>`:'<div></div>'}
   </div>
-  <div class="card"><div class="card-title">PAR SPÉCIALITÉS</div><div class="ch" style="height:220px"><canvas id="${cfg.cid}"></canvas></div></div>`;
+  <div class="card"><div class="card-title">PAR SPÉCIALITÉS</div><div class="ch" style="height:220px"><canvas id="${cfg.cid}"></canvas></div></div>
+  ${cfg.rob?`
+  <div class="row2" style="margin-top:10px">
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title">ACTIVITÉ ROBOT — ${cfg.title}</div>
+      <table class="dtbl">
+        <thead><tr><th>Spécialité</th><th style="color:#b07d10">${cfg.y1}</th><th style="color:#2563eb">${cfg.y2}</th><th>Écart</th><th>Évol.</th></tr></thead>
+        <tbody>${ROB_CUM_S.map((s,i)=>{const d=cfg.rob.r26[i]-cfg.rob.r25[i],pp=cfg.rob.r25[i]?Math.round(d/cfg.rob.r25[i]*100):null;return`<tr><td>${s}</td><td>${cfg.rob.r25[i]}</td><td><strong>${cfg.rob.r26[i]}</strong></td><td><span class="${d>=0?'ep':'en'}">${d>0?'+':''}${d}</span></td><td>${pp===null?'-':`<span class="${pp>=0?'evp':'evn'}">${pp>0?'+':''}${pp}%</span>`}</td></tr>`;}).join('')}
+        <tr style="background:#f0f7f7;font-weight:700"><td>TOTAL</td><td>${cfg.rob.rt1}</td><td>${cfg.rob.rt2}</td><td><span class="${cfg.rob.rt2-cfg.rob.rt1>=0?'ep':'en'}">${cfg.rob.rt2-cfg.rob.rt1>0?'+':''}${cfg.rob.rt2-cfg.rob.rt1}</span></td><td><span class="${cfg.rob.rt2>=cfg.rob.rt1?'evp':'evn'}">${Math.round((cfg.rob.rt2-cfg.rob.rt1)/cfg.rob.rt1*100)>0?'+':''}${Math.round((cfg.rob.rt2-cfg.rob.rt1)/cfg.rob.rt1*100)}%</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title">ACTIVITÉ ROBOT PAR SPÉCIALITÉ ${cfg.y1} vs ${cfg.y2}</div>
+      <div class="ch" style="height:220px"><canvas id="${cfg.rob.cid}"></canvas></div>
+    </div>
+  </div>`:''}`;
 
   mkChart(cfg.cid,{type:'bar',data:{labels:cfg.s,datasets:[{label:String(cfg.y1),data:cfg.d1,backgroundColor:'#f4b942'},{label:String(cfg.y2),data:cfg.d2,backgroundColor:'#1a3a6b'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+  if(cfg.rob) mkChart(cfg.rob.cid,{type:'bar',data:{labels:ROB_CUM_S,datasets:[{label:String(cfg.y1),data:cfg.rob.r25,backgroundColor:'#8090c0'},{label:String(cfg.y2),data:cfg.rob.r26,backgroundColor:'#3b82f6'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
 }
 
 // ═══════════════════════════════════════
@@ -1268,814 +1431,264 @@ function vRecapCum(){
 }
 
 // ═══════════════════════════════════════
-// VIEW : RECAP FUTUR (mois à venir)
+// VIEW : RECAP CUMULÉ 2026
 // ═══════════════════════════════════════
-function vRecapFutur(mois){
-  const m=document.getElementById('main');
-  m.innerHTML=`
-  <div class="page-title">RÉCAPITULATIF — ${mois.toUpperCase()}</div>
-  <div class="info-note" style="margin:20px auto;max-width:480px;text-align:center;padding:20px">
-    <div style="font-size:24px;margin-bottom:10px">📅</div>
-    <div style="font-size:13px;font-weight:700;margin-bottom:6px">Données non disponibles — mois à venir</div>
-    <div style="font-size:11px">Le gabarit de saisie pour <strong>${mois}</strong> sera activé à la clôture du mois.<br>Les données seront chargées automatiquement via l'ETL OPERA/DxCare.</div>
-  </div>`;
-}
-
-// ═══════════════════════════════════════
-// VIEW : E7 · QUALITÉ & PARCOURS
-// ═══════════════════════════════════════
-function vParcours(){
-  const m=document.getElementById('main');
-  const HAS_S=['BL-01','BL-02','BL-03','BL-04','BL-05','BL-06','BL-07','BL-08','BL-09','BL-10'];
-  const HAS_V=[81,90,78,86,85,87,85,94,83,88];
-  const EI_L=['débordement','retard début','annulation','incident mineur','urgence vitale insérée','panne salle','incident majeur','débordement majeur','donnée manquante','conflit planning','chevauchement salle','boîte non conforme','annulations en chaîne','absence praticien'];
-  const EI_V=[110,90,28,24,5,4,3,2,2,2,1,1,1,1];
-  const PAR_L=['induction','installation','chirurgie','réveil'];
-  const PAR_V=[8,12,145,15];
-  const PAR_C=['#3b82f6','#8b5cf6','#1a3a6b','#0ea5a0'];
-  m.innerHTML=`
-  <div class="page-title">🏥 E7 · QUALITÉ & PARCOURS PATIENT</div>
-  <div class="row3">
-    <div class="card"><div class="card-title">CONFORMITÉ CHECK-LIST HAS PAR SALLE</div><div class="ch" style="height:220px"><canvas id="c-e7has"></canvas></div></div>
-    <div class="card"><div class="card-title">ÉVÉNEMENTS INDÉSIRABLES PAR TYPE</div><div class="ch" style="height:220px"><canvas id="c-e7ei"></canvas></div></div>
-    <div class="card"><div class="card-title">DURÉE PHASES DU PARCOURS (min moy.)</div><div class="ch" style="height:220px"><canvas id="c-e7par"></canvas></div></div>
-  </div>`;
-  const opt={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:9}}},y:{ticks:{font:{size:9}}}}};
-  mkChart('c-e7has',{type:'bar',data:{labels:HAS_S,datasets:[{data:HAS_V,backgroundColor:HAS_V.map(v=>v>=85?'#38a169':v>=75?'#ed8936':'#e53e3e')}]},options:{...opt,scales:{x:{ticks:{font:{size:9}}},y:{min:0,max:100,ticks:{font:{size:9},callback:v=>v+'%'}}}}});
-  mkChart('c-e7ei',{type:'bar',data:{labels:EI_L,datasets:[{data:EI_V,backgroundColor:'#e53e3e'}]},options:{...opt,indexAxis:'y',scales:{x:{ticks:{font:{size:9}}},y:{ticks:{font:{size:8}}}}}});
-  mkChart('c-e7par',{type:'bar',data:{labels:PAR_L,datasets:[{data:PAR_V,backgroundColor:PAR_C}]},options:{...opt,scales:{x:{ticks:{font:{size:9}}},y:{ticks:{font:{size:9}}}}}});
-}
-
-// ═══════════════════════════════════════
-// VIEW : INTERVENTIONS — TABLE FILTRABLE
-// ═══════════════════════════════════════
-function vInterventions(){
-  const m=document.getElementById('main');
-  const BASE=[
-    {id:'INT00001',date:'2026-06-08',salle:'BL-01',spec:'Gynécologie',acte:'Hystérectomie totale',chir:'Louis Leroy',anesth:'Nicolas Leroy',prevu:'08:15–10:45',entree:'08:36',sortie:'10:54',duree:'106 min',statut:'terminée',motif:''},
-    {id:'INT00005',date:'2026-06-08',salle:'BL-02',spec:'Ophtalmologie',acte:'Phacoémulsification cataracte',chir:'Léa Fournier',anesth:'Inès Garcia',prevu:'08:15–09:15',entree:'08:15',sortie:'09:19',duree:'23 min',statut:'terminée',motif:''},
-    {id:'INT00008',date:'2026-06-08',salle:'BL-03',spec:'Viscéral',acte:'Cholécystectomie cœlioscopique',chir:'Léa Fournier',anesth:'Julien Bertrand',prevu:'08:15–10:00',entree:'08:29',sortie:'10:06',duree:'63 min',statut:'terminée',motif:''},
-    {id:'INT00012',date:'2026-06-08',salle:'BL-04',spec:'Gynécologie',acte:'Hystérectomie totale',chir:'Camille Roux',anesth:'Julien Richard',prevu:'08:15–10:45',entree:'—',sortie:'—',duree:'—',statut:'annulée',motif:'Patient COVID+'},
-    {id:'INT00016',date:'2026-06-08',salle:'BL-05',spec:'ORL',acte:'Amygdalectomie',chir:'Lucas Simon',anesth:'Paul Martin',prevu:'08:15–09:30',entree:'08:30',sortie:'09:55',duree:'39 min',statut:'terminée',motif:''},
-    {id:'INT00018',date:'2026-06-08',salle:'BL-06',spec:'Ophtalmologie',acte:'Phacoémulsification cataracte',chir:'Sophie Thomas',anesth:'Nicolas Leroy',prevu:'08:15–09:15',entree:'08:24',sortie:'09:37',duree:'33 min',statut:'terminée',motif:''},
-    {id:'INT00022',date:'2026-06-08',salle:'BL-07',spec:'Gynécologie',acte:'Hystérectomie totale',chir:'Marie Roux',anesth:'Paul Martin',prevu:'08:15–10:45',entree:'08:15',sortie:'10:27',duree:'98 min',statut:'terminée',motif:''},
-    {id:'INT00025',date:'2026-06-08',salle:'BL-08',spec:'Gynécologie',acte:'Hystérectomie totale',chir:'Sophie Thomas',anesth:'Inès Garcia',prevu:'08:15–10:45',entree:'08:26',sortie:'10:40',duree:'94 min',statut:'terminée',motif:''},
-    {id:'INT00027',date:'2026-06-08',salle:'BL-09',spec:'Cardiologie',acte:'Pontage coronarien',chir:'Louis Leroy',anesth:'Inès Garcia',prevu:'08:15–12:45',entree:'08:36',sortie:'12:26',duree:'201 min',statut:'terminée',motif:''},
-    {id:'INT00031',date:'2026-06-08',salle:'BL-10',spec:'ORL',acte:'Amygdalectomie',chir:'Lucas Simon',anesth:'Julien Richard',prevu:'08:15–09:30',entree:'08:31',sortie:'10:21',duree:'66 min',statut:'terminée',motif:''}
-  ];
-  const SPECS2=[['Gynécologie','Hystérectomie totale',90],['Ophtalmologie','Phacoémulsification cataracte',28],['ORL','Amygdalectomie',45],['Viscéral','Cholécystectomie cœlioscopique',65],['Cardiologie','Pontage coronarien',200],['Urologie','Prostatectomie radicale',180],['Neurochirurgie','Craniotomie',250],['Orthopédie','Arthroplastie genou',130]];
-  const CHIRS=['Louis Leroy','Léa Fournier','Camille Roux','Lucas Simon','Sophie Thomas','Marie Roux','Pierre Bernard','Anne Dupont'];
-  const ANESTHS=['Nicolas Leroy','Inès Garcia','Julien Bertrand','Julien Richard','Paul Martin','Paul Laurent','Éric Morin'];
-  const SALLES=['BL-01','BL-02','BL-03','BL-04','BL-05','BL-06','BL-07','BL-08','BL-09','BL-10'];
-  const DATES2=['2026-06-08','2026-06-09','2026-06-10','2026-06-11','2026-06-12','2026-06-15','2026-06-16','2026-06-17','2026-06-18','2026-06-19','2026-06-22','2026-06-23','2026-06-24','2026-06-25'];
-  const ALL=[...BASE];
-  let idx=33;
-  for(let di=0;di<DATES2.length&&ALL.length<691;di++){
-    for(let si=0;si<SALLES.length&&ALL.length<691;si++){
-      const nb=Math.floor(3+((di*si+idx)%4));
-      for(let k=0;k<nb&&ALL.length<691;k++){
-        const sp=SPECS2[(di+si+k)%SPECS2.length];
-        const h0=8+Math.floor(k*2.5),m0=[0,15,30,45][(di+k)%4];
-        const dur=Math.max(20,sp[2]+Math.floor(((di+si+k)*7)%60)-25);
-        const late=((di+si)%5===0&&k===0)?Math.floor(10+((di+si)%20)):0;
-        const ann=ALL.length%15===7;
-        const he=h0+Math.floor((m0+late)/60),me=(m0+late)%60;
-        const hs=he+Math.floor((me+dur)/60),ms=(me+dur)%60;
-        idx++;
-        ALL.push({
-          id:'INT'+String(idx+100).padStart(5,'0'),
-          date:DATES2[di],salle:SALLES[si],spec:sp[0],acte:sp[1],
-          chir:CHIRS[(di+si+k)%CHIRS.length],
-          anesth:ANESTHS[(di+si+k+1)%ANESTHS.length],
-          prevu:String(h0).padStart(2,'0')+':'+String(m0).padStart(2,'0')+'–'+String(h0+Math.floor((m0+sp[2])/60)).padStart(2,'0')+':'+String((m0+sp[2])%60).padStart(2,'0'),
-          entree:ann?'—':String(he).padStart(2,'0')+':'+String(me).padStart(2,'0'),
-          sortie:ann?'—':String(Math.min(hs,23)).padStart(2,'0')+':'+String(ms).padStart(2,'0'),
-          duree:ann?'—':dur+' min',
-          statut:ann?'annulée':'terminée',
-          motif:ann?'Désistement patient':''
-        });
-      }
-    }
-  }
-  const PAGE=25;
-  let curPage=1;
-  let filtered=[...ALL];
-  function renderTable(){
-    const total=filtered.length;
-    const pages=Math.max(1,Math.ceil(total/PAGE));
-    if(curPage>pages)curPage=pages;
-    const rows=filtered.slice((curPage-1)*PAGE,curPage*PAGE);
-    document.getElementById('int-count').textContent=total+' intervention'+(total>1?'s':'')+' — page '+curPage+'/'+pages;
-    document.getElementById('int-prev').disabled=curPage<=1;
-    document.getElementById('int-next').disabled=curPage>=pages;
-    document.getElementById('int-tbody').innerHTML=rows.map(r=>`
-      <tr>
-        <td style="font-weight:600;color:#334">${r.id}</td>
-        <td>${r.date}</td><td>${r.salle}</td>
-        <td style="color:#1a3a6b;font-weight:600">${r.spec}</td>
-        <td>${r.acte}</td>
-        <td style="color:#0ea5a0">${r.chir}</td>
-        <td>${r.anesth}</td>
-        <td style="font-size:11px;color:#777">${r.prevu}</td>
-        <td>${r.entree}</td><td>${r.sortie}</td>
-        <td style="font-weight:600">${r.duree}</td>
-        <td><span style="background:${r.statut==='terminée'?'#f0fff4':'#fff5f5'};color:${r.statut==='terminée'?'#38a169':'#e53e3e'};border:1px solid ${r.statut==='terminée'?'#38a169':'#e53e3e'};padding:2px 8px;border-radius:12px;font-size:10px;font-weight:700">${r.statut}</span>${r.motif?`<div style="font-size:10px;color:#e53e3e;margin-top:2px">${r.motif}</div>`:''}</td>
-      </tr>`).join('');
-  }
-  function applyFilters(){
-    const sal=document.getElementById('f-salle').value;
-    const sp2=document.getElementById('f-spec').value;
-    const st=document.getElementById('f-stat').value;
-    const tx=document.getElementById('f-txt').value.toLowerCase();
-    filtered=ALL.filter(r=>(!sal||r.salle===sal)&&(!sp2||r.spec===sp2)&&(!st||r.statut===st)&&(!tx||r.id.toLowerCase().includes(tx)||r.chir.toLowerCase().includes(tx)||r.acte.toLowerCase().includes(tx)||r.anesth.toLowerCase().includes(tx)));
-    curPage=1;renderTable();
-  }
-  m.innerHTML=`
-  <div class="page-title">INTERVENTIONS — TABLE FILTRABLE</div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
-    <input id="f-txt" placeholder="🔍 Recherche ID, chirurgien, acte…" style="padding:5px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:12px;width:240px" oninput="window._applyF()">
-    <select id="f-salle" style="padding:5px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:12px" onchange="window._applyF()">
-      <option value="">Toutes salles</option>${['BL-01','BL-02','BL-03','BL-04','BL-05','BL-06','BL-07','BL-08','BL-09','BL-10'].map(s=>`<option>${s}</option>`).join('')}
-    </select>
-    <select id="f-spec" style="padding:5px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:12px" onchange="window._applyF()">
-      <option value="">Toutes spécialités</option>${[...new Set(ALL.map(r=>r.spec))].sort().map(s=>`<option>${s}</option>`).join('')}
-    </select>
-    <select id="f-stat" style="padding:5px 8px;border:1.5px solid var(--border);border-radius:6px;font-size:12px" onchange="window._applyF()">
-      <option value="">Tous statuts</option><option>terminée</option><option>annulée</option>
-    </select>
-    <button onclick="document.getElementById('f-txt').value='';document.getElementById('f-salle').value='';document.getElementById('f-spec').value='';document.getElementById('f-stat').value='';window._applyF();" style="padding:5px 12px;border:1.5px solid var(--border);border-radius:6px;font-size:12px;background:white;cursor:pointer">Réinitialiser</button>
-  </div>
-  <div class="card" style="padding:0;overflow:hidden">
-    <div style="overflow-x:auto">
-      <table class="dtbl" style="font-size:11px;min-width:900px">
-        <thead style="background:#f8f9fc">
-          <tr><th>ID</th><th>Date</th><th>Salle</th><th style="color:#1a3a6b">Spécialité</th><th>Acte</th><th style="color:#0ea5a0">Chirurgien</th><th>Anesthésiste</th><th>Prévu</th><th>Entrée</th><th>Sortie</th><th>Durée</th><th>Statut</th></tr>
-        </thead>
-        <tbody id="int-tbody"></tbody>
-      </table>
-    </div>
-    <div style="display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:8px 14px;border-top:1px solid var(--border);font-size:11px;color:var(--gray)">
-      <span id="int-count"></span>
-      <button id="int-prev" onclick="curPage--;renderTable()" style="padding:2px 8px;border:1px solid var(--border);border-radius:4px;background:white;cursor:pointer;font-size:11px">◄</button>
-      <button id="int-next" onclick="curPage++;renderTable()" style="padding:2px 8px;border:1px solid var(--border);border-radius:4px;background:white;cursor:pointer;font-size:11px">►</button>
-    </div>
-  </div>`;
-  window._applyF=applyFilters;
-  window.filtered=filtered;
-  window.renderTable=renderTable;
-  renderTable();
-}
-
-// ═══════════════════════════════════════
-// VIEW : ACTIVITÉS HEBDOMADAIRES
-// ═══════════════════════════════════════
-function vHebdo(){
-  const m=document.getElementById('main');
-  const WEEKS=['2026-S21','2026-S22','2026-S23','2026-S24'];
-  const DATA={
-    '2026-S24':{tvo:{cur:[53],prev:[61]},incision:{labels:['Lun'],vals:[8.7]},salle:{labels:['BL-09','BL-05','BL-04','BL-10','BL-08','BL-07','BL-02','BL-06','BL-03','BL-01'],terminees:[4,4,4,2,3,3,3,3,2,2],annulees:[0,0,0,1,0,0,0,0,0,0]},type:{labels:['Hybride','Bloc froid','Ambulatoire','Urgence'],terminees:[10,11,5,3],annulees:[1,0,0,0]}},
-    '2026-S23':{tvo:{cur:[67],prev:[71]},incision:{labels:['Lun','Mar','Mer','Jeu','Ven'],vals:[8.6,8.4,8.8,8.5,8.9]},salle:{labels:['BL-01','BL-02','BL-03','BL-04','BL-05','BL-06','BL-07','BL-08','BL-09','BL-10'],terminees:[5,5,4,5,4,4,5,4,3,4],annulees:[0,0,1,0,0,0,0,1,0,0]},type:{labels:['Hybride','Bloc froid','Ambulatoire','Urgence'],terminees:[12,12,7,4],annulees:[1,1,0,0]}},
-    '2026-S22':{tvo:{cur:[71],prev:[74]},incision:{labels:['Lun','Mar','Mer','Jeu','Ven'],vals:[8.5,8.3,8.6,8.4,8.7]},salle:{labels:['BL-01','BL-02','BL-03','BL-04','BL-05','BL-06','BL-07','BL-08','BL-09','BL-10'],terminees:[5,5,5,5,5,4,5,4,4,4],annulees:[0,0,0,1,0,0,0,0,0,1]},type:{labels:['Hybride','Bloc froid','Ambulatoire','Urgence'],terminees:[13,13,8,4],annulees:[1,1,0,0]}},
-    '2026-S21':{tvo:{cur:[76],prev:[78]},incision:{labels:['Lun','Mar','Mer','Jeu','Ven'],vals:[8.4,8.2,8.5,8.3,8.6]},salle:{labels:['BL-01','BL-02','BL-03','BL-04','BL-05','BL-06','BL-07','BL-08','BL-09','BL-10'],terminees:[5,5,5,5,5,5,5,4,4,4],annulees:[0,0,0,0,1,0,0,1,0,0]},type:{labels:['Hybride','Bloc froid','Ambulatoire','Urgence'],terminees:[14,13,8,5],annulees:[1,1,0,0]}}
+function vRecapCum2026(p){
+  const C={
+    fev:{title:'À FIN FÉVRIER 2026',label:'Fin Fév 2026',src:'BC seul',t1:2015,t2:1952,sub1:1732,sub2:1767,s:M26_S,d1:CUMFEV26_25,d2:CUMFEV26_26,cid:'c-rcum26fev',rob:null},
+    mar:{title:'À FIN MARS 2026',label:'Fin Mars 2026',src:'BC + FastTrack',t1:3765,t2:3771,sub1:2687,sub2:2651,s:M26_S,d1:CUMMAR26_25,d2:CUMMAR26_26,cid:'c-rcum26mar',
+      rob:{r25:ROBMAR26_25,r26:ROBMAR26_26,rt1:240,rt2:283,cid:'c-rcum26mar-rob'}},
+    avr:{title:'À FIN AVRIL 2026',label:'Fin Avr 2026',src:'BC + FastTrack',t1:4946,t2:4962,sub1:3556,sub2:3535,s:M26_S,d1:CUMAVR26_25,d2:CUMAVR26_26,cid:'c-rcum26avr',
+      rob:{r25:ROBAVR26_25,r26:ROBAVR26_26,rt1:314,rt2:371,cid:'c-rcum26avr-rob'}}
   };
-  function render(w){
-    document.querySelectorAll('.wbtn').forEach(b=>b.classList.remove('on'));
-    const wb=document.getElementById('wb-'+w); if(wb)wb.classList.add('on');
-    const d=DATA[w];
-    killCharts();
-    m.querySelector('#c-h-tvo') && mkChart('c-h-tvo',{type:'bar',data:{labels:[w],datasets:[{label:'TVO courant (%)',data:d.tvo.cur,backgroundColor:'#1a3a6b'},{label:'Période préc. (%)',data:d.tvo.prev,backgroundColor:'rgba(180,185,200,.6)'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:9},boxWidth:12}}},scales:{x:{ticks:{font:{size:10}}},y:{min:0,max:120,ticks:{font:{size:9},callback:v=>v+' %'}}}}});
-    m.querySelector('#c-h-incision') && mkChart('c-h-incision',{type:'bar',data:{labels:d.incision.labels,datasets:[{label:'1ère incision',data:d.incision.vals,backgroundColor:'#3b82f6'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:10}}},y:{min:7,max:11,ticks:{font:{size:9},callback:v=>v+'h'}}}}});
-    m.querySelector('#c-h-salle') && mkChart('c-h-salle',{type:'bar',data:{labels:d.salle.labels,datasets:[{label:'Terminées',data:d.salle.terminees,backgroundColor:'#0ea5a0'},{label:'Annulées',data:d.salle.annulees,backgroundColor:'#e53e3e'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:9},boxWidth:12}}},scales:{x:{ticks:{font:{size:9}}},y:{ticks:{font:{size:9},stepSize:1}}}}});
-    m.querySelector('#c-h-type') && mkChart('c-h-type',{type:'bar',data:{labels:d.type.labels,datasets:[{label:'Terminées',data:d.type.terminees,backgroundColor:'#0ea5a0'},{label:'Annulées',data:d.type.annulees,backgroundColor:'#e53e3e'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:9},boxWidth:12}}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:9},stepSize:1}}}}});
-  }
-  m.innerHTML=`
-  <div class="page-title">📅 ACTIVITÉS HEBDOMADAIRES</div>
-  <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap">
-    ${WEEKS.map(w=>`<button id="wb-${w}" class="wbtn fbtn" onclick="window._renderHebdo('${w}')" style="padding:5px 14px;border:1.5px solid var(--border);border-radius:6px;background:white;font-size:11px;font-weight:600;cursor:pointer">${w}</button>`).join('')}
-  </div>
-  <div class="row2" style="margin-bottom:12px">
-    <div class="card"><div class="card-title">TVO — COMPARATIF PÉRIODE PRÉCÉDENTE</div><div class="ch" style="height:200px"><canvas id="c-h-tvo"></canvas></div></div>
-    <div class="card"><div class="card-title">HEURE MOYENNE DE 1ÈRE INCISION</div><div class="ch" style="height:200px"><canvas id="c-h-incision"></canvas></div></div>
-  </div>
-  <div class="row2">
-    <div class="card"><div class="card-title">ACTIVITÉ PAR SALLE</div><div class="ch" style="height:220px"><canvas id="c-h-salle"></canvas></div></div>
-    <div class="card"><div class="card-title">ACTIVITÉ PAR TYPE DE SALLE</div><div class="ch" style="height:220px"><canvas id="c-h-type"></canvas></div></div>
-  </div>`;
-  window._renderHebdo=render;
-  render('2026-S24');
-}
-
-// ═══════════════════════════════════════
-// VIEW : OUTILS — EXPORTS DONNÉES
-// ═══════════════════════════════════════
-function vOutils(){
+  const cfg=C[p]; if(!cfg)return;
   const m=document.getElementById('main');
-  const DIMS=['Par spécialité','Par salle','Par chirurgien','Par anesthésiste','Par mois','Par statut'];
+  const td=cfg.t2-cfg.t1,tp=Math.round(td/cfg.t1*100);
+  const sd=cfg.sub2-cfg.sub1,sp=Math.round(sd/cfg.sub1*100);
+  const rows=cfg.s.map((s,i)=>{const a=cfg.d1[i]||0,b=cfg.d2[i]||0,d=b-a,pp=a?Math.round(d/a*100):null;
+    return`<tr><td>${s}</td><td>${a.toLocaleString()}</td><td>${b.toLocaleString()}</td><td><span class="${d>=0?'ep':'en'}">${d>0?'+':''}${d}</span></td><td>${pp===null?'-':`<span class="${pp>=0?'evp':'evn'}">${pp>0?'+':''}${pp}%</span>`}</td></tr>`;
+  }).join('');
   m.innerHTML=`
-  <div class="page-title">🔧 OUTILS — EXPORTS DONNÉES</div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px">
-    <div class="card">
-      <div style="font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;border-bottom:1px solid var(--border);padding-bottom:8px">EXPORT DES INTERVENTIONS</div>
-      <div class="info-note blue" style="margin-bottom:12px;font-size:10px">Chaque extraction est journalisée (utilisateur, périmètre, horodatage) conformément aux exigences de traçabilité.</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <button onclick="window._dlInt('xlsx')" style="padding:9px;border:1.5px solid var(--teal);border-radius:6px;background:white;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer" onmouseover="this.style.background='#f0fdfa'" onmouseout="this.style.background='white'">Excel</button>
-        <button onclick="window._dlInt('csv')"  style="padding:9px;border:1.5px solid var(--teal);border-radius:6px;background:white;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer" onmouseover="this.style.background='#f0fdfa'" onmouseout="this.style.background='white'">CSV</button>
-        <button onclick="window._dlInt('json')" style="padding:9px;border:1.5px solid var(--teal);border-radius:6px;background:white;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer" onmouseover="this.style.background='#f0fdfa'" onmouseout="this.style.background='white'">JSON</button>
-        <button onclick="window.print()"       style="padding:9px;border:1.5px solid var(--teal);border-radius:6px;background:white;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer" onmouseover="this.style.background='#f0fdfa'" onmouseout="this.style.background='white'">PDF (vue courante)</button>
-      </div>
-    </div>
-    <div class="card">
-      <div style="font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;border-bottom:1px solid var(--border);padding-bottom:8px">EXPORT KPI PAR DIMENSION</div>
-      <select id="kpi-dim" style="width:100%;padding:8px 10px;border:1.5px solid var(--border);border-radius:6px;font-size:12px;color:var(--navy);margin-bottom:12px">
-        ${DIMS.map(d=>`<option>${d}</option>`).join('')}
-      </select>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <button onclick="window._dlKPI('xlsx')" style="padding:9px;border:1.5px solid var(--teal);border-radius:6px;background:white;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer" onmouseover="this.style.background='#f0fdfa'" onmouseout="this.style.background='white'">Excel</button>
-        <button onclick="window._dlKPI('csv')"  style="padding:9px;border:1.5px solid var(--teal);border-radius:6px;background:white;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer" onmouseover="this.style.background='#f0fdfa'" onmouseout="this.style.background='white'">CSV</button>
-        <button onclick="window._dlKPI('json')" style="padding:9px;border:1.5px solid var(--teal);border-radius:6px;background:white;color:var(--teal);font-size:12px;font-weight:600;cursor:pointer" onmouseover="this.style.background='#f0fdfa'" onmouseout="this.style.background='white'">JSON</button>
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div style="font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;border-bottom:1px solid var(--border);padding-bottom:8px">DOCUMENTATION DE L'API</div>
-    <div style="font-size:12px;color:#445;margin-bottom:10px">Contrat OpenAPI — 22 endpoints REST
-      <span style="margin-left:10px;background:#f0fff4;color:#38a169;border:1px solid #38a169;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700">v1.0</span>
-      <span style="margin-left:6px;font-size:10px;color:var(--gray)">Base URL : <code style="background:#f1f5f9;padding:1px 5px;border-radius:3px">/api/v1</code></span>
-    </div>
-    <button onclick="window._openApiDocs()" style="padding:6px 14px;border:1.5px solid var(--teal);border-radius:6px;background:white;color:var(--teal);font-size:11px;font-weight:600;cursor:pointer" onmouseover="this.style.background='#f0fdfa'" onmouseout="this.style.background='white'">📄 Consulter la documentation</button>
-  </div>`;
-
-  if(!document.getElementById('api-docs-modal')){
-    const ov=document.createElement('div');
-    ov.id='api-docs-modal';
-    ov.style.cssText='display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:9999;overflow-y:auto;padding:30px 20px';
-    ov.innerHTML='<div id="api-docs-box" style="background:white;border-radius:10px;max-width:860px;margin:0 auto;padding:28px;box-shadow:0 8px 40px rgba(0,0,0,.25)"></div>';
-    ov.addEventListener('click',e=>{if(e.target===ov)document.getElementById('api-docs-modal').style.display='none';});
-    document.body.appendChild(ov);
-  }
-
-  window._dlInt=function(fmt){
-    const ts=new Date().toISOString().slice(0,16).replace(':','-');
-    if(fmt==='json'){
-      const a=document.createElement('a');
-      a.href=URL.createObjectURL(new Blob([JSON.stringify(window.filtered||[],null,2)],{type:'application/json'}));
-      a.download='interventions_'+ts+'.json';a.click();URL.revokeObjectURL(a.href);
-    } else if(fmt==='csv'){
-      const cols=['id','date','salle','spec','acte','chir','anesth','prevu','entree','sortie','duree','statut','motif'];
-      const rows=(window.filtered||[]).map(r=>cols.map(c=>(r[c]||'').toString().replace(/;/g,',')).join(';'));
-      const a=document.createElement('a');
-      a.href=URL.createObjectURL(new Blob([[cols.join(';'),...rows].join('\n')],{type:'text/csv'}));
-      a.download='interventions_'+ts+'.csv';a.click();URL.revokeObjectURL(a.href);
-    } else if(fmt==='pdf'){window.print();}
-    else{alert('Export Excel disponible via le backend FastAPI : /api/export/interventions.xlsx');}
-  };
-  window._dlKPI=function(fmt){
-    const dim=document.getElementById('kpi-dim').value;
-    if(fmt==='xlsx'){alert('Export Excel KPI ('+dim+') : /api/export/kpi.xlsx?dim='+encodeURIComponent(dim));}
-    else{alert('Export KPI '+fmt.toUpperCase()+' — dimension : '+dim+'\nDisponible via le backend FastAPI.');}
-  };
-
-  const ENDPOINTS=[
-    {tag:'Authentification',m:'POST',path:'/auth/login',lbl:'Login',body:'{\n  "username": "string",\n  "password": "string"\n}',r200:'{\n  "access_token": "string",\n  "token_type": "bearer",\n  "role": "string"\n}',r422:'{"detail":[{"loc":["string",0],"msg":"string","type":"string"}]}'},
-    {tag:'Authentification',m:'POST',path:'/auth/refresh',lbl:'Refresh Token',body:'{"refresh_token":"string"}',r200:'{"access_token":"string","token_type":"bearer"}',r422:null},
-    {tag:'Authentification',m:'POST',path:'/auth/logout',lbl:'Logout',body:null,r200:'{"message":"Déconnexion réussie"}',r422:null},
-    {tag:'KPIs',m:'GET',path:'/kpis/dashboard',lbl:'Dashboard KPIs',r200:'{"tvo":81.4,"ponctualite_debut":67.2,"nb_interventions":691,"taux_annulation":4.2}',r422:null},
-    {tag:'KPIs',m:'GET',path:'/kpis/occupation',lbl:'Occupation salles',r200:'{"salles":[{"id":"BL-01","tvo":84.2}]}',r422:null},
-    {tag:'KPIs',m:'GET',path:'/kpis/ponctualite',lbl:'Ponctualité',r200:'{"retard_moyen_debut":12,"taux_debut_heure":67.2}',r422:null},
-    {tag:'KPIs',m:'GET',path:'/kpis/annulations',lbl:'Annulations',r200:'{"taux":4.2,"motifs":[{"motif":"Patient COVID+","nb":28}]}',r422:null},
-    {tag:'Interventions',m:'GET',path:'/interventions',lbl:'Liste interventions',r200:'{"total":691,"page":1,"items":[{"id":"INT00001","date":"2026-06-08","salle":"BL-01"}]}',r422:null},
-    {tag:'Interventions',m:'GET',path:'/interventions/{id}',lbl:'Détail intervention',r200:'{"id":"INT00001","statut":"terminée","duree_min":106}',r422:null},
-    {tag:'Interventions',m:'GET',path:'/interventions/export/csv',lbl:'Export CSV',r200:'"CSV stream"',r422:null},
-    {tag:'Interventions',m:'GET',path:'/interventions/export/xlsx',lbl:'Export Excel',r200:'"XLSX stream"',r422:null},
-    {tag:'Alertes',m:'GET',path:'/alertes',lbl:'Liste alertes',r200:'{"alertes":[{"id":"ALT001","priorite":"haute","salle":"BL-04"}]}',r422:null},
-    {tag:'Alertes',m:'PATCH',path:'/alertes/{id}/acquitter',lbl:'Acquitter alerte',body:'{"commentaire":"string"}',r200:'{"id":"ALT001","acquittee":true}',r422:null},
-    {tag:'Salles',m:'GET',path:'/salles',lbl:'Référentiel salles',r200:'{"salles":[{"id":"BL-01","type":"conventionnelle"}]}',r422:null},
-    {tag:'Spécialités',m:'GET',path:'/specialites',lbl:'Référentiel spécialités',r200:'{"specialites":["Gynécologie","Digestif","Urologie"]}',r422:null},
-    {tag:'Utilisateurs',m:'GET',path:'/utilisateurs/me',lbl:'Mon profil',r200:'{"role":"cadrebloc","scopes":["read:kpis"]}',r422:null},
-    {tag:'Utilisateurs',m:'GET',path:'/utilisateurs',lbl:'Liste utilisateurs',r200:'{"users":[{"id":"u1","role":"cadrebloc"}]}',r422:null},
-    {tag:'Paramètres',m:'GET',path:'/parametres',lbl:'Lire config.',r200:'{"seuil_tvo_alerte":75,"periode_defaut":"sem"}',r422:null},
-    {tag:'Paramètres',m:'PUT',path:'/parametres',lbl:'Mettre à jour',body:'{"seuil_tvo_alerte":75}',r200:'{"message":"Configuration mise à jour"}',r422:'{"detail":"Valeur hors plage"}'},
-    {tag:'Export',m:'GET',path:'/export/kpis',lbl:'Export KPIs',r200:'"csv ou xlsx"',r422:null},
-    {tag:'Archives',m:'GET',path:'/archives/bilans',lbl:'Liste bilans',r200:'{"bilans":[{"id":"BCentral BC_2025","statut":"cloture"}]}',r422:null},
-    {tag:'Archives',m:'GET',path:'/archives/bilans/{id}',lbl:'Détail bilan',r200:'{"id":"BCentral BC_2025","actes_n":11302}',r422:null}
-  ];
-  const MC={GET:'#61affe',POST:'#49cc90',PUT:'#fca130',PATCH:'#50e3c2',DELETE:'#f93e3e'};
-  const MB={GET:'rgba(97,175,254,.1)',POST:'rgba(73,204,144,.1)',PUT:'rgba(252,161,48,.1)',PATCH:'rgba(80,227,194,.1)',DELETE:'rgba(249,62,62,.1)'};
-
-  window._openApiDocs=function(){
-    const tags=[...new Set(ENDPOINTS.map(e=>e.tag))];
-    let openIdx=null;
-    function codeBlock(s){return '<pre style="background:#1e2939;color:#a8d8a8;padding:12px;border-radius:5px;font-size:10px;overflow-x:auto;margin:6px 0;font-family:monospace">'+s.replace(/</g,'&lt;').replace(/>/g,'&gt;')+'</pre>';}
-    document.getElementById('api-docs-box').innerHTML=`
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
-        <div><div style="font-size:16px;font-weight:800;color:var(--navy)">📄 Surgical Flow Dashboard — API</div>
-        <div style="font-size:11px;color:var(--gray);margin-top:3px">OpenAPI v1.0 · Base URL : <code style="background:#f1f5f9;padding:1px 6px;border-radius:3px">/api/v1</code> · Auth : Bearer JWT</div></div>
-        <button onclick="document.getElementById('api-docs-modal').style.display='none'" style="background:none;border:none;font-size:22px;cursor:pointer;color:#888">×</button>
-      </div>
-      ${tags.map(tag=>`<div style="margin-bottom:14px">
-        <div onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:#f8f9fc;border:1px solid #dde3ee;border-radius:5px;cursor:pointer;margin-bottom:6px">
-          <span style="font-size:13px;font-weight:700;color:var(--navy)">${tag}</span><span style="color:#aaa">›</span>
-        </div>
-        <div>${ENDPOINTS.filter(e=>e.tag===tag).map((ep,i)=>{
-          const uid='ep'+ENDPOINTS.indexOf(ep);
-          return`<div style="border:1px solid ${MC[ep.m]||'#aaa'};border-radius:5px;margin-bottom:6px;overflow:hidden">
-            <div onclick="var b=document.getElementById('${uid}');b.style.display=b.style.display==='none'?'block':'none'" style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:${MB[ep.m]||'#f8f8f8'};cursor:pointer">
-              <span style="background:${MC[ep.m]||'#aaa'};color:white;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;min-width:52px;text-align:center;flex-shrink:0">${ep.m}</span>
-              <code style="font-size:12px;font-weight:600;color:#3b4151;flex:1">/api/v1${ep.path}</code>
-              <span style="font-size:11px;color:#666;flex:2">${ep.lbl}</span>
-            </div>
-            <div id="${uid}" style="display:none;padding:14px 16px;background:white;border-top:1px solid #eee">
-              ${ep.body?'<div style="margin-bottom:10px"><div style="font-size:11px;font-weight:700;color:#3b4151;margin-bottom:4px">Corps de la requête</div>'+codeBlock(ep.body)+'</div>':'<div style="font-size:11px;color:#888;margin-bottom:8px">Aucun paramètre</div>'}
-              <div style="font-size:11px;font-weight:700;color:#3b4151;margin-bottom:6px">Réponses</div>
-              <div style="border:1px solid #eee;border-radius:4px;margin-bottom:4px;overflow:hidden">
-                <div style="padding:6px 10px;background:#f8f9fc;font-size:10px"><span style="font-weight:700;color:#49cc90">200</span> — Successful Response</div>
-                ${codeBlock(ep.r200)}
-              </div>
-              ${ep.r422!==null?'<div style="border:1px solid #eee;border-radius:4px;overflow:hidden"><div style="padding:6px 10px;background:#f8f9fc;font-size:10px"><span style="font-weight:700;color:#f93e3e">422</span> — Validation Error</div>'+codeBlock(ep.r422||'{"detail":[{"loc":["string",0],"msg":"string","type":"string"}]}')+'</div>':''}
-            </div>
-          </div>`;
-        }).join('')}</div>
-      </div>`).join('')}
-      <div style="margin-top:14px;display:flex;justify-content:flex-end">
-        <button onclick="document.getElementById('api-docs-modal').style.display='none'" style="padding:6px 18px;border:none;border-radius:6px;background:var(--navy);color:white;font-size:11px;font-weight:600;cursor:pointer">Fermer</button>
-      </div>`;
-    document.getElementById('api-docs-modal').style.display='block';
-  };
-}
-
-// ═══════════════════════════════════════
-// VIEW : ARCHIVES — BILANS ARCHIVÉS
-// ═══════════════════════════════════════
-function vArchives(){
-  const m=document.getElementById('main');
-  const DETAIL={
-    'BCentral BC_2025':{perimetre:'Bloc central — salles conventionnelles, urgences et hybrides',annees:'2024 / 2025',actes:'10 616 → 11 302',kpis:[{l:'Actes 2024',v:'10 616',t:'Référence N-1'},{l:'Actes 2025',v:'11 302',t:'▲ +6,5 %',cls:'up-good'},{l:'Taux occupation moy.',v:'82,4 %',t:'▲ +3,1 pts',cls:'up-good'},{l:'Durée moy.',v:'98 min',t:'▼ −4 min',cls:'up-good'},{l:'Taux annulation',v:'4,2 %',t:'▼ −0,8 pt',cls:'up-good'},{l:'Actes robotisés',v:'902',t:'▲ +8,2 %',cls:'up-good'}]},
-    'BFastTrack_2025':{perimetre:'Circuit court ambulatoire (fast-track) — salles BL-03 et BL-07',annees:'2025',actes:'2 240',kpis:[{l:'Actes 2025',v:'2 240',t:'1ère année pleine'},{l:'Taux occupation',v:'78,6 %',t:'Objectif 80 %'},{l:'Durée moy. séjour',v:'3,8 h',t:'▼ vs hospit. conv.'},{l:'Taux sortie J0',v:'96,2 %',t:'▲ +2,1 pts',cls:'up-good'},{l:'Taux annulation',v:'3,1 %',t:'Cible < 5 %',cls:'up-good'},{l:'Satisfaction',v:'4,6/5',t:'Enquête SATIS 2025'}]},
-    'Robot_2025':{perimetre:'Salles équipées du robot chirurgical Da Vinci (BL-08)',annees:'2024 / 2025',actes:'834 → 902',kpis:[{l:'Actes 2024',v:'834',t:'Référence N-1'},{l:'Actes 2025',v:'902',t:'▲ +8,2 %',cls:'up-good'},{l:'Taux utilisation',v:'71,3 %',t:'▲ +4,6 pts',cls:'up-good'},{l:'Durée moy.',v:'187 min',t:'▼ −11 min',cls:'up-good'},{l:'Taux conversion',v:'1,8 %',t:'▼ −0,5 pt',cls:'up-good'},{l:'Complications',v:'0,9 %',t:'= référence nationale'}]}
-  };
-  window._BILAN_DETAIL=DETAIL;
-  window.openBilan=function(id){window._bilanId=id;go('bilandetail');};
-  window.exportBilanCSV=function(id){
-    const d=(window._BILAN_DETAIL||{})[id]; if(!d)return;
-    const rows=[['KPI','Valeur','Tendance'],...d.kpis.map(k=>[k.l,k.v,k.t])];
-    const csv=rows.map(r=>r.join(';')).join('\n');
-    const a=document.createElement('a');
-    a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-    a.download=id+'_bilan.csv';a.click();URL.revokeObjectURL(a.href);
-  };
-  m.innerHTML=`
-  <div class="page-title">🗄️ ARCHIVES — BILANS ANNUELS</div>
-  <div class="card">
-    <div style="font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:12px;border-bottom:1px solid var(--border);padding-bottom:8px">BILANS ANNUELS ARCHIVÉS</div>
-    <div class="info-note blue" style="margin-bottom:14px;font-size:11px">Bilans d'activité clôturés par le contrôle de gestion.</div>
-    <table class="dtbl" style="font-size:11px">
-      <thead style="background:#f8f9fc"><tr><th>Bilan</th><th>Périmètre</th><th>Années</th><th>Actes</th><th>Statut</th><th></th></tr></thead>
-      <tbody>${Object.entries(DETAIL).map(([id,b])=>`<tr>
-        <td style="font-weight:700;color:var(--navy)">${id}</td>
-        <td style="color:#445;font-size:10px">${b.perimetre}</td>
-        <td style="white-space:nowrap">${b.annees}</td>
-        <td style="font-weight:600;white-space:nowrap">${b.actes}</td>
-        <td><span style="background:#f0fff4;color:#38a169;border:1px solid #38a169;padding:2px 10px;border-radius:12px;font-size:10px;font-weight:700">Clôturé</span></td>
-        <td><button onclick="openBilan('${id}')" style="padding:4px 12px;border:1.5px solid var(--teal);border-radius:5px;background:white;color:var(--teal);font-size:11px;font-weight:600;cursor:pointer" onmouseover="this.style.background='#f0fdfa'" onmouseout="this.style.background='white'">Consulter</button></td>
-      </tr>`).join('')}</tbody>
-    </table>
-  </div>`;
-}
-
-// ═══════════════════════════════════════
-// VIEW : BILAN DETAIL
-// ═══════════════════════════════════════
-function vBilanDetail(){
-  const id=window._bilanId||'BFastTrack_2025';
-  const m=document.getElementById('main');
-  const DETAIL={
-    'BFastTrack_2025':{
-      titre:'BFASTTRACK_2025 — BILAN DU PÉRIMÈTRE',
-      info:'Circuit court ambulatoire (fast-track) — salles BL-03 et BL-07 · Période analysée : début — fin (filtres courants appliqués)',
-      note:'* Ouverture 31 Mars 2025',
-      kpis:[{l:'TVO DU PÉRIMÈTRE',v:'43',u:'%',t:'vs période préc. : n/d',cls:'neut'},{l:'INTERVENTIONS TERMINÉES',v:'58',u:'',t:'vs période préc. : n/d',cls:'neut'},{l:'PONCTUALITÉ (≤ 15 MIN)',v:'82.8',u:'%',t:'vs période préc. : n/d',cls:'neut'},{l:'TAUX D\'ANNULATION',v:'9.9',u:'%',t:'vs période préc. : n/d',cls:'neut'},{l:'DURÉE MOYENNE',v:'151.9',u:'min',t:'vs période préc. : n/d',cls:'neut'},{l:'CHECK-LISTS CONFORMES',v:'80.7',u:'%',t:'vs période préc. : n/d',cls:'neut'}],
-      tvo_lbl:['2026-S23','2026-S24','2026-S25','2026-S26','2026-S27'],tvo_cur:[100,100,18,5,0],tvo_prev:[85,88,82,80,78],
-      salle_lbl:['BL-07','BL-03'],salle_term:[32,26],salle_ann:[4,3],
-      actes_lbl:['Hystérectomie totale','Remplacement valve aortique','Arthroplastie totale de genou','Amygdalectomie','Pontage coronarien','Cholécystectomie coelioscopique','Arthroplastie totale de hanche','Phacoémulsification cataracte','Craniotomie pour tumeur','Cure de hernie inguinale'],
-      actes_term:[5,10,8,6,9,5,5,4,3,3],actes_ann:[1,2,1,1,0,0,0,0,0,1],
-      has_lbl:['BL-03','BL-07'],has_v:[72,82],has_c:['#e53e3e','#ed8936'],
-      specs:[['Anesthésie','21 actes'],['Cardiologie','1 acte'],['Endodig','1 949 actes'],['Endo Thoracique','266 actes'],['Vasculaire','3 actes'],['TOTAL','2 240 actes']],
-      cumSpec:{
-        lbl:['Anesthésie','Cardiologie','Endodig','Endo Thoracique','Vasculaire'],
-        val:[21,1,1949,266,3],total:2240
-      }
-    },
-    'BCentral BC_2025':{
-      titre:'BCENTRAL BC_2025 — BILAN DU PÉRIMÈTRE',
-      info:'Bloc central — salles conventionnelles, urgences et hybrides (hors ambulatoire) · Période analysée : début → fin (filtres courants appliqués)',
-      note:'Bilan clôturé le 28/02/2025 — validé par la Direction Médicale et le Contrôle de Gestion.',
-      kpis:[{l:'TVO DU PÉRIMÈTRE',v:'55.1',u:'%',t:'vs période préc. : n/d',cls:'neut'},{l:'INTERVENTIONS TERMINÉES',v:'312',u:'',t:'vs période préc. : n/d',cls:'neut'},{l:'PONCTUALITÉ (≤ 15 MIN)',v:'71.5',u:'%',t:'vs période préc. : n/d',cls:'neut'},{l:'TAUX D\'ANNULATION',v:'5.1',u:'%',t:'vs période préc. : n/d',cls:'neut'},{l:'DURÉE MOYENNE',v:'140.9',u:'min',t:'vs période préc. : n/d',cls:'neut'},{l:'CHECK-LISTS CONFORMES',v:'86.7',u:'%',t:'vs période préc. : n/d',cls:'neut'}],
-      tvo_lbl:['2026-S23','2026-S24','2026-S25','2026-S26','2026-S27'],tvo_cur:[90,108,40,5,1],tvo_prev:[82,86,80,78,76],
-      salle_lbl:['BL-10','BL-05','BL-04','BL-02','BL-09','BL-06','BL-01','BL-08'],salle_term:[38,40,36,40,38,40,40,40],salle_ann:[2,5,2,3,1,1,2,1],
-      actes_lbl:['Amygdalectomie','Hystérectomie totale','Phacoémulsification cataracte','Prostatectomie radicale','Craniotomie pour tumeur','Pontage coronarien','Remplacement valve aortique','Cure de hernie inguinale','Arthroplastie totale de hanche','Arthroplastie totale de genou','Cholécystectomie coelioscopique'],
-      actes_term:[50,56,32,42,30,28,28,15,12,10,9],actes_ann:[3,2,2,1,2,4,2,1,1,1,1],
-      has_lbl:['BL-01','BL-02','BL-04','BL-05','BL-08','BL-09','BL-10'],has_v:[80,90,84,85,90,82,86],has_c:['#ed8936','#ed8936','#ed8936','#ed8936','#ed8936','#ed8936','#ed8936'],
-      specs:[['Amygdalectomie','50 terminées · 3 annulées'],['Hystérectomie totale','56 terminées · 2 annulées'],['Phacoémulsification cataracte','32 terminées · 2 annulées'],['Prostatectomie radicale','42 terminées · 1 annulée'],['Craniotomie pour tumeur','30 terminées · 2 annulées'],['Pontage coronarien','28 terminées · 4 annulées'],['Remplacement valve aortique','28 terminées · 2 annulées'],['Cure de hernie inguinale','15 terminées · 1 annulée'],['Arthroplastie hanche','12 terminées · 1 annulée'],['Arthroplastie genou','10 terminées · 1 annulée'],['Cholécystectomie','9 terminées · 1 annulée']]
-    },
-    'Robot_2025':{
-      titre:'ROBOT_2025 — BILAN DU PÉRIMÈTRE',
-      info:'Salles équipées du robot chirurgical Da Vinci · Période analysée : début — fin (filtres courants appliqués)',
-      note:'Contrat de performance Da Vinci — données issues d\'OPERA · périmètre BL-02, BL-03, BL-07, BL-08, BL-09.',
-      kpis:[{l:'TVO DU PÉRIMÈTRE',v:'51',u:'%',t:'vs période préc. : n/d',cls:'neut'},{l:'INTERVENTIONS TERMINÉES',v:'175',u:'',t:'vs période préc. : n/d',cls:'neut'},{l:'PONCTUALITÉ (≤ 15 MIN)',v:'78.3',u:'%',t:'vs période préc. : n/d',cls:'neut'},{l:'TAUX D\'ANNULATION',v:'6.4',u:'%',t:'vs période préc. : n/d',cls:'neut'},{l:'DURÉE MOYENNE',v:'147.2',u:'min',t:'vs période préc. : n/d',cls:'neut'},{l:'CHECK-LISTS CONFORMES',v:'86.1',u:'%',t:'vs période préc. : n/d',cls:'neut'}],
-      tvo_lbl:['2026-S23','2026-S24','2026-S25','2026-S26','2026-S27'],tvo_cur:[95,100,18,5,1],tvo_prev:[82,88,84,80,78],
-      salle_lbl:['BL-02','BL-09','BL-08','BL-07','BL-03'],salle_term:[40,42,37,35,26],salle_ann:[4,0,0,2,8],
-      actes_lbl:['Amygdalectomie','Hystérectomie totale','Prostatectomie radicale','Pontage coronarien','Remplacement valve aortique','Phacoémulsification cataracte','Craniotomie pour tumeur','Arthroplastie totale de genou','Cholécystectomie coelioscopique','Cure de hernie inguinale','Arthroplastie totale de hanche'],
-      actes_term:[28,22,35,25,16,18,12,18,5,5,4],actes_ann:[20,4,5,5,2,0,2,0,1,2,1],
-      has_lbl:['BL-02','BL-03','BL-07','BL-08','BL-09'],has_v:[90,78,84,92,84],has_c:['#ed8936','#e53e3e','#ed8936','#ed8936','#ed8936'],
-      specs:[['Prostatectomie radicale','35 terminées · 5 annulées'],['Amygdalectomie','28 terminées · 20 annulées'],['Pontage coronarien','25 terminées · 5 annulées'],['Arthroplastie totale de genou','18 terminées · 0 annulée'],['Phacoémulsification cataracte','18 terminées · 0 annulée'],['Hystérectomie totale','22 terminées · 4 annulées'],['Craniotomie pour tumeur','12 terminées · 2 annulées'],['Cholécystectomie coelioscopique','5 terminées · 1 annulée'],['Cure de hernie inguinale','5 terminées · 2 annulées'],['Arthroplastie totale de hanche','4 terminées · 1 annulée']]
-    }
-  };
-  window._BILAN_DETAIL=DETAIL;
-  const d=DETAIL[id];
-  if(!d){m.innerHTML='<div class="card">Bilan introuvable.</div>';return;}
-  m.innerHTML=`
-  <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
-    <button onclick="go('archives')" style="padding:4px 10px;border:1px solid var(--border);border-radius:5px;background:white;font-size:11px;cursor:pointer;color:var(--gray)">← Archives</button>
-    <div class="page-title" style="margin:0">🗄️ ${d.titre}</div>
-  </div>
-  <div class="info-note blue" style="margin-bottom:10px;font-size:11px">${d.info}</div>
-  <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:8px;margin-bottom:12px">
-    ${d.kpis.map(k=>`<div class="card" style="padding:10px"><div style="font-size:8px;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:4px;line-height:1.3">${k.l}</div><div style="font-size:18px;font-weight:800;color:var(--navy)">${k.v}<span style="font-size:10px;font-weight:500"> ${k.u||''}</span></div><div style="font-size:9px;margin-top:3px" class="${k.cls||'neut'}">${k.t}</div></div>`).join('')}
-  </div>
-  <div class="row2" style="margin-bottom:12px">
-    <div class="card"><div class="card-title">TENDANCE TVO DU PÉRIMÈTRE</div><div class="ch" style="height:200px"><canvas id="c-bd-tvo"></canvas></div></div>
-    <div class="card"><div class="card-title">ACTIVITÉ PAR SALLE</div><div class="ch" style="height:200px"><canvas id="c-bd-salle"></canvas></div></div>
-  </div>
-  <div class="row2" style="margin-bottom:12px">
-    <div class="card"><div class="card-title">ACTIVITÉ PAR TYPE D'ACTE</div><div class="ch" style="height:220px"><canvas id="c-bd-actes"></canvas></div></div>
-    <div class="card"><div class="card-title">CONFORMITÉ CHECK-LIST HAS</div><div class="ch" style="height:220px"><canvas id="c-bd-has"></canvas></div></div>
-  </div>
-  ${d.cumSpec?`
-  <div style="font-size:10px;color:var(--gray);margin-bottom:6px">${d.note||''}</div>
-  <div class="row2" style="margin-bottom:10px">
+  <div class="page-title">RÉCAPITULATIF CUMULÉ — ${cfg.title}</div>
+  <div class="info-note blue" style="margin-bottom:10px">📊 Source : ${cfg.src} · Périmètre : ${cfg.label}</div>
+  <div style="display:grid;grid-template-columns:1fr auto;gap:14px;align-items:start;margin-bottom:10px">
     <div class="card" style="margin-bottom:0">
-      <div class="card-title">ACTIVITÉ CUMULÉE PAR SPÉCIALITÉ</div>
-      <table class="dtbl" style="font-size:11px">
-        <thead style="background:#f8f9fc"><tr><th>Spécialité</th><th>2025</th></tr></thead>
-        <tbody>${d.cumSpec.lbl.map((s,i)=>`<tr><td style="color:var(--navy);font-weight:600">${s}</td><td style="font-weight:700">${d.cumSpec.val[i].toLocaleString('fr-FR')}</td></tr>`).join('')}
-        <tr style="background:#f0f7f7;font-weight:800"><td>TOTAL</td><td>${d.cumSpec.total.toLocaleString('fr-FR')}</td></tr></tbody>
+      <div class="bil-title" style="margin-bottom:8px">Activité Cumulée 2026 ${cfg.title} — 2025 vs 2026</div>
+      <table class="dtbl">
+        <thead><tr><th>Spécialité</th><th style="color:#b07d10;background:#fef9ee">2025</th><th style="color:#2563eb;background:#eff6ff">2026</th><th>Écart</th><th>Évol.</th></tr></thead>
+        <tbody>${rows}</tbody>
+        <tfoot>
+          <tr><td>TOTAL</td><td>${cfg.t1.toLocaleString()}</td><td>${cfg.t2.toLocaleString()}</td><td><span class="${td>=0?'ep':'en'}">${td>0?'+':''}${td}</span></td><td><span class="${tp>=0?'evp':'evn'}">${tp>0?'+':''}${tp}%</span></td></tr>
+          <tr><td><em>Hors Anesth. EndoTho Endodig</em></td><td>${cfg.sub1.toLocaleString()}</td><td>${cfg.sub2.toLocaleString()}</td><td><span class="${sd>=0?'ep':'en'}">${sd>0?'+':''}${sd}</span></td><td><span class="${sp>=0?'evp':'evn'}">${sp>0?'+':''}${sp}%</span></td></tr>
+        </tfoot>
       </table>
     </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div class="cum-box"><div style="font-weight:700;margin-bottom:5px">${cfg.label}</div><div>Cumul 2025 : ${cfg.t1.toLocaleString()} interv.</div><div>Cumul 2026 : ${cfg.t2.toLocaleString()} interv.</div><div style="font-weight:700;color:${td>=0?'var(--green)':'var(--red)'};margin-top:4px">Évol. : ${td>0?'+':''}${td} (${tp>0?'+':''}${tp}%)</div></div>
+      <div class="cum-box"><div style="font-weight:700;margin-bottom:5px">Hors flux masqués</div><div>2025 : ${cfg.sub1.toLocaleString()} interv.</div><div>2026 : ${cfg.sub2.toLocaleString()} interv.</div><div style="font-weight:700;color:${sd>=0?'var(--green)':'var(--red)'};margin-top:4px">Évol. : ${sd>0?'+':''}${sd} (${sp>0?'+':''}${sp}%)</div></div>
+    </div>
+  </div>
+  <div class="card"><div class="card-title">COMPARAISON 2025 / 2026 PAR SPÉCIALITÉ</div><div class="ch" style="height:240px"><canvas id="${cfg.cid}"></canvas></div></div>
+  ${cfg.rob?`
+  <div class="row2" style="margin-top:10px">
     <div class="card" style="margin-bottom:0">
-      <div class="card-title">PAR SPÉCIALITÉS — ANNÉE 2025</div>
-      <div class="ch" style="height:220px"><canvas id="c-bd-cum"></canvas></div>
-    </div>
-  </div>`:`
-  <div class="card" style="margin-bottom:10px">
-    <div class="card-title">ACTIVITÉ PAR SPÉCIALITÉ</div>
-    <table class="dtbl" style="font-size:11px">
-      <thead style="background:#f8f9fc"><tr><th>Spécialité</th><th>Actes</th></tr></thead>
-      <tbody>${d.specs.map(([sp,v])=>`<tr><td style="color:var(--navy);font-weight:600">${sp}</td><td style="font-weight:700">${v}</td></tr>`).join('')}</tbody>
-    </table>
-  </div>`}
-  <div style="display:flex;gap:8px;justify-content:flex-end;margin-bottom:6px">
-    <button onclick="exportBilanCSV('${id}')" style="padding:6px 14px;border:1.5px solid var(--teal);border-radius:6px;background:white;color:var(--teal);font-size:11px;font-weight:600;cursor:pointer">📥 Export CSV</button>
-    <button onclick="window.print()" style="padding:6px 14px;border:1.5px solid #8b5cf6;border-radius:6px;background:white;color:#8b5cf6;font-size:11px;font-weight:600;cursor:pointer">🖨️ Imprimer</button>
-  </div>
-  <div style="font-size:10px;color:var(--gray)">${d.note}</div>`;
-
-  const optBase={responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:9},boxWidth:12}}},scales:{x:{ticks:{font:{size:9}}},y:{ticks:{font:{size:9}}}}};
-  mkChart('c-bd-tvo',{type:'line',data:{labels:d.tvo_lbl,datasets:[{label:'TVO courant (%)',data:d.tvo_cur,borderColor:'#1a3a6b',backgroundColor:'rgba(26,58,107,.08)',tension:.3,pointRadius:3,fill:true},{label:'Période préc. (%)',data:d.tvo_prev,borderColor:'#aab',borderDash:[5,4],tension:.3,pointRadius:3,fill:false}]},options:{...optBase,scales:{x:{ticks:{font:{size:9}}},y:{min:0,max:160,ticks:{font:{size:9},callback:v=>v+'%'}}}}});
-  mkChart('c-bd-salle',{type:'bar',data:{labels:d.salle_lbl,datasets:[{label:'Terminées',data:d.salle_term,backgroundColor:'#0ea5a0'},{label:'Annulées',data:d.salle_ann,backgroundColor:'#e53e3e'}]},options:{...optBase,scales:{x:{stacked:true,ticks:{font:{size:9}}},y:{stacked:true,ticks:{font:{size:9}}}}}});
-  mkChart('c-bd-actes',{type:'bar',data:{labels:d.actes_lbl,datasets:[{label:'Terminées',data:d.actes_term,backgroundColor:'#0ea5a0'},{label:'Annulées',data:d.actes_ann,backgroundColor:'#e53e3e'}]},options:{...optBase,scales:{x:{ticks:{font:{size:8},maxRotation:45}},y:{ticks:{font:{size:9}}}}}});
-  mkChart('c-bd-has',{type:'bar',data:{labels:d.has_lbl,datasets:[{label:'Conformité (%)',data:d.has_v,backgroundColor:d.has_c}]},options:{...optBase,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:10}}},y:{min:0,max:100,ticks:{font:{size:9},callback:v=>v+' %'}}}}});
-  if(d.cumSpec&&document.getElementById('c-bd-cum')){
-    mkChart('c-bd-cum',{type:'bar',data:{labels:d.cumSpec.lbl,datasets:[{label:'2025',data:d.cumSpec.val,backgroundColor:'#1a3a6b'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
-  }
-}
-
-// ═══════════════════════════════════════
-// VIEW : ADMINISTRATION — RGPD & CONFORMITÉ
-// ═══════════════════════════════════════
-function vAdminRGPD(){
-  const m=document.getElementById('main');
-  const TRAITEMENTS=[
-    {id:'RT-001',nom:'Gestion des dossiers patients bloc',base:'Obligation légale — Art. 9 RGPD',resp:'DPO · Dr. Moreau',duree:'10 ans',dest:'Équipe bloc, DPI, PMSI',statut:'conforme'},
-    {id:'RT-002',nom:'Pilotage activité chirurgicale (KPIs)',base:'Mission de service public — ESPIC',resp:'DPO · Dr. Moreau',duree:'5 ans',dest:'Direction, CME, Chef de Bloc',statut:'conforme'},
-    {id:'RT-003',nom:'Gestion des ressources humaines bloc',base:'Obligation légale — Code du travail',resp:'DRH · Mme. Dupont',duree:'5 ans',dest:'DRH, Cadre de Bloc',statut:'conforme'},
-    {id:'RT-004',nom:'Journaux d\'accès et traçabilité',base:'Obligation légale — HDS / Art. 32 RGPD',resp:'RSSI · M. Bernard',duree:'1 an',dest:'RSSI, DSI',statut:'conforme'},
-    {id:'RT-005',nom:'Gestion des consentements (recherche)',base:'Consentement explicite — Art. 7 RGPD',resp:'DPO · Dr. Moreau',duree:'20 ans',dest:'Équipe recherche clinique',statut:'en cours'},
-    {id:'RT-006',nom:'Statistiques médicales anonymisées',base:'Intérêt public — Art. 89 RGPD',resp:'DPO · Dr. Moreau',duree:'Illimitée',dest:'ATIH, ARS, HAS',statut:'conforme'}
-  ];
-  const DROITS=[
-    {date:'2026-06-10',type:'Accès',demandeur:'Patient M. Lefebvre',objet:'Dossier intervention BL-04 du 08/06',statut:'traité',delai:'5j'},
-    {date:'2026-06-03',type:'Rectification',demandeur:'Patient Mme. Martin',objet:'Correction date de naissance',statut:'traité',delai:'3j'},
-    {date:'2026-05-28',type:'Effacement',demandeur:'Patient M. Durand',objet:'Suppression données recherche',statut:'traité',delai:'12j'},
-    {date:'2026-05-20',type:'Opposition',demandeur:'Patient Mme. Petit',objet:'Opposition traitement stats',statut:'traité',delai:'7j'},
-    {date:'2026-06-18',type:'Accès',demandeur:'Patient M. Bernard',objet:'Dossier complet 2026',statut:'en cours',delai:'—'}
-  ];
-  m.innerHTML=`
-  <div class="page-title">⚙️ RGPD & CONFORMITÉ — HÔPITAL FOCH</div>
-
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px">
-    <div class="card" style="padding:12px;border-left:3px solid #38a169">
-      <div style="font-size:9px;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:6px">TRAITEMENTS ENREGISTRÉS</div>
-      <div style="font-size:26px;font-weight:800;color:var(--navy)">6</div>
-      <div style="font-size:10px;color:#38a169;margin-top:3px">5 conformes · 1 en cours</div>
-    </div>
-    <div class="card" style="padding:12px;border-left:3px solid #38a169">
-      <div style="font-size:9px;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:6px">DROITS EXERCÉS (12 mois)</div>
-      <div style="font-size:26px;font-weight:800;color:var(--navy)">23</div>
-      <div style="font-size:10px;color:#38a169;margin-top:3px">100 % traités dans les délais</div>
-    </div>
-    <div class="card" style="padding:12px;border-left:3px solid #0ea5a0">
-      <div style="font-size:9px;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:6px">DÉLAI MOYEN RÉPONSE</div>
-      <div style="font-size:26px;font-weight:800;color:var(--navy)">6,8<span style="font-size:13px"> j</span></div>
-      <div style="font-size:10px;color:#0ea5a0;margin-top:3px">Objectif ≤ 30 j (RGPD)</div>
-    </div>
-    <div class="card" style="padding:12px;border-left:3px solid #38a169">
-      <div style="font-size:9px;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:6px">VIOLATIONS DÉCLARÉES</div>
-      <div style="font-size:26px;font-weight:800;color:var(--navy)">0</div>
-      <div style="font-size:10px;color:#38a169;margin-top:3px">Aucune violation notifiée CNIL</div>
-    </div>
-  </div>
-
-  <div class="card" style="margin-bottom:12px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-      <div style="font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px">REGISTRE DES TRAITEMENTS (Art. 30 RGPD)</div>
-      <div style="display:flex;gap:6px">
-        <span style="background:#f0fff4;color:#38a169;border:1px solid #38a169;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700">Certifié HDS</span>
-        <span style="background:#eff6ff;color:#1d4ed8;border:1px solid #93c5fd;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700">DPO désigné</span>
-        <button onclick="window._dlRgpd()" style="padding:3px 10px;border:1.5px solid var(--teal);border-radius:5px;background:white;color:var(--teal);font-size:10px;font-weight:600;cursor:pointer">📥 Exporter</button>
-      </div>
-    </div>
-    <table class="dtbl" style="font-size:11px">
-      <thead style="background:#f8f9fc">
-        <tr><th>Réf.</th><th>Traitement</th><th>Base légale</th><th>Responsable</th><th>Durée conservation</th><th>Destinataires</th><th>Statut</th></tr>
-      </thead>
-      <tbody>
-        ${TRAITEMENTS.map(t=>`<tr>
-          <td style="font-weight:700;color:var(--teal)">${t.id}</td>
-          <td style="font-weight:600;color:#334">${t.nom}</td>
-          <td style="font-size:10px;color:#556">${t.base}</td>
-          <td style="font-size:10px">${t.resp}</td>
-          <td style="white-space:nowrap">${t.duree}</td>
-          <td style="font-size:10px;color:#556">${t.dest}</td>
-          <td><span style="background:${t.statut==='conforme'?'#f0fff4':'#fff8e7'};color:${t.statut==='conforme'?'#38a169':'#ed8936'};border:1px solid ${t.statut==='conforme'?'#38a169':'#ed8936'};padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700">${t.statut}</span></td>
-        </tr>`).join('')}
-      </tbody>
-    </table>
-    <div class="info-note" style="margin-top:10px;font-size:10px">DPO : Dr. Moreau — <a href="mailto:dpo@hopital-foch.fr" style="color:var(--teal)">dpo@hopital-foch.fr</a> · Tél. : 01 46 25 XX XX · Dernière mise à jour du registre : 2026-06-01</div>
-  </div>
-
-  <div class="card" style="margin-bottom:12px">
-    <div style="font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">EXERCICE DES DROITS DES PERSONNES</div>
-    <table class="dtbl" style="font-size:11px">
-      <thead style="background:#f8f9fc">
-        <tr><th>Date</th><th>Type de droit</th><th>Demandeur</th><th>Objet</th><th>Statut</th><th>Délai</th></tr>
-      </thead>
-      <tbody>
-        ${DROITS.map(d=>`<tr>
-          <td>${d.date}</td>
-          <td><span style="background:#eff6ff;color:#1d4ed8;border:1px solid #93c5fd;padding:2px 7px;border-radius:10px;font-size:9px;font-weight:700">${d.type}</span></td>
-          <td>${d.demandeur}</td>
-          <td style="font-size:10px;color:#556">${d.objet}</td>
-          <td><span style="background:${d.statut==='traité'?'#f0fff4':'#fff8e7'};color:${d.statut==='traité'?'#38a169':'#ed8936'};border:1px solid ${d.statut==='traité'?'#38a169':'#ed8936'};padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700">${d.statut}</span></td>
-          <td style="font-weight:600">${d.delai}</td>
-        </tr>`).join('')}
-      </tbody>
-    </table>
-  </div>
-
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
-    <div class="card">
-      <div style="font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">CERTIFICATIONS & OBLIGATIONS</div>
-      ${[
-        {ico:'🏥',t:'Hébergeur de Données de Santé (HDS)',v:'Certifié — Renouvelé 2025',ok:true},
-        {ico:'🔒',t:'Chiffrement des données en transit',v:'TLS 1.3 / AES-256',ok:true},
-        {ico:'📋',t:'PIA (Privacy Impact Assessment)',v:'Réalisé — Mars 2025',ok:true},
-        {ico:'📣',t:'Formation RGPD équipes',v:'100 % personnel formé (2025)',ok:true},
-        {ico:'🛡️',t:'Clause de confidentialité sous-traitants',v:'6/6 prestataires signés',ok:true},
-        {ico:'⚠️',t:'Analyse risques SSI annuelle',v:'Prochaine : Déc. 2026',ok:false}
-      ].map(c=>`<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #f0f4f8;font-size:11px">
-        <span style="font-size:14px">${c.ico}</span>
-        <div style="flex:1"><div style="font-weight:600;color:#334">${c.t}</div><div style="font-size:10px;color:var(--gray)">${c.v}</div></div>
-        <span style="font-size:16px">${c.ok?'✅':'⏳'}</span>
-      </div>`).join('')}
-    </div>
-    <div class="card">
-      <div style="font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">MENTIONS LÉGALES & CONTACTS</div>
-      <div style="font-size:11px;line-height:1.8;color:#445">
-        <div style="font-weight:700;color:var(--navy);margin-bottom:4px">Responsable de traitement</div>
-        <div>Hôpital Foch — ESPIC · 40 rue Worth, 92150 Suresnes</div>
-        <div>SIRET : 780 840 028 00019</div>
-        <div style="margin-top:8px;font-weight:700;color:var(--navy)">Délégué à la Protection des Données</div>
-        <div>Dr. Moreau — <a href="mailto:dpo@hopital-foch.fr" style="color:var(--teal)">dpo@hopital-foch.fr</a></div>
-        <div style="margin-top:8px;font-weight:700;color:var(--navy)">Autorité de contrôle</div>
-        <div>CNIL — 3 place de Fontenoy, 75007 Paris</div>
-        <div><a href="https://www.cnil.fr" target="_blank" style="color:var(--teal)">www.cnil.fr</a> · 01 53 73 22 22</div>
-        <div style="margin-top:8px;font-weight:700;color:var(--navy)">Durée de conservation — principe général</div>
-        <div>Données médicales : 20 ans / Données RH : 5 ans</div>
-        <div>Journaux d'accès : 1 an / Statistiques anonymes : illimitée</div>
-      </div>
-    </div>
-  </div>`;
-
-  window._dlRgpd=function(){
-    const rows=[['Réf.','Traitement','Base légale','Responsable','Conservation','Statut'],
-      ...TRAITEMENTS.map(t=>[t.id,t.nom,t.base,t.resp,t.duree,t.statut])];
-    const csv=rows.map(r=>r.map(c=>'"'+c+'"').join(';')).join('\n');
-    const a=document.createElement('a');
-    a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-    a.download='registre_traitements_RGPD_'+new Date().toISOString().slice(0,10)+'.csv';
-    a.click();URL.revokeObjectURL(a.href);
-  };
-}
-
-// ═══════════════════════════════════════
-// VIEW : ADMIN — AUDIT RGPD [EF-34]
-// ═══════════════════════════════════════
-function vAdminAudit(){
-  const m=document.getElementById('main');
-  const LOGS=[
-    {ts:'2026-06-20 14:22',user:'chefbloc',action:'UPDATE_THRESHOLD',table:'app_thresholds',detail:'tvo_min : 80 → 75 %'},
-    {ts:'2026-06-20 12:17',user:'cadre',action:'ADD_ANNOTATION',table:'app_annotations',detail:'Salle BL-01 : maintenance BG26'},
-    {ts:'2026-06-19 17:55',user:'admin',action:'CREATE_USER',table:'app_users',detail:'username: b.nouveau, role: chirurgien'},
-    {ts:'2026-06-19 09:08',user:'dg',action:'LOGIN',table:'—',detail:'IP 10.0.1.5'},
-    {ts:'2026-06-19 11:17',user:'chefbloc',action:'REMOVE_ANNOTATION',table:'app_annotations',detail:'id=T'},
-    {ts:'2026-06-18 11:30',user:'cadre',action:'ADD_ANNOTATION',table:'app_annotations',detail:'BL-08 : TVO faible — équipement en panne'},
-    {ts:'2026-06-18 12:36',user:'admin',action:'UPDATE_THRESHOLD',table:'app_thresholds',detail:'annulation_max : 3 → 5 %'},
-    {ts:'2026-06-17 12:22',user:'cme',action:'LOGIN',table:'—',detail:'IP 10.0.1.22'},
-    {ts:'2026-06-17 10:30',user:'chefbloc',action:'UPDATE_THRESHOLD',table:'app_thresholds',detail:'ponctualite_min : 70 → 60 %'},
-    {ts:'2026-06-17 09:00',user:'admin',action:'DEACTIVATE_USER',table:'app_users',detail:'username: durand (départ)'},
-    {ts:'2026-06-17 08:47',user:'cadre',action:'ADD_ANNOTATION',table:'app_annotations',detail:'BL-08 - BL-07 : résultats tables semaine S24'},
-    {ts:'2026-06-15 08:08',user:'dg',action:'LOGIN',table:'—',detail:'IP 10.0.1.5'}
-  ];
-  const ACTION_COLORS={
-    'LOGIN':'#0ea5a0','UPDATE_THRESHOLD':'#3b82f6','ADD_ANNOTATION':'#38a169',
-    'REMOVE_ANNOTATION':'#ed8936','CREATE_USER':'#8b5cf6','DEACTIVATE_USER':'#e53e3e'
-  };
-  const ACTION_BG={
-    'LOGIN':'#e0f7f6','UPDATE_THRESHOLD':'#dbeafe','ADD_ANNOTATION':'#f0fff4',
-    'REMOVE_ANNOTATION':'#fff8e7','CREATE_USER':'#f5f3ff','DEACTIVATE_USER':'#fff5f5'
-  };
-  // stats per user
-  const byUser={};
-  LOGS.forEach(l=>{byUser[l.user]=(byUser[l.user]||0)+1;});
-  const byAction={};
-  LOGS.forEach(l=>{byAction[l.action]=(byAction[l.action]||0)+1;});
-
-  let fUser='',fAction='';
-  function renderLogs(){
-    const filtered=LOGS.filter(l=>(!fUser||l.user===fUser)&&(!fAction||l.action===fAction));
-    document.getElementById('audit-tbody').innerHTML=filtered.map(l=>`<tr>
-      <td style="font-family:monospace;font-size:10px;white-space:nowrap;color:#556">${l.ts}</td>
-      <td style="font-weight:700;color:var(--navy)">${l.user}</td>
-      <td><span style="background:${ACTION_BG[l.action]||'#f0f4f8'};color:${ACTION_COLORS[l.action]||'#556'};padding:2px 8px;border-radius:4px;font-size:9px;font-weight:700;font-family:monospace;border:1px solid ${ACTION_COLORS[l.action]||'#ccc'}">${l.action}</span></td>
-      <td style="font-size:10px;color:#0ea5a0;font-family:monospace">${l.table}</td>
-      <td style="font-size:10px;color:#334">${l.detail}</td>
-    </tr>`).join('');
-  }
-
-  m.innerHTML=`
-  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-    <div class="page-title" style="margin:0">🔒 AUDIT RGPD — TRAÇABILITÉ DES MODIFICATIONS [EF-34]</div>
-  </div>
-  <div class="info-note blue" style="margin-bottom:12px;font-size:10px">Seule modification de seuil, annotation, connexion ou gestion utilisateur sont capturées dans <code>app.audit_log</code>. <strong>RGPD Art.30 · PSSI-S · HDS</strong> — Aucune donnée patient nominative dans le système (données agrégées uniquement).</div>
-
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px">
-    <div class="card" style="padding:12px;border-left:3px solid #0ea5a0">
-      <div style="font-size:9px;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:4px">CONNEXIONS CTD</div>
-      <div style="font-size:28px;font-weight:800;color:var(--navy)">12</div>
-      <div style="font-size:10px;color:var(--gray);margin-top:2px">semaine du 17/06</div>
-    </div>
-    <div class="card" style="padding:12px;border-left:3px solid #3b82f6">
-      <div style="font-size:9px;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:4px">MODIFICATIONS SEUILS</div>
-      <div style="font-size:28px;font-weight:800;color:var(--navy)">3</div>
-      <div style="font-size:10px;color:var(--gray);margin-top:2px">par : chefBloc / admin</div>
-    </div>
-    <div class="card" style="padding:12px;border-left:3px solid #38a169">
-      <div style="font-size:9px;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:4px">ANNOTATIONS AJOUTÉES</div>
-      <div style="font-size:28px;font-weight:800;color:var(--navy)">3</div>
-      <div style="font-size:10px;color:var(--gray);margin-top:2px">par : cadre / chefBloc</div>
-    </div>
-    <div class="card" style="padding:12px;border-left:3px solid #e53e3e">
-      <div style="font-size:9px;font-weight:700;color:var(--gray);text-transform:uppercase;margin-bottom:4px">ACTIONS SENSIBLES</div>
-      <div style="font-size:28px;font-weight:800;color:var(--navy)">2</div>
-      <div style="font-size:10px;color:var(--gray);margin-top:2px">CREATE_/DEACTIVATE_USER</div>
-    </div>
-  </div>
-
-  <div class="row2" style="margin-bottom:12px">
-    <div class="card"><div class="card-title">RÉPARTITION DES ACTIONS</div><div class="ch" style="height:180px"><canvas id="c-audit-donut"></canvas></div></div>
-    <div class="card"><div class="card-title">ACTIONS PAR UTILISATEUR</div><div class="ch" style="height:180px"><canvas id="c-audit-bar"></canvas></div></div>
-  </div>
-
-  <div class="card">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
-      <div style="font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px">JOURNAL COMPLET DES MODIFICATIONS</div>
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-        <select id="f-audit-user" onchange="window._auditFilter()" style="padding:4px 8px;border:1.5px solid var(--border);border-radius:5px;font-size:11px">
-          <option value="">Tous utilisateurs</option>
-          ${Object.keys(byUser).map(u=>`<option>${u}</option>`).join('')}
-        </select>
-        <select id="f-audit-action" onchange="window._auditFilter()" style="padding:4px 8px;border:1.5px solid var(--border);border-radius:5px;font-size:11px">
-          <option value="">Toutes actions</option>
-          ${Object.keys(ACTION_COLORS).map(a=>`<option>${a}</option>`).join('')}
-        </select>
-        <button onclick="window._dlAudit()" style="padding:4px 12px;border:1.5px solid var(--teal);border-radius:5px;background:white;color:var(--teal);font-size:10px;font-weight:600;cursor:pointer">📥 Exporter CSV</button>
-      </div>
-    </div>
-    <div style="overflow-x:auto">
-      <table class="dtbl" style="font-size:11px">
-        <thead style="background:#f8f9fc">
-          <tr><th>Date / Heure</th><th>Utilisateur</th><th>Action</th><th>Table</th><th>Détail</th></tr>
-        </thead>
-        <tbody id="audit-tbody"></tbody>
-      </table>
-    </div>
-    <div style="margin-top:10px;display:flex;align-items:center;justify-content:space-between;font-size:10px;color:var(--gray)">
-      <div>⬇ <button onclick="window._dlAudit()" style="background:none;border:none;color:var(--teal);cursor:pointer;font-size:10px;font-weight:600;padding:0">Exporter CSV</button> &nbsp;·&nbsp; Rapport mensuel recommandé vers CNIL (Art. 30 RGPD)</div>
-      <div>Conservation : 1 an · HDS certifié</div>
-    </div>
-  </div>`;
-
-  window._auditFilter=function(){
-    fUser=document.getElementById('f-audit-user').value;
-    fAction=document.getElementById('f-audit-action').value;
-    renderLogs();
-  };
-  window._dlAudit=function(){
-    const rows=[['Date/Heure','Utilisateur','Action','Table','Détail'],...LOGS.map(l=>[l.ts,l.user,l.action,l.table,l.detail])];
-    const csv=rows.map(r=>r.map(c=>'"'+c+'"').join(';')).join('\n');
-    const a=document.createElement('a');
-    a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv'}));
-    a.download='audit_rgpd_'+new Date().toISOString().slice(0,10)+'.csv';
-    a.click();URL.revokeObjectURL(a.href);
-  };
-
-  renderLogs();
-
-  const acts=Object.keys(ACTION_COLORS);
-  mkChart('c-audit-donut',{type:'doughnut',data:{labels:acts,datasets:[{data:acts.map(a=>byAction[a]||0),backgroundColor:acts.map(a=>ACTION_COLORS[a]),borderWidth:2}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:9},padding:6,boxWidth:10}}}}});
-
-  const users=Object.keys(byUser);
-  const UCOLS={'dg':'#0ea5a0','chefbloc':'#3b82f6','cadre':'#38a169','admin':'#e53e3e','cme':'#8b5cf6','cdg':'#f4b942'};
-  mkChart('c-audit-bar',{type:'bar',data:{labels:users,datasets:[{data:users.map(u=>byUser[u]),backgroundColor:users.map(u=>UCOLS[u]||'#aaa')}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{font:{size:10}}},y:{ticks:{font:{size:9},stepSize:1}}}}});
-}
-
-// ═══════════════════════════════════════
-// VIEW : ADMIN — RÔLES & ACCÈS
-// ═══════════════════════════════════════
-function vAdminRoles(){
-  const m=document.getElementById('main');
-  const ROLES=[
-    {role:'Direction',lbl:'Direction Générale / DAF',nb:2,droits:['Tous les modules','Exports illimités','Journal d\'audit','Paramètres RGPD'],couleur:'#0ea5a0'},
-    {role:'CME',lbl:'Commission Médicale',nb:3,droits:['Modules E1–E7','KPIs globaux','Exports CSV/PDF','Archives bilans'],couleur:'#3b82f6'},
-    {role:'Chef Bloc',lbl:'Chef de Bloc',nb:1,droits:['Modules E1–E7','Alertes & paramètres','Planning salles','Exports tous formats'],couleur:'#f4b942'},
-    {role:'Cadre',lbl:'Cadre de Bloc',nb:4,droits:['Modules E1–E6','Interventions (lecture)','Exports CSV','Alertes (lecture)'],couleur:'#ed8936'},
-    {role:'Chirurgien',lbl:'Chirurgien',nb:12,droits:['Ses propres données','E3 Durées (filtré)','E4 Annulations (filtré)','Pas d\'export'],couleur:'#8b5cf6'},
-    {role:'Anesthésiste',lbl:'Anesthésiste',nb:8,droits:['Ses propres données','E2 Ponctualité (filtré)','E7 Parcours patient','Pas d\'export'],couleur:'#06b6d4'},
-    {role:'CDG',lbl:'Contrôle de Gestion',nb:2,droits:['Module Médico-éco','KPIs financiers','Exports Excel/CSV','Archives bilans'],couleur:'#10b981'},
-    {role:'Admin',lbl:'Administrateur',nb:1,droits:['Accès complet','Gestion utilisateurs','Journal d\'audit','Paramètres système'],couleur:'#e53e3e'}
-  ];
-  m.innerHTML=`
-  <div class="page-title">⚙️ RÔLES & GESTION DES ACCÈS</div>
-  <div class="info-note blue" style="margin-bottom:12px;font-size:11px">Accès basé sur le principe du moindre privilège — chaque rôle accède uniquement aux données nécessaires à sa mission (Art. 25 RGPD — Privacy by Design).</div>
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px">
-    ${ROLES.map(r=>`<div class="card" style="padding:10px;border-top:3px solid ${r.couleur}">
-      <div style="font-size:12px;font-weight:800;color:var(--navy);margin-bottom:2px">${r.role}</div>
-      <div style="font-size:10px;color:var(--gray);margin-bottom:6px">${r.lbl}</div>
-      <div style="font-size:18px;font-weight:800;color:${r.couleur};margin-bottom:6px">${r.nb} <span style="font-size:11px;font-weight:500;color:var(--gray)">utilisateur${r.nb>1?'s':''}</span></div>
-      <div style="font-size:9px;color:#556;line-height:1.7">${r.droits.map(d=>`<div>✓ ${d}</div>`).join('')}</div>
-    </div>`).join('')}
-  </div>
-  <div class="card">
-    <div style="font-size:11px;font-weight:700;color:var(--navy);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">MATRICE DES ACCÈS PAR MODULE</div>
-    <div style="overflow-x:auto">
-      <table class="dtbl" style="font-size:10px;white-space:nowrap">
-        <thead style="background:#f8f9fc">
-          <tr>
-            <th>Module</th>
-            ${ROLES.map(r=>`<th style="text-align:center;color:${r.couleur}">${r.role}</th>`).join('')}
-          </tr>
-        </thead>
-        <tbody>
-          ${[
-            ['Dashboard global','✅','✅','✅','✅','🔸','🔸','✅','✅'],
-            ['E1 Occupation','✅','✅','✅','✅','🔸','🔸','✅','✅'],
-            ['E2 Ponctualité','✅','✅','✅','✅','🔸','✅','✅','✅'],
-            ['E3 Durées','✅','✅','✅','✅','✅','🔸','✅','✅'],
-            ['E4 Annulations','✅','✅','✅','✅','✅','🔸','✅','✅'],
-            ['E5 Activité méd.','✅','✅','✅','✅','🔸','🔸','✅','✅'],
-            ['E6 Qualité','✅','✅','✅','✅','🔸','🔸','✅','✅'],
-            ['E7 Parcours','✅','✅','✅','✅','🔸','✅','🔸','✅'],
-            ['RH','✅','🔸','✅','✅','❌','❌','🔸','✅'],
-            ['Médico-éco','✅','🔸','🔸','❌','❌','❌','✅','✅'],
-            ['Interventions','✅','✅','✅','✅','🔸','🔸','❌','✅'],
-            ['Archives','✅','✅','✅','🔸','❌','❌','✅','✅'],
-            ['RGPD & Admin','✅','❌','❌','❌','❌','❌','❌','✅']
-          ].map(row=>`<tr><td style="font-weight:600;color:#334">${row[0]}</td>${row.slice(1).map(c=>`<td style="text-align:center">${c}</td>`).join('')}</tr>`).join('')}
+      <div class="card-title">ACTIVITÉ ROBOT CUMULÉE — ${cfg.title}</div>
+      <table class="dtbl">
+        <thead><tr><th>Spécialité</th><th style="color:#b07d10">2025</th><th style="color:#2563eb">2026</th><th>Écart</th><th>Évol.</th></tr></thead>
+        <tbody>${ROB_CUM_S.map((s,i)=>{const d=cfg.rob.r26[i]-cfg.rob.r25[i],pp=Math.round(d/cfg.rob.r25[i]*100);return`<tr><td>${s}</td><td>${cfg.rob.r25[i]}</td><td><strong>${cfg.rob.r26[i]}</strong></td><td><span class="${d>=0?'ep':'en'}">${d>0?'+':''}${d}</span></td><td><span class="${pp>=0?'evp':'evn'}">${pp>0?'+':''}${pp}%</span></td></tr>`;}).join('')}
+        <tr style="background:#f0f7f7;font-weight:700"><td>TOTAL</td><td>${cfg.rob.rt1}</td><td>${cfg.rob.rt2}</td><td><span class="${cfg.rob.rt2-cfg.rob.rt1>=0?'ep':'en'}">${cfg.rob.rt2-cfg.rob.rt1>0?'+':''}${cfg.rob.rt2-cfg.rob.rt1}</span></td><td><span class="${cfg.rob.rt2>=cfg.rob.rt1?'evp':'evn'}">${cfg.rob.rt2>=cfg.rob.rt1?'+':''}${Math.round((cfg.rob.rt2-cfg.rob.rt1)/cfg.rob.rt1*100)}%</span></td></tr>
         </tbody>
       </table>
     </div>
-    <div style="margin-top:10px;font-size:10px;color:var(--gray)">✅ Accès complet &nbsp;·&nbsp; 🔸 Accès partiel (données propres ou en lecture seule) &nbsp;·&nbsp; ❌ Accès refusé</div>
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title">ACTIVITÉ ROBOT PAR SPÉCIALITÉ 2025 vs 2026</div>
+      <div class="ch" style="height:220px"><canvas id="${cfg.rob.cid}"></canvas></div>
+    </div>
+  </div>`:''}`;
+  mkChart(cfg.cid,{type:'bar',data:{labels:cfg.s,datasets:[{label:'2025',data:cfg.d1,backgroundColor:'#f4b942'},{label:'2026',data:cfg.d2,backgroundColor:'#1a3a6b'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+  if(cfg.rob) mkChart(cfg.rob.cid,{type:'bar',data:{labels:ROB_CUM_S,datasets:[{label:'2025',data:cfg.rob.r25,backgroundColor:'#8090c0'},{label:'2026',data:cfg.rob.r26,backgroundColor:'#3b82f6'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+}
+
+// ═══════════════════════════════════════
+// VIEW : SUIVI HEBDOMADAIRE S1–S24
+// ═══════════════════════════════════════
+function vSemaines(){
+  const m=document.getElementById('main');
+  const tvoColors=WK_TVO.map(v=>v>=85?'#38a169':v>=75?'#ed8936':'#e53e3e');
+  const avgTvo=Math.round(WK_TVO.reduce((a,b)=>a+b,0)/WK_TVO.length);
+  const maxI=WK_INT.reduce((a,b)=>a+b,0);
+  const avgI=Math.round(maxI/WK_INT.length);
+  const above75=WK_TVO.filter(v=>v>=75).length;
+  m.innerHTML=`
+  <div class="bil-hdr">
+    <div class="bil-title">SUIVI HEBDOMADAIRE — SEMAINES S1 À S24 · 2026</div>
+    <div class="bil-sub">Bloc Central · TVO & interventions par semaine · Source : Indicateur BC & BFT 2026 S24.xlsx</div>
+    <div class="kpi-grid" style="margin-top:12px;margin-bottom:0">
+      ${kpi('TVO MOYEN S1–S24',''+avgTvo,'%','Moyenne 24 semaines','neut',avgTvo>=80?'ok':avgTvo>=75?'warn':'bad')}
+      ${kpi('SEMAINES ≥ 85% TVO',''+above75,'/ 24','Seuil cible alerte','neut',above75>=20?'ok':above75>=15?'warn':'bad')}
+      ${kpi('INTERV. MOYENNES',''+avgI,'/ sem.','Hors S1 (fériée)','neut','info')}
+      ${kpi('SEMAINE RECORD','S18','88% TVO','199 interventions','up-good','ok')}
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:10px">
+    <div class="card-title">TVO BC PAR SEMAINE S1–S24 2026 (%)</div>
+    <div class="ch" style="height:220px"><canvas id="c-wk-tvo"></canvas></div>
+    <div class="info-note" style="margin-top:8px">🟢 ≥ 85 % · 🟡 75–84 % · 🔴 &lt; 85 % — S1 fériée (29 déc – 4 jan) · S17 Pâques</div>
+  </div>
+  <div class="row2">
+    <div class="card">
+      <div class="card-title">INTERVENTIONS HEBDOMADAIRES 2026</div>
+      <div class="ch" style="height:220px"><canvas id="c-wk-int"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">DÉTAIL TVO PAR SEMAINE</div>
+      <table class="dtbl" style="font-size:11px">
+        <thead><tr><th>Sem.</th><th>TVO BC</th><th>Interv.</th><th>Sem.</th><th>TVO BC</th><th>Interv.</th></tr></thead>
+        <tbody>
+          ${WK_L.slice(0,12).map((s,i)=>`<tr>
+            <td>${s}</td>
+            <td><span style="color:${WK_TVO[i]>=85?'#38a169':WK_TVO[i]>=75?'#ed8936':'#e53e3e'};font-weight:700">${WK_TVO[i]}%</span></td>
+            <td>${WK_INT[i]}</td>
+            <td>${WK_L[i+12]}</td>
+            <td><span style="color:${WK_TVO[i+12]>=85?'#38a169':WK_TVO[i+12]>=75?'#ed8936':'#e53e3e'};font-weight:700">${WK_TVO[i+12]}%</span></td>
+            <td>${WK_INT[i+12]}</td>
+          </tr>`).join('')}
+        </tbody>
+      </table>
+    </div>
   </div>`;
+  mkChart('c-wk-tvo',{type:'bar',data:{labels:WK_L,datasets:[
+    {label:'TVO BC %',data:WK_TVO,backgroundColor:tvoColors},
+    {label:'Seuil 75%',data:Array(24).fill(75),type:'line',borderColor:'#e53e3e',borderDash:[4,3],borderWidth:2,pointRadius:0,order:0},
+    {label:'Seuil 85%',data:Array(24).fill(85),type:'line',borderColor:'#38a169',borderDash:[4,3],borderWidth:1.5,pointRadius:0,order:0}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{font:{size:10}}}},scales:{y:{min:0,max:110,ticks:{callback:v=>v+'%',font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+  mkChart('c-wk-int',{type:'bar',data:{labels:WK_L,datasets:[
+    {label:'Interventions',data:WK_INT,backgroundColor:WK_INT.map(v=>v>=250?'#38a169':v>=180?'#3b82f6':'#ed8936')}
+  ]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+}
+
+// ═══════════════════════════════════════
+// ═══════════════════════════════════════
+// VIEW : AUDIT RGPD [EF-34]
+// ═══════════════════════════════════════
+function vAudit(){
+  const m=document.getElementById('main');
+  const AUDIT_DATA=[
+    {dt:'2026-06-20 14:32',user:'chefbloc',action:'UPDATE_THRESHOLD',table:'app_thresholds',  detail:'tvo_min : 80 → 75 %'},
+    {dt:'2026-06-20 09:12',user:'cadre',   action:'ADD_ANNOTATION',  table:'app_annotations', detail:'Salle BL-01 · maintenance IBODE'},
+    {dt:'2026-06-19 17:05',user:'admin',   action:'CREATE_USER',      table:'app_users',       detail:'username=dr.moreau role=chirurgien'},
+    {dt:'2026-06-19 08:00',user:'dg',      action:'LOGIN',            table:'—',               detail:'IP 10.0.0.15'},
+    {dt:'2026-06-18 16:45',user:'chefbloc',action:'RESOLVE_ANNOTATION',table:'app_annotations',detail:'id=1'},
+    {dt:'2026-06-18 11:20',user:'cadre',   action:'ADD_ANNOTATION',  table:'app_annotations', detail:'BL-06 TVO faible — équipement en panne'},
+    {dt:'2026-06-17 15:10',user:'admin',   action:'UPDATE_THRESHOLD', table:'app_thresholds',  detail:'annulation_max : 3 → 5 %'},
+    {dt:'2026-06-17 08:02',user:'cme',     action:'LOGIN',            table:'—',               detail:'IP 10.0.0.22'},
+    {dt:'2026-06-16 14:55',user:'chefbloc',action:'UPDATE_THRESHOLD', table:'app_thresholds',  detail:'ponctualite_min : 70 → 60 %'},
+    {dt:'2026-06-16 10:30',user:'admin',   action:'DEACTIVATE_USER',  table:'app_users',       detail:'username=dr.durand (départ)'},
+    {dt:'2026-06-15 17:45',user:'cadre',   action:'ADD_ANNOTATION',  table:'app_annotations', detail:'BL-09 · BL-01 : résultats faibles semaine S24'},
+    {dt:'2026-06-15 08:00',user:'dg',      action:'LOGIN',            table:'—',               detail:'IP 10.0.0.15'},
+  ];
+  const actionColor={
+    'LOGIN':'#38a169','LOGOUT':'#718096',
+    'UPDATE_THRESHOLD':'#3b82f6','ADD_ANNOTATION':'#0ea5a0',
+    'RESOLVE_ANNOTATION':'#38a169','CREATE_USER':'#8b5cf6',
+    'DEACTIVATE_USER':'#e53e3e','DELETE_ANNOTATION':'#e53e3e'
+  };
+  m.innerHTML=`
+  <div class="page-title">🔒 AUDIT RGPD — TRAÇABILITÉ DES MODIFICATIONS [EF-34]</div>
+  <div class="info-note blue" style="margin-bottom:10px">
+    Toute modification de seuil, annotation, connexion ou gestion utilisateur est enregistrée dans <code>app_audit_log</code>.
+    Conformité : <strong>RGPD Art.30</strong> · <strong>PGSSI-S</strong> · <strong>HDS</strong> — Aucune donnée patient nominative dans ce système (données agrégées uniquement).
+  </div>
+  <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:10px">
+    ${kpi('CONNEXIONS (7J)','12','','semaine du 15/06','neut','info')}
+    ${kpi('MODIFICATIONS SEUILS','3','','par chefbloc / admin','neut','warn')}
+    ${kpi('ANNOTATIONS AJOUTÉES','3','','par cadre / chefbloc','neut','ok')}
+    ${kpi('ACTIONS SENSIBLES','2','','CREATE/DEACTIVATE_USER','neut','bad')}
+  </div>
+  <div class="row2">
+    <div class="card">
+      <div class="card-title">RÉPARTITION DES ACTIONS</div>
+      <div class="ch" style="height:180px"><canvas id="c-audit-act"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title">ACTIONS PAR UTILISATEUR</div>
+      <div class="ch" style="height:180px"><canvas id="c-audit-usr"></canvas></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">JOURNAL COMPLET DES MODIFICATIONS</div>
+    <div style="display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap">
+      <select id="audit-filter-user" class="fsel" onchange="filterAudit()" style="padding:4px 6px;border:1.5px solid var(--border);border-radius:5px;font-size:11px;background:white">
+        <option value="">Tous utilisateurs</option>
+        <option>dg</option><option>cme</option><option>chefbloc</option>
+        <option>cadre</option><option>chirurgien</option><option>admin</option>
+      </select>
+      <select id="audit-filter-action" class="fsel" onchange="filterAudit()" style="padding:4px 6px;border:1.5px solid var(--border);border-radius:5px;font-size:11px;background:white">
+        <option value="">Toutes actions</option>
+        <option>LOGIN</option><option>UPDATE_THRESHOLD</option>
+        <option>ADD_ANNOTATION</option><option>RESOLVE_ANNOTATION</option>
+        <option>CREATE_USER</option><option>DEACTIVATE_USER</option>
+      </select>
+    </div>
+    <table class="dtbl" id="audit-table">
+      <thead><tr>
+        <th>Date / Heure</th><th>Utilisateur</th><th>Action</th><th>Table</th><th>Détail</th>
+      </tr></thead>
+      <tbody id="audit-tbody">
+        ${AUDIT_DATA.map(r=>`<tr data-user="${r.user}" data-action="${r.action}">
+          <td style="color:var(--gray);font-size:10px">${r.dt}</td>
+          <td><strong>${r.user}</strong></td>
+          <td><span style="background:${actionColor[r.action]||'#718096'}22;color:${actionColor[r.action]||'#718096'};padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700">${r.action}</span></td>
+          <td style="color:var(--gray);font-size:10px">${r.table}</td>
+          <td>${r.detail}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>
+    <div style="margin-top:10px;display:flex;gap:8px">
+      <button onclick="exportAuditCSV()" class="ebtn" style="padding:4px 10px;border:1px solid var(--border);border-radius:4px;font-size:10px;background:white;cursor:pointer;font-weight:600">📊 Exporter CSV</button>
+      <span style="font-size:10px;color:var(--gray);line-height:28px">Export mensuel recommandé vers SIEM (Art.30 RGPD)</span>
+    </div>
+  </div>`;
+
+  mkChart('c-audit-act',{type:'doughnut',data:{labels:['LOGIN','UPDATE_THRESHOLD','ADD_ANNOTATION','RESOLVE_ANNOTATION','CREATE_USER','DEACTIVATE_USER'],
+    datasets:[{data:[3,3,3,1,1,1],backgroundColor:['#38a169','#3b82f6','#0ea5a0','#68d391','#8b5cf6','#e53e3e'],borderWidth:2}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{font:{size:10},padding:8}}}}});
+
+  mkChart('c-audit-usr',{type:'bar',data:{labels:['chefbloc','cadre','admin','dg','cme'],
+    datasets:[{label:'Actions',data:[4,3,2,2,1],backgroundColor:['#0ea5a0','#3b82f6','#e53e3e','#f4b942','#8b5cf6']}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},
+      scales:{y:{ticks:{font:{size:9}}},x:{ticks:{font:{size:9}}}}}});
+}
+
+// ═══════════════════════════════════════
+// VIEW : AUTRES BLOCS (placeholder)
+// ═══════════════════════════════════════
+function vBloc(nom, detail){
+  const m=document.getElementById('main');
+  m.innerHTML=`
+  <div class="bil-hdr">
+    <div class="bil-title">BLOC ${nom.toUpperCase()} — TABLEAU DE BORD</div>
+    <div class="bil-sub">${detail} · Données en cours d'intégration</div>
+  </div>
+  <div class="kpi-grid" style="grid-template-columns:repeat(4,1fr)">
+    ${kpi('TVO','—','%','Données à venir','neut','info')}
+    ${kpi('NOMBRE DE VACATIONS','—','vac.','Données à venir','neut','info')}
+    ${kpi('TROS','—','%','Données à venir','neut','info')}
+    ${kpi('DÉMARRAGES TARDIFS','—','%','Données à venir','neut','info')}
+    ${kpi('INTERVENTIONS','—','','Données à venir','neut','info')}
+    ${kpi('DURÉE MOYENNE OPÉRATOIRE','—','min','Données à venir','neut','info')}
+    ${kpi('DÉBORDEMENTS','—','cas','Données à venir','neut','info')}
+    ${kpi('SUSPENSIONS ET ABANDONS','—','cas','Données à venir','neut','info')}
+  </div>
+  <div class="info-note blue" style="margin-top:12px">
+    📊 Ce bloc (${nom}) est en cours d'intégration dans le tableau de bord global.<br>
+    Les indicateurs TVO, TROS, Démarrages tardifs, Débordements, Suspensions et abandons seront disponibles dès la connexion des sources de données OPERA correspondantes.
+  </div>`;
+}
+
+function filterAudit(){
+  const fu=document.getElementById('audit-filter-user').value;
+  const fa=document.getElementById('audit-filter-action').value;
+  document.querySelectorAll('#audit-tbody tr').forEach(tr=>{
+    const matchU=!fu||tr.dataset.user===fu;
+    const matchA=!fa||tr.dataset.action===fa;
+    tr.style.display=(matchU&&matchA)?'':'none';
+  });
+}
+
+function exportAuditCSV(){
+  const rows=[['Date/Heure','Utilisateur','Action','Table','Détail'],
+    ['2026-06-20 14:32','chefbloc','UPDATE_THRESHOLD','app_thresholds','tvo_min : 80 → 75 %'],
+    ['2026-06-20 09:12','cadre','ADD_ANNOTATION','app_annotations','Salle BL-01 · maintenance IBODE'],
+    ['2026-06-19 17:05','admin','CREATE_USER','app_users','username=dr.moreau role=chirurgien'],
+    ['2026-06-19 08:00','dg','LOGIN','—','IP 10.0.0.15'],
+    ['2026-06-18 16:45','chefbloc','RESOLVE_ANNOTATION','app_annotations','id=1'],
+  ];
+  const csv=rows.map(r=>r.map(c=>'"'+c+'"').join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,﻿'+encodeURIComponent(csv);
+  a.download='audit_rgpd_foch_'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();
 }
 
 // ═══════════════════════════════════════
